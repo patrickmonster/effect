@@ -1,7 +1,8 @@
 Element.prototype.createElement=Element.prototype.C=function(ele){var ele=document.createElement(ele);this.appendChild(ele);return ele};
 window.addScript=document.addScript=function(){var a=arguments,b=a.length,c=0;for(;c<b;c++)document.head.C("script").src=a[c]};
+window.addLink=document.addLink=function(){var a=arguments,b=a.length,c=0;for(;c<b;c++)document.head.C("link").src=a[c]};
+window.addStyle=document.addStyle=function(){var a=arguments,b=a.length,c=0;for(;c<b;c++)document.head.C('style').innerHTML=a[c]};
 (function($) {
-window.addScript("https://www.googletagmanager.com/gtag/js?id=UA-158025067-2");
 window.dataLayer = window.dataLayer || [];
 function gtag(){dataLayer.push(arguments);}
 gtag('js', new Date());
@@ -24,17 +25,16 @@ $.fn.effect = function(options) {
 					flakeColor: "#FFFFFF",
 					leftMove:200
 			},isPlay = true,
-			options = $.extend({}, defaults, options),
-			$flake=$('<div id="flake"/>').html(options.html),
-			func=function(){
-				if (isPlay)setTimeout(func,options.newOn);
+			options = $.extend({}, defaults, options),$flake=$('<div id="flake"/>'),
+			func = function(message){
+				if (isPlay)setTimeout(func,options.newOn * Math.random(),message);
 				var startPositionLeft=(Math.random()*documentWidth*(options.leftMove==200?1:1.5))
 							+(options.leftMove==200?0:options.leftMove),
 						startOpacity=1+Math.random(),
 						sizeFlake = options.minSize + Math.random() * options.maxSize,
 						endPositionLeft = startPositionLeft - 100 + Math.random() * options.leftMove,
 						durationFall = (documentHeight * options.speed) + Math.random() * 1000,
-						ele = $flake.clone().appendTo(options.target).css({
+						ele = $flake.clone().appendTo(options.target).html(message).css({
 								position:"absolute",
 								opacity:startOpacity,
 								'font-size':sizeFlake,
@@ -69,14 +69,13 @@ $.fn.effect = function(options) {
 					}, durationFall,'linear',function(){$(this).remove()});
 				}
 			};
-	func();
+			if(typeof options["html"] == "string")func(options["html"]);
+			else for(var i of options["html"])func(i)
 	$(window).resize(function (){
 		documentHeight = $(document).height()
 		documentWidth = $(document).width()
 	});
-	return function(){
-		isPlay = false
-	};
+	return function(){isPlay=false};
 };
 
 
