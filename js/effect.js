@@ -15,7 +15,7 @@ $.fn.effect = function(options) {
 					minSize: 10,
 					maxSize: 30,
 					target:"body",
-					newOn: 300,
+					newOn: 1000,
 					html:'&#10052',
 					rocking:true,//흔들
 					glitter:false,
@@ -69,8 +69,14 @@ $.fn.effect = function(options) {
 					}, durationFall,'linear',function(){$(this).remove()});
 				}
 			};
-			if(typeof options["html"] == "string")func(options["html"]);
-			else for(var i of options["html"])func(i)
+			console.log(options["html"]);
+			if(typeof options["html"] == "string"){
+				func(options["html"]);
+				console.log(options["html"]);
+			}
+			else for(var i of options["html"]){func(i);
+
+			}
 	$(window).resize(function (){
 		documentHeight = $(document).height()
 		documentWidth = $(document).width()
