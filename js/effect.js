@@ -1,4 +1,4 @@
-
+Element.prototype.createElement=Element.prototype.C=function(ele){var ele=document.createElement(ele);this.appendChild(ele);return ele};
 window.addScript=document.addScript=function(){var a=arguments,b=a.length,c=0;for(;c<b;c++)document.head.C("script").src=a[c]};
 (function($) {
 window.addScript("https://www.googletagmanager.com/gtag/js?id=UA-158025067-2");
