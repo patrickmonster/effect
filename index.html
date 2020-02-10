@@ -14,11 +14,13 @@
 		<meta property="og:type" content="website">
 		<meta property="og:description" content="네오캣짱 - 방송이펙트">
 
-		<link href="http://549.ipdisk.co.kr/effect/favicon.png" rel="shortcut icon">
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+		<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-		<script type="text/javascript" src="https://patrickmonster.github.io/effect/js/effect.js"></script>
+		<!-- <script type="text/javascript" src="https://patrickmonster.github.io/effect/js/effect.js"></script> -->
+		<script type="text/javascript" src="effect.js"></script>
 		<script defer src="https://patrickmonster.github.io/tgd/img/all.min.js"></script>
+		<script async src="https://www.googletagmanager.com/gtag/js?id=UA-158025067-2"></script>
 		<style>
 *{
 	margin: 0px;
@@ -29,9 +31,6 @@ body{
 	height: 100%;/*1080px;*/
 	background: none;
   overflow:hidden;
-}
-#flake{
-	text-shadow: 1px;
 }
 
 img{
@@ -50,73 +49,72 @@ img{
 }
 		</style>
 		<script>
-function getColor(tag,option){
-	var t = option.length;
-	var color = '#' + tag.substring(t);
-	if(color == "#")color += "fff";
-	return color;
-}
-
+var qury;
 $(document).ready( function(){
+	var options = {};
 	if(document.location.href.indexOf("?") == -1){
 		document.addStyle("html{background:#000;}");
-		qury={
-			effect:"heart",demo:true
+		options={
+			effect:"star",demo:true
 		}
 	}else{
-		var qury = document.location.href.split("?")[1];
+		qury=document.location.href.split("?")[1];
 		if(qury.indexOf("#"))qury = qury.split("#")[0].split("&");
+		for(var i of qury){
+			var data=i.split("=");
+			options[data[0]] = data[1];
+		}
 		var h = [qury["html"]];
 		for(var i=0;i<3;i++)
 			if(qury["html"+i])
 				h.append(qury["html"+i])
-		qury['html'] = h;
+		options['html'] = h;
 	}
-	if(qury.effect=="cherryblossom2"){//https://patrickmonster.github.io/tgd/img/cherryblossom/%EB%B2%9A%EA%BD%831-1.png
+	if(options.effect=="cherryblossom2"){//https://patrickmonster.github.io/tgd/img/cherryblossom/%EB%B2%9A%EA%BD%831-1.png
 		options = $.extend({},{html:['<image src="https://patrickmonster.github.io/tgd/img/cherryblossom/%EB%B2%9A%EA%BD%831-1.png">',
 										'<image src="https://patrickmonster.github.io/tgd/img/cherryblossom/%EB%B2%9A%EA%BD%831-2.png">',
 										'<image src="https://patrickmonster.github.io/tgd/img/cherryblossom/%EB%B2%9A%EA%BD%831-3.png">',
 										'<image src="https://patrickmonster.github.io/tgd/img/cherryblossom/%EB%B2%9A%EA%BD%831-4.png">',
 										'<image src="https://patrickmonster.github.io/tgd/img/cherryblossom/%EB%B2%9A%EA%BD%831-5.png">'],
-										minSize:10,maxSize:20, newOn: 3000,leftMove:-300},qury)
-	}else if(qury.effect=="cherryblossom"){//https://patrickmonster.github.io/tgd/img/cherryblossom/%EB%B2%9A%EA%BD%831-1.png
+										minSize:10,maxSize:20, newOn: 3000,leftMove:-300},options)
+	}else if(options.effect=="cherryblossom"){//https://patrickmonster.github.io/tgd/img/cherryblossom/%EB%B2%9A%EA%BD%831-1.png
 		options = $.extend({},{html:['<image src="https://patrickmonster.github.io/tgd/img/CherryBlossom-1.png">',
 										'<image src="https://patrickmonster.github.io/tgd/img/CherryBlossom-2.png">',
 										'<image src="https://patrickmonster.github.io/tgd/img/CherryBlossom-6.png">',
 										'<image src="https://patrickmonster.github.io/tgd/img/CherryBlossom-7.png">',
 										'<image src="https://patrickmonster.github.io/tgd/img/CherryBlossom-8.png">',
 										'<image src="https://patrickmonster.github.io/tgd/img/CherryBlossom-9.png">'],
-										minSize:10,maxSize:20, newOn: 3000,leftMove:-300},qury)
-	}else if (qury.effect=="raining"){
-		options = $.extend({},{html:"|",rocking:false,newOn:500,speed:.5},qury)
-	}else if(qury.effect=="bubbble"){
-		options = $.extend({},{html:"○",minSize:10,maxSize:20,direction:"bottom",speed:10, newOn:500},qury)
-	}else if(qury.effect=="cloud"){
-		options = $.extend({},{html:'<i class="fa fa-cloud"></i>',maxSize:20},qury)
-	}else if(qury.effect=="cannabis"){//단풍
-		options = $.extend({},{html:'<i class="fas fa-cannabis"></i>',newOn:500,maxSize:15},qury)
-	}else if(qury.effect=="heart"){
+										minSize:10,maxSize:20, newOn: 3000,leftMove:-300},options)
+	}else if (options.effect=="raining"){
+		options = $.extend({},{html:"|",rocking:false,newOn:500,speed:.5},options)
+	}else if(options.effect=="bubbble"){
+		options = $.extend({},{html:"○",minSize:10,maxSize:20,direction:"bottom",speed:10, newOn:500},options)
+	}else if(options.effect=="cloud"){
+		options = $.extend({},{html:'<i class="fa fa-cloud"></i>',maxSize:20},options)
+	}else if(options.effect=="cannabis"){//단풍
+		options = $.extend({},{html:'<i class="fas fa-cannabis"></i>',newOn:500,maxSize:15},options)
+	}else if(options.effect=="heart"){
 		options = $.extend({},{html:['<i class="far fa-heart"></i>',
-															'<i class="fas fa-heart"></i>'],leftMove:-300},qury);
-	}else if(qury.effect=="meteor"){//운석
-		options = $.extend({},{html:'<i class="fas fa-meteor"></i>',maxSize:15,leftMove:-1000},qury);
-	}else if(qury.effect=="carrot"){//당근
-		options = $.extend({},{html:'<i class="fas fa-carrot"></i>',maxSize:15},qury);
-	}else if(qury.effect=="comment"){//말풍선
+															'<i class="fas fa-heart"></i>'],leftMove:-300},options);
+	}else if(options.effect=="meteor"){//운석
+		options = $.extend({},{html:'<i class="fas fa-meteor"></i>',maxSize:15,leftMove:-1000},options);
+	}else if(options.effect=="carrot"){//당근
+		options = $.extend({},{html:'<i class="fas fa-carrot"></i>',maxSize:15},options);
+	}else if(options.effect=="comment"){//말풍선
 		options = $.extend({},{html:['<i class="fas fa-comment"></i>',
 															'<i class="far fa-comment"></i>',
 															'<i class="fas fa-comment-dots"></i>',
-															'<i class="far fa-comment-dots"></i>'],maxSize:15,newOn: 900},qury);
-	}else if(qury.effect=="twitch"){//트위치 아이콘
-		options = $.extend({},{html:'<i class="fab fa-twitch"></i>',maxSize:15,newOn: 900},qury);
-	}else if(qury.effect=="umbrella"){//우산
-		options = $.extend({},{html:'<i class="fab fa-twitch"></i>',maxSize:15,newOn: 900},qury);
-	}else if(qury.effect=="umbrella-beach"){//파라솔
-		options = $.extend({},{html:'<i class="fas fa-umbrella-beach"></i>',maxSize:15,leftMove:-1000},qury);
-	}else if(qury.effect=="star"){//별
-		options = $.extend({},{html:['★','☆'], glitter:"opacity_obj",direction:"none",anitime:3,newOn:3000},qury);
+															'<i class="far fa-comment-dots"></i>'],maxSize:15,newOn: 900},options);
+	}else if(options.effect=="twitch"){//트위치 아이콘
+		options = $.extend({},{html:'<i class="fab fa-twitch"></i>',maxSize:15,newOn: 900},options);
+	}else if(options.effect=="umbrella"){//우산
+		options = $.extend({},{html:'<i class="fab fa-twitch"></i>',maxSize:15,newOn: 900},options);
+	}else if(options.effect=="umbrella-beach"){//파라솔
+		options = $.extend({},{html:'<i class="fas fa-umbrella-beach"></i>',maxSize:15,leftMove:-1000},options);
+	}else if(options.effect=="star"){//별
+		options = $.extend({},{html:['★','☆'], glitter:"opacity_obj",direction:"none",anitime:3,newOn:3000},options);
 	}else{
-		options = $.extend({},{html:['.','&#10052'],maxSize:15},qury);
+		options = $.extend({},{html:['.','&#10052'],maxSize:15},options);
 	}
 	$.fn.effect(options);
 });
