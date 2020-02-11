@@ -71,8 +71,9 @@ $(document).ready( function(){
 					h.append(qury["html"+i])
 					options['html'] = h;
 		}
-		if(options["color"])options["flakeColor"]="#"+qury["color"];
 	}
+	if(qury["color"])options["flakeColor"]="#"+qury["color"];
+	if(options["color"])options["flakeColor"]="#"+options["color"];
 	console.log(qury);
 	console.log(options);
 	if(options.effect=="cherryblossom2"){//https://patrickmonster.github.io/tgd/img/cherryblossom/%EB%B2%9A%EA%BD%831-1.png
