@@ -55,7 +55,7 @@
 		if(document.location.href.indexOf("?") == -1){
 			document.addStyle("html{background:#000;}");
 			options={
-				effect:"star",demo:true
+				effect:"bubbble",demo:true
 			}
 		}else{
 			qury=document.location.href.split("?")[1];
@@ -65,11 +65,15 @@
 				options[data[0]] = data[1];
 			}
 			var h = [qury["html"]];
-			for(var i=0;i<3;i++)
-				if(qury["html"+i])
-					h.append(qury["html"+i])
-			options['html'] = h;
+			if(h[0] != undefined){
+				for(var i=0;i<3;i++)
+					if(qury["html"+i])
+						h.append(qury["html"+i])
+						options['html'] = h;
+			}
 		}
+		console.log(qury);
+		console.log(options);
 		if(options.effect=="cherryblossom2"){//https://patrickmonster.github.io/tgd/img/cherryblossom/%EB%B2%9A%EA%BD%831-1.png
 			options = $.extend({},{html:['<image src="https://patrickmonster.github.io/tgd/img/cherryblossom/%EB%B2%9A%EA%BD%831-1.png">',
 											'<image src="https://patrickmonster.github.io/tgd/img/cherryblossom/%EB%B2%9A%EA%BD%831-2.png">',
@@ -116,6 +120,7 @@
 		}else{
 			options = $.extend({},{html:['.','&#10052'],maxSize:15},options);
 		}
+		console.log(options)
 		$.fn.effect(options);
 	});
 			</script>
