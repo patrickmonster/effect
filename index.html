@@ -14,11 +14,10 @@
 		<meta property="og:type" content="website">
 		<meta property="og:description" content="네오캣짱 - 방송이펙트">
 
-		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
-		<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+		<!-- <script src="js/fontawesome.js"></script> -->
+		<script src="js/all.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 		<script type="text/javascript" src="https://patrickmonster.github.io/effect/js/effect.js"></script>
-		<!-- <script type="text/javascript" src="effect.js"></script> -->
 		<script defer src="https://patrickmonster.github.io/tgd/img/all.min.js"></script>
 		<script async src="https://www.googletagmanager.com/gtag/js?id=UA-158025067-2"></script>
 		<style>
@@ -55,8 +54,9 @@ $(document).ready( function(){
 	if(document.location.href.indexOf("?") == -1){
 		document.addStyle("html{background:#000;}");
 		options={
-			effect:"bubbble",demo:true
+			effect:"disease",demo:true
 		}
+		qury={};
 	}else{
 		qury=document.location.href.split("?")[1];
 		if(qury.indexOf("#"))qury = qury.split("#")[0].split("&");
@@ -72,10 +72,10 @@ $(document).ready( function(){
 					options['html'] = h;
 		}
 	}
-	if(qury["color"])options["flakeColor"]="#"+qury["color"];
-	if(options["color"])options["flakeColor"]="#"+options["color"];
 	console.log(qury);
 	console.log(options);
+	if(qury.hasOwnProperty("color"))options["flakeColor"]="#"+qury["color"];
+	if(options.hasOwnProperty("color"))options["flakeColor"]="#"+options["color"];
 	if(options.effect=="cherryblossom2"){//https://patrickmonster.github.io/tgd/img/cherryblossom/%EB%B2%9A%EA%BD%831-1.png
 		options = $.extend({},{html:['<image src="https://patrickmonster.github.io/tgd/img/cherryblossom/%EB%B2%9A%EA%BD%831-1.png">',
 										'<image src="https://patrickmonster.github.io/tgd/img/cherryblossom/%EB%B2%9A%EA%BD%831-2.png">',
@@ -117,8 +117,29 @@ $(document).ready( function(){
 		options = $.extend({},{html:'<i class="fab fa-twitch"></i>',maxSize:15,newOn: 900},options);
 	}else if(options.effect=="umbrella-beach"){//파라솔
 		options = $.extend({},{html:'<i class="fas fa-umbrella-beach"></i>',maxSize:15,leftMove:-1000},options);
+	}else if(options.effect=="sparkles"){//반짝임
+		options = $.extend({},{html:['<i class="fas fa-sparkles"></i>'], glitter:"opacity_obj",direction:"none",anitime:3,newOn:1000},options);
+	}else if(options.effect=="star2"){//별
+		options = $.extend({},{html:['<i class="fas fa-splotch"></i>',
+																'<i class="far fa-splotch"></i>'],leftMove:-500,newOn:1000,speed:10},options);
 	}else if(options.effect=="star"){//별
-		options = $.extend({},{html:['★','☆'], glitter:"opacity_obj",direction:"none",anitime:3,newOn:3000},options);
+		options = $.extend({},{html:['<i class="fas fa-star"></i>',
+																'<i class="far fa-star"></i>'], glitter:"opacity_obj",direction:"none",anitime:3,newOn:3000},options);
+	}else if(options.effect=="cookie"){//쿠키
+		options = $.extend({},{html:['<i class="fas fa-cookie"></i>',
+																'<i class="far fa-cookie"></i>',
+																'<i class="fad fa-cookie"></i>'],direction:"bottom",anitime:3,newOn:3000},options);
+	}else if(options.effect=="bone"){//뼈
+		options = $.extend({},{html:['<i class="fas fa-bone"></i>',
+																'<i class="fal fa-bone"></i>',
+																'<i class="fad fa-bone"></i>'],newOn:3000},options);
+		//<i class="fas fa-bone"></i>
+	}else if(options.effect=="disease"){//별3
+		options = $.extend({},{html:['<i class="fas fa-disease"></i>',
+																'<i class="far fa-disease"></i>'],direction:"none",newOn:3000},options);
+	}else if(options.effect=="pig"){//돼지
+		options = $.extend({},{html:['<i class="fas fa-pig"></i>',
+																'<i class="far fa-pig"></i>'],direction:"left",newOn:3000},options)
 	}else{
 		options = $.extend({},{html:['.','&#10052'],maxSize:15},options);
 	}
