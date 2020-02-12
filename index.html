@@ -18,6 +18,7 @@
 		<script src="js/all.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 		<script type="text/javascript" src="https://patrickmonster.github.io/effect/js/effect.js"></script>
+		<!-- <script type="text/javascript" src="effect.js"></script> -->
 		<script defer src="https://patrickmonster.github.io/tgd/img/all.min.js"></script>
 		<script async src="https://www.googletagmanager.com/gtag/js?id=UA-158025067-2"></script>
 		<style>
@@ -54,7 +55,7 @@ $(document).ready( function(){
 	if(document.location.href.indexOf("?") == -1){
 		document.addStyle("html{background:#000;}");
 		options={
-			effect:"disease",demo:true
+			effect:"chocolate",demo:true
 		}
 		qury={};
 	}else{
@@ -90,7 +91,14 @@ $(document).ready( function(){
 										'<image src="https://patrickmonster.github.io/tgd/img/CherryBlossom-7.png">',
 										'<image src="https://patrickmonster.github.io/tgd/img/CherryBlossom-8.png">',
 										'<image src="https://patrickmonster.github.io/tgd/img/CherryBlossom-9.png">'],
-										minSize:10,maxSize:20, newOn: 3000,leftMove:-300},options)
+										minSize:10,maxSize:20, newOn: 3000,leftMove:-300},options);
+	}else if(options.effect=="chocolate"){
+		options = $.extend({},{html:['<image src="https://patrickmonster.github.io/tgd/img/cacao.png">',
+										'<image src="https://patrickmonster.github.io/tgd/img/chocolate.png">',
+										'<image src="https://patrickmonster.github.io/tgd/img/chocolate-1.png">',
+										'<image src="https://patrickmonster.github.io/tgd/img/chocolate-box-2.png">',
+										'<image src="https://patrickmonster.github.io/tgd/img/chocolate-chip.png">'],
+										minSize:10,maxSize:20, newOn: 3000},options);
 	}else if (options.effect=="raining"){
 		options = $.extend({},{html:"|",rocking:false,newOn:500,speed:.5},options)
 	}else if(options.effect=="bubbble"){
