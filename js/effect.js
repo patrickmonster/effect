@@ -21,16 +21,20 @@ $.fn.effect = function(options) {
 					glitter:false,
 					anitime:.5,
 					speed:10,
+					opacity:1,
 					direction:"top",
 					flakeColor: "#FFFFFF",
-					leftMove:200
-			},isPlay = true,
+					style:"",
+					topMove:200,
+					leftMove:200,
+					isPlay:true
+			},
 			options = $.extend({}, defaults, options),$flake=$('<div id="flake"/>'),
 			func = function(message){
-				if (isPlay)setTimeout(func,options.newOn * Math.random(),message);
+				if (options.isPlay && options.direction!="rand")setTimeout(func,options.newOn * Math.random(),message);
 				var startPositionLeft=(Math.random()*documentWidth*(options.leftMove==200?1:1.5))
 							+(options.leftMove==200?0:options.leftMove),
-						startOpacity=1+Math.random(),
+						startOpacity=options.opacity+Math.random(),
 						sizeFlake = options.minSize + Math.random() * options.maxSize,
 						endPositionLeft = startPositionLeft - 100 + Math.random() * options.leftMove,
 						durationFall = (documentHeight * options.speed) + Math.random() * 1000,
@@ -44,11 +48,26 @@ $.fn.effect = function(options) {
 						ep=((options.direction=="top"||options.direction=="left")?documentHeight-10:'-50px');
 				if (options.glitter)//사용자 애니메이션
 					ele.css("animation",options.glitter+" "+options.anitime+"s infinite")
-				if(options.direction == "none"){
+				if(options.direction == "fine_movement"){
+					hp=Math.random() * documentHeight;
+					wp=Math.random() * documentWidth;
 					ele.css({
-						top: (Math.random() * documentWidth*(options.leftMove==200?1:1.5)),
+						top: hp,
+						left:wp,
+					}).animate({
+						left:wp +(options.leftMove*Boolean(Math.round(Math.random()))),
+						opacity:.5
+					}, durationFall,'linear',function(){$(this).remove()});
+				}else if(options.direction == "none"){
+					ele.css({
+						top: (Math.random() * documentHeight*(options.leftMove==200?1:1.5)),
 						left:(Math.random() * documentWidth*(options.leftMove==200?1:1.5)),
 					}).animate({opacity:.5}, durationFall,'linear',function(){$(this).remove()});
+				}else if (options.direction=="rand"){
+					ele.css({
+						top: sp,
+						left: startPositionLeft-(options.leftMove==200?0:options.leftMove*2),
+					});
 				}else if (options.direction=="top"||options.direction=="bottom"){
 					ele.css({
 						top: sp,
@@ -81,7 +100,7 @@ $.fn.effect = function(options) {
 		documentHeight = $(document).height()
 		documentWidth = $(document).width()
 	});
-	return function(){isPlay=false};
+	return function(){options.isPlay=false};
 };
 
 
