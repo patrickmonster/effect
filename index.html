@@ -17,8 +17,8 @@
 		<!-- <script src="js/fontawesome.js"></script> -->
 		<script src="js/all.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-		<script type="text/javascript" src="https://patrickmonster.github.io/effect/js/effect.js"></script>
-		<!-- <script type="text/javascript" src="effect.js"></script> -->
+		<!-- <script type="text/javascript" src="https://patrickmonster.github.io/effect/js/effect.js"></script> -->
+		<script type="text/javascript" src="effect.js"></script>
 		<script defer src="https://patrickmonster.github.io/tgd/img/all.min.js"></script>
 		<script async src="https://www.googletagmanager.com/gtag/js?id=UA-158025067-2"></script>
 		<style>
@@ -55,7 +55,7 @@ $(document).ready( function(){
 	if(document.location.href.indexOf("?") == -1){
 		document.addStyle("html{background:#000;}");
 		options={
-			effect:"chocolate",demo:true
+			effect:"star3",demo:true
 		}
 		qury={};
 	}else{
@@ -127,6 +127,11 @@ $(document).ready( function(){
 		options = $.extend({},{html:'<i class="fas fa-umbrella-beach"></i>',maxSize:15,leftMove:-1000},options);
 	}else if(options.effect=="sparkles"){//반짝임
 		options = $.extend({},{html:['<i class="fas fa-sparkles"></i>'], glitter:"opacity_obj",direction:"none",anitime:3,newOn:1000},options);
+	}else if(options.effect=="star3"){//별
+		options = $.extend({},{html:['<i class="fas fa-splotch"></i>',
+																'<i class="far fa-splotch"></i>'],
+																newOn:3000,speed:10,direction:"fine_movement",leftMove:400,
+															speed:20},options);
 	}else if(options.effect=="star2"){//별
 		options = $.extend({},{html:['<i class="fas fa-splotch"></i>',
 																'<i class="far fa-splotch"></i>'],leftMove:-500,newOn:1000,speed:10},options);
