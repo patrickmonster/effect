@@ -108,8 +108,7 @@ $.fn.bottomup = function(options) {//단일모드
   var defaults = {size: 15,flakeColor:'#000'},
       options = $.extend({}, defaults, options),
     	$flake = $('<div id="flake" />').css({
-                position: 'absolute',
-                opacity: 1,
+                position: 'absolute',opacity: 1,
               	'font-size': options.size,
               	color: options.flakeColor,
                 bottom: '0px'
