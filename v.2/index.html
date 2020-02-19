@@ -78,8 +78,7 @@ $(document).ready( function(){
 		}
 	}
 	if(qury.hasOwnProperty("demo"))$("body").css("background","#"+qury.hasOwnProperty("demo"));
-	if(qury.hasOwnProperty("color"))options["flakeColor"]="#"+qury["color"];
-	if(options.hasOwnProperty("color"))options["color"]="#"+options["color"];
+	if(options.hasOwnProperty("color")&&options.indexOf("#")==-1)options["color"]="#"+options["color"];
 	if(options.effect=="cherryblossom2"){
 		options = $.extend({},{text:['<image src="https://patrickmonster.github.io/tgd/img/cherryblossom/%EB%B2%9A%EA%BD%831-1.png">',
 										'<image src="https://patrickmonster.github.io/tgd/img/cherryblossom/%EB%B2%9A%EA%BD%831-2.png">',
