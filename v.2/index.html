@@ -59,7 +59,7 @@ $(document).ready( function(){
 	if(document.location.href.indexOf("?") == -1){
 		document.addStyle("html{background:#000;}");
 		options={
-			effect:"star3",demo:"333",color:"#666"
+			effect:"bubbble",demo:"333"
 		}
 		qury={};
 	}else{
@@ -79,7 +79,7 @@ $(document).ready( function(){
 	}
 	if(qury.hasOwnProperty("demo"))$("body").css("background","#"+qury.hasOwnProperty("demo"));
 	if(qury.hasOwnProperty("color"))options["flakeColor"]="#"+qury["color"];
-	if(options.hasOwnProperty("color"))options["flakeColor"]="#"+options["color"];
+	if(options.hasOwnProperty("color"))options["color"]="#"+options["color"];
 	if(options.effect=="cherryblossom2"){
 		options = $.extend({},{text:['<image src="https://patrickmonster.github.io/tgd/img/cherryblossom/%EB%B2%9A%EA%BD%831-1.png">',
 										'<image src="https://patrickmonster.github.io/tgd/img/cherryblossom/%EB%B2%9A%EA%BD%831-2.png">',
