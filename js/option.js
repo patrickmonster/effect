@@ -77,4 +77,5 @@ function getEffect(){
   }else{
     options = $.extend({},{text:['.','&#10052'],maxSize:15,color:options.color},options);
   }
+  return options;
 }
