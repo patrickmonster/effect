@@ -1,4 +1,4 @@
-function getEffect(){
+function getEffect(options){
   if(options.hasOwnProperty("color")&&options['color'].indexOf("#")==-1)options["color"]="#"+options["color"];
   if(options.effect=="cherryblossom2"){
     options = $.extend({},{text:['<image src="https://patrickmonster.github.io/tgd/img/cherryblossom/%EB%B2%9A%EA%BD%831-1.png">',
