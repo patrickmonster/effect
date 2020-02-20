@@ -59,7 +59,7 @@ $(document).ready( function(){
 	if(document.location.href.indexOf("?") == -1){
 		document.addStyle("html{background:#000;}");
 		options={
-			effect:"star4",demo:"333"
+			effect:"star5",demo:"333"
 		}
 		qury={};
 	}else{
@@ -127,8 +127,10 @@ $(document).ready( function(){
 		options = $.extend({},{text:'<i class="fab fa-twitch"></i>',maxSize:15,color:options.color},options);
 	}else if(options.effect=="umbrella-beach"){//파라솔
 		options = $.extend({},{text:'<i class="fas fa-umbrella-beach"></i>',maxSize:15,color:options.color},options);
+	}else if(options.effect=="star5"){//별
+		options = $.extend({},{text:['.'],count:50,speed:1,direction:"none",color:options.color},options);
 	}else if(options.effect=="star4"){//별
-		options = $.extend({},{text:['.'],count:30,speed:10,direction:"fine_movement",move:100,color:options.color},options);
+		options = $.extend({},{text:['.'],count:40,speed:10,direction:"fine_movement",move:100,color:options.color},options);
 	}else if(options.effect=="star3"){//별
 		options = $.extend({},{text:['<i class="fas fa-splotch"></i>',
 																'<i class="far fa-splotch"></i>'],
