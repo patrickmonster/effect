@@ -1,0 +1,268 @@
+<!doctype html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+    <title>Leaderboards</title>
+		<script async src="https://www.googletagmanager.com/gtag/js?id=UA-158025067-2"></script>
+		<!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css"> -->
+		<script src="https://patrickmonster.github.io/effect/js/all.min.js" charset="utf-8"></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+		<script src="https://patrickmonster.github.io/effect/v.2/js/effect.js" charset="utf-8"></script>
+		<script src="https://patrickmonster.github.io/effect/js/option.js" charset="utf-8"></script>
+		<script src="chat.emote.js"></script>
+    <script>
+function randomItem(a) {return a[Math.floor(Math.random() * a.length)]}
+(function($) {
+$.fn.bottomup = function(options) {//단일모드
+  var defaults = {size: 15,flakeColor:'#000',sizeEmote:15},
+      options = $.extend({}, defaults, options),
+    	$flake = $('<div id="flake" />').css({
+                position: 'absolute',opacity: 1,
+              	'font-size': options.size,
+              	color: options.flakeColor,
+                bottom: '0px'
+            });
+  return function(txt){
+	if(!txt)return;
+    var startPositionLeft = ($(document).width()/2) + Math.random() * ($(document).width()/2) - 100,
+		durationFall = $(document).height() * 10 + Math.random() * 5000,
+		obj = $flake.clone().appendTo('body').html(txt)
+	
+	if(txt.indexOf("<img")!=-1)
+		$(obj).children("img").css({"width":options.sizeEmote+"vh","height":options.sizeEmote+"vh"});
+	obj.css({
+    	left: startPositionLeft,
+    }).animate({
+    	bottom: $(document).height() - 40,
+    	left: startPositionLeft - 100 + Math.random() * 10,
+    	opacity: 0.5
+    }, durationFall, 'linear', function() {
+    	$(this).remove()
+    });
+  }
+};
+})(jQuery);
+var eff = null,option;
+$(document).ready(function(){
+	var qury = document.location.href.split("?")[1],isEffect = true,isChat = true;
+	if (!qury){
+		document.body.style.background = "#000";// 로드 안함
+		list = [28,301396363,301396373,301396453,301205415,301396357,301396406]
+		var ele = $.fn.bottomup();
+		setInterval(function(){
+			ele('<image src="https://static-cdn.jtvnw.net/emoticons/v1/'+randomItem(list)+'/1.0">');
+		},2000);
+		return;
+	}
+	var o = qury.split("&"),options = {},effects = [];
+	for(var i in o){
+		var j = o[i].indexOf("=");// = 가 시작하는 포인터
+		options[o[i].substring(0,j)] = o[i].substring(j+1);
+	}
+	if(options["demo"])document.body.style.background = "#"+options["demo"];
+	// options = $.extend({}, {count:1},options)
+	window.chatClient = new chatClient($.extend({}, {count:1,loop:false},options));
+	option = JSON.parse(localStorage.getItem(options.channel));
+	if(!option || !option.hasOwnProperty("count")){
+		option ={
+			minSize: 10,maxSize: 50,
+			text:'&#10052',
+			direction:"top",
+			color: "#fff",
+			target:"#bord",
+			anitime:1000,glitter:false,//애니메이션
+			startOpacity:1,endOpacity:.2,time:300,//시작/끝 애니매이션(투명도)
+			move_direction:"left",move:200,//흔들림 방향
+			delay:10000,speed:10,anitiming:"linear",
+			count:20,//개수
+			maxEmote:2,sizeEmote:4
+		};
+		localStorage.setItem(options.channel+"-effect",1);
+		localStorage.setItem(options.channel+"-sand",1);
+		if(!option.hasOwnProperty("count"))
+			localStorage.setItem(options.channel,JSON.stringify(option));
+	}
+
+	if(localStorage.getItem(options.channel+"-effect")=='1')
+		isEffect = true;
+	else isEffect = false;
+	if(localStorage.getItem(options.channel+"-sand")=='1')
+		isChat = true;
+	else isChat = false;
+	if(isEffect)eff = $.fn.effect(option);
+	localStorage.setItem(options.channel,JSON.stringify(option));//기록 리셋 방지
+	window.chatClient.open();
+	window.chatClient.console = $.fn.bottomup($.extend({},options));
+	window.chatClient.onEmotes=function(url){this.onConsole({html:'<img src="'+url+'">'})};
+	window.chatClient.onHighlighted=function(message){window.chatClient.console(message)};
+	window.chatClient.onConsole=function(message){for(var i=0;i<option.maxEmote;i+=1)window.chatClient.console(message['html'])};
+	window.chatClient.webSocket.onclose =function(){window.chatClient.console("연결재요청!");setTimeout(function(){window.chatClient.open()},100)};
+	window.chatClient.onBits=function(bit,name,message){window.chatClient.console("<h1>"+name+"님 "+bit+"비트후원</h1>"+message.replace(/(.{20})/g,"$1<br>"))};
+	window.chatClient.onCommand =function(message){
+		if(message[0].indexOf("레봇") != -1)
+			out("화면 이펙트용으로 구성된 네오캣짱(rsj1120)님 노예입니다!(스트리머 오버레이에서 동작중...)");
+		else if(message[0].indexOf("ef") != -1){
+			var ef = ["cherryblossom","cherryblossom2",
+				"chocolate","","cannabis","cloud",
+				"heart","carrot","meteor","comment",
+				"twitch","umbrella","umbrella-beach",
+				"raining","bubbble",
+				"star","star2","star3","star4","star5",
+				"cookie","bone","pig"],index=0;
+			if (message.length <= 1){
+				//out("자동설정:#ef ["+ef.join("/")+"]");
+				;
+			}else{
+				index=ef.indexOf(message[1])
+				if(index!=-1){
+					option=$.extend({},option,getEffect({effect:ef[index]}));
+					try {clearAll();eff()}catch(e){;}
+					if(isEffect)
+						eff = $.fn.effect(option);
+					out("옵션이 변경되었습니다! ("+message[1]+")");
+					localStorage.setItem(options.channel,JSON.stringify(option));
+				}else out("옵션이 존재하지 않습니다! - " + message[1]);
+			}
+		}else if(message[0].indexOf("ch")!=-1){
+			isChat = !isChat;
+			out("출력 모드 " + (isChat?"켜짐":"꺼짐"));
+			localStorage.setItem(options.channel+"-sand",isChat?1:0);
+		}else if(message[0].indexOf("onm") != -1){
+			out("매니저 모드");
+			this.isMood=true;
+		}else if(message[0].indexOf("offm") != -1){
+			out("비 매니져 모드");
+			this.isMood=false;
+		}else if(message[0].indexOf("on") != -1){
+			out("이펙트가 켜짐");
+			try {clearAll();eff()}catch(e){;}
+			eff = $.fn.effect(option);
+			isEffect = true;
+			localStorage.setItem(options.channel+"-effect",1);
+		}else if(message[0].indexOf("off") != -1){//
+			out("이펙트가 꺼짐");
+			try {clearAll();eff()}catch(e){;}
+			isEffect = false;
+			localStorage.setItem(options.channel+"-effect",0);
+		}else if(message[0].indexOf("op") != -1){
+			if (message.length <= 1)
+				out("옵션값:" + Object.keys(option).join("/"));
+			else if(message.length == 2){
+				if(option.hasOwnProperty(message[1])) 
+					out("["+message[1]+"] " + option[message[1]]);
+				else out("옵션이 존재하지 않습니다! - " + message[1]);
+			}else{
+				if(option.hasOwnProperty(message[1])){
+					var num = Number(message[2]);
+					if (message[1].indexOf("text") != -1){
+						var isOption = true,f=function(a,b){
+							if(["fas","far","fal","fad"].indexOf(a)!=-1){
+								a='<i class="'+a+' fa-'+b+'"></i>';
+								console.log(a);
+							}else if (["img","image"].indexOf(a)!=-1)
+								a = '<img src='+b+'></img>';
+							else if (["em"].indexOf(a)!=-1)
+								a = '<img src=https://static-cdn.jtvnw.net/emoticons/v1/'+b+'></img>';
+							else return message.slice(2).join(" ");
+							return a;
+						};
+						if (message.length >= 2){//#op text far heart fas heart
+							var tmp = message.slice(2),l=[];
+							console.log(tmp);
+							for(var i=0;i<tmp.length;i+=2)
+								l.push(f(tmp[i],tmp[i+1]));
+							message[2]=l;
+						}
+						if(isOption)
+							out("옵션이 변경되었습니다! ("+message[1]+"):" + message[3]);
+						else out("옵션이 변경되었습니다! ("+message[1]+"):" + message[2]);
+						option[message[1]]=message[2];
+						try {clearAll();eff()}catch(e){;}
+						eff = $.fn.effect(option);
+						localStorage.setItem(options.channel,JSON.stringify(option));
+						return
+					}
+					if (message[2].indexOf("false") != -1)
+						message[2] = false;
+					if(!isNaN(num))
+						message[2] = num;
+					option[message[1]] = message[2];
+					try {clearAll();eff()}catch(e){;}
+					if(isEffect)
+						eff = $.fn.effect(option);	
+					console.log("option");
+					if(['size','color','sizeEmote'].indexOf(message[1])!= -1){
+						window.chatClient.console = $.fn.bottomup(option);
+					}
+					out("옵션이 변경되었습니다! ("+message[1]+"):" + message[2]);
+					localStorage.setItem(options.channel,JSON.stringify(option));
+				}else {
+					out("옵션이 존재하지 않습니다! + ");
+				}
+			}
+		}else if(message[0].indexOf("reset") != -1){//리셋
+			try {clearAll();eff()}catch(e){;}
+			option ={
+				minSize: 10,maxSize: 50,
+				text:'&#10052',
+				direction:"top",
+				color: "#fff",
+				target:"#bord",
+				anitime:1000,glitter:false,//애니메이션
+				startOpacity:1,endOpacity:.2,time:300,//시작/끝 애니매이션(투명도)
+				move_direction:"left",move:200,//흔들림 방향
+				delay:10000,speed:10,anitiming:"linear",
+				count:20,//개수
+				maxEmote:2,sizeEmote:4
+			};
+			eff = $.fn.effect(option);
+			localStorage.setItem(options.channel,JSON.stringify(option));
+			out("봇 초기화");
+		}else if(["discord","디코"].indexOf(message[0])!=-1){
+			out("discord.gg/Th3a6JE 설명및 등록설정(저작권 관리)");
+		}else if(message[0].indexOf("re") != -1){//리셋
+			out("화면을 다시 불러옵니다...");
+			setTimeout(function(){location.reload();},1000);
+		}
+	};
+	function out(message){
+		if(!isChat)return;
+		$("#console").html(message).css({"opacity":1,"color":option.color}).delay(2000).animate({"opacity":0},1000,'linear',function(){
+			$(this).html("");
+		});
+		//window.chatClient.onSend(message)
+	}
+	function clearAll(){$(option.target).html("")};
+});
+    </script>
+	<style>
+*{
+	margin: 0px;
+	background-color:transparent;
+}
+body{
+	width:100%;/*1920px;*/
+	height:100%;/*1080px;*/
+  overflow:hidden;
+	text-align:center;
+}
+#flake{
+	overflow:hidden;
+}
+@keyframes heartbeat {
+    0% { transform: scale(0); }
+    70% { transform: scale(1); }
+    100% { transform: scale(0); }
+}
+@keyframes opacity_obj {
+    0% {opacity:0}
+    70% {opacity:1}
+    100% {opacity:0}
+}
+	</style>
+</head>
+<body>
+	<div id="bord" style="width:100%;height:100%;margin:0;padding:0;"></div>
+	<div id="console" style="margin:0;padding:0;position:absolute;bottom:0;width:100%;height:20px;"></div>
+</body>
+</html>
