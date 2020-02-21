@@ -3,15 +3,21 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
     <title>Leaderboards</title>
-		<script async src="https://www.googletagmanager.com/gtag/js?id=UA-158025067-2"></script>
+		<script async src="https://www.googletagmanager.com/gtag/js?id=UA-158025067-3"></script>
 		<!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css"> -->
 		<script src="https://patrickmonster.github.io/effect/js/all.min.js" charset="utf-8"></script>
-    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+		<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 		<script src="https://patrickmonster.github.io/effect/v.2/js/effect.js" charset="utf-8"></script>
 		<script src="https://patrickmonster.github.io/effect/js/option.js" charset="utf-8"></script>
 		<script src="chat.emote.js"></script>
+	<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'UA-158025067-3');
+	</script>
     <script>
-function randomItem(a) {return a[Math.floor(Math.random() * a.length)]}
+function randomItem(a){return a[Math.floor(Math.random()*a.length)]}
 (function($) {
 $.fn.bottomup = function(options) {//단일모드
   var defaults = {size: 15,flakeColor:'#000',sizeEmote:15},
