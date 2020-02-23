@@ -1,3 +1,4 @@
+
 <!doctype html>
 <html>
 <head>
@@ -6,7 +7,7 @@
 		<script async src="https://www.googletagmanager.com/gtag/js?id=UA-158025067-2"></script>
 		<!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css"> -->
 		<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-		<script src="js/chat.js"></script>
+		<script src="https://patrickmonster.github.io/effect/sound/js/chat.js"></script>
     <script>
 var eff = null,option,sound_queue;
 var audio_player=function(option){//통합 제어용
@@ -16,7 +17,7 @@ var audio_player=function(option){//통합 제어용
 	audio.controls=false;audio.loop=false;
 	audio.src = option.src;
 	audio.autoplay=false;
-	audio.volume=.5;
+	audio.volume=.1;
 	function play(){
 		console.log(audio.volume);
 		if(isPlaying()){
