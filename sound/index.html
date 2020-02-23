@@ -36,7 +36,7 @@ var audio_player=function(option){//통합 제어용
 
 
 $(document).ready(function(){
-	var tag = document.location.href.split("#")[1];
+	var tag = document.location.href.split("#")[1],isChat=false;
 	if(!tag)tag="rsj1120";
 	var audios={},source,newAudioS=(src)=>{
 		return {src:src,maxVol:source.maxVol,minVol:source.minVol,"volume_count":(source.maxVol-source.minVol)/source.countVol,id:i};
@@ -56,8 +56,15 @@ $(document).ready(function(){
 		if(isNaN(source[i]))
 			audios[i]=audio_player(newAudioS(source[i]));
 	window.chatClient.open();
-	window.chatClient.onHighlighted=function(parsed){//하이라이트 메세지
-		var msg = parsed.message;
+	chatClient.prototype.onChat = function(parsed){
+		if(!isChat)return;
+		for(var i in source){
+			var index=msg.indexOf(i);
+			if(index!=-1)
+				audios[i].play()
+		}
+	};
+	window.chatClient.onHighlighted=function(msg){//하이라이트 메세지
 		for(var i in source){
 			var index=msg.indexOf(i);
 			if(index!=-1)
