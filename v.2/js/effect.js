@@ -9,8 +9,8 @@ function gtag(){dataLayer.push(arguments);}
 gtag('js', new Date());
 gtag('config', 'UA-158025067-2');
 $.fn.effect = function(options) {
-var documentHeight = $(document).height(),
-    documentWidth = $(document).width(),
+var documentHeight =document.documentElement.clientHeight,
+    documentWidth = document.documentElement.clientWidth,
     randArray=(a)=>{return a[Math.floor(Math.random() * a.length)]},
     defaults = {
         minSize: 10,maxSize: 50,
@@ -48,6 +48,7 @@ var documentHeight = $(document).height(),
           }else if(["top","bottom"].indexOf(d.direction)!=-1)r="left";
           else if(["left","right"].indexOf(d.direction)!=-1)r="top";
           s[d.direction]=s.pos;e[d.direction]=e.pos;
+		  console.log(s[d.direction]);
           if(!d.func)
             d.func=function(d,r,s,e){
               s[r]=(Math.random()*documentWidth*(d.move==200?1:1.5))+(d.move==200?0:d.move);
@@ -64,12 +65,12 @@ var documentHeight = $(document).height(),
             return function(){isplay=false;$(o).remove()}};
           return f;
       })(obj,options,{
-          pos:0-(options.maxSize+20),opacity:0,
+          pos:-1*(options.maxSize+50),opacity:0,
       },{pos:documentHeight+10})();
     }
 $(window).resize(function (){
-  documentHeight=$(document).height();
-  documentWidth=$(document).width();
+  documentHeight=document.documentElement.clientHeight;
+  documentWidth=document.documentElement.clientWidth;
 });
 return function(){isPlay=false};
 };
