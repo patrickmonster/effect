@@ -47,7 +47,7 @@ $(document).ready(function(){
 	if(!source)
 		source={
 			"모치":"https://cdn.discordapp.com/attachments/680701405463576576/680863886190051346/Timothy_Rap_Full_Anne_Happy-eKYm1Wfpytg.mp3",
-			maxVol:.5,minVol:.01,countVol:10};
+			maxVol:1,minVol:.5,countVol:10};
 	if(localStorage.getItem(tag+"-sound")=='1')
 		isSound = true;
 	else isSound = false;
@@ -56,15 +56,15 @@ $(document).ready(function(){
 		if(isNaN(source[i]))
 			audios[i]=audio_player(newAudioS(source[i]));
 	window.chatClient.open();
-	chatClient.prototype.onChat = function(parsed){
+	window.chatClient.onChat=function(msg){
 		if(!isChat)return;
 		for(var i in source){
-			var index=msg.indexOf(i);
+			var index=msg.message.indexOf(i);
 			if(index!=-1)
 				audios[i].play()
 		}
-	};
-	window.chatClient.onHighlighted=function(msg){//하이라이트 메세지
+	}
+	window.chatClient.onHighlighted=function(msg){
 		for(var i in source){
 			var index=msg.indexOf(i);
 			if(index!=-1)
@@ -74,13 +74,13 @@ $(document).ready(function(){
 	window.chatClient.onCommand =function(message){
 		if(message[0].indexOf("sstop") != -1){
 			for(var i in audios)audios[i].stop()
-			
-		if(message[0].indexOf("schat") != -1){
+		}else if(message[0].indexOf("schat")!=-1){
 			isChat=!isChat;
-		else if(message[0].indexOf("sre") != -1){
+		}else if(message[0].indexOf("sre") != -1){
 			if(message[0].indexOf("sreset")!=-1){
-				source={"모치":"https://cdn.discordapp.com/attachments/680701405463576576/680863886190051346/Timothy_Rap_Full_Anne_Happy-eKYm1Wfpytg.mp3",
-						maxVol:.5,minVol:.01,countVol:10};
+				source={
+					"모치":"https://cdn.discordapp.com/attachments/680701405463576576/680863886190051346/Timothy_Rap_Full_Anne_Happy-eKYm1Wfpytg.mp3",
+					maxVol:1,minVol:.5,countVol:10};
 				localStorage.setItem(tag,JSON.stringify(source));
 			}
 			setTimeout(function(){location.reload()},1000);
