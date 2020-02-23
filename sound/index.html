@@ -74,7 +74,10 @@ $(document).ready(function(){
 	window.chatClient.onCommand =function(message){
 		if(message[0].indexOf("sstop") != -1){
 			for(var i in audios)audios[i].stop()
-		}else if(message[0].indexOf("sre") != -1){
+			
+		if(message[0].indexOf("schat") != -1){
+			isChat=!isChat;
+		else if(message[0].indexOf("sre") != -1){
 			if(message[0].indexOf("sreset")!=-1){
 				source={"모치":"https://cdn.discordapp.com/attachments/680701405463576576/680863886190051346/Timothy_Rap_Full_Anne_Happy-eKYm1Wfpytg.mp3",
 						maxVol:.5,minVol:.01,countVol:10};
