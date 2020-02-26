@@ -2,7 +2,7 @@ function getEffect(options){
   if(options.hasOwnProperty("color")&&options['color'].indexOf("#")==-1)options["color"]="#"+options["color"];
   if(options.effect=="315"){
     options = $.extend({},{
-			text:".",	direction:"top",count:50,speed:3,move:0,
+			text:".",	direction:"top",count:60,speed:8,move:0,
       transform:" translate(-"+document.documentElement.clientWidth/2+"px, -50px) rotate(315deg)",
 			documentHeight:()=>{return document.documentElement.clientHeight*2},
 		},options);
