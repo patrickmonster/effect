@@ -1,6 +1,12 @@
 function getEffect(options){
   if(options.hasOwnProperty("color")&&options['color'].indexOf("#")==-1)options["color"]="#"+options["color"];
-  if(options.effect=="cherryblossom2"){
+  if(options.effect=="315"){
+    options = $.extend({},{
+			text:".",	direction:"top",count:50,speed:3,move:0,
+      transform:" translate(-"+document.documentElement.clientWidth/2+"px, -50px) rotate(315deg)",
+			documentHeight:()=>{return document.documentElement.clientHeight*2},
+		},options);
+  }else if(options.effect=="cherryblossom2"){
     options = $.extend({},{text:['<image src="https://patrickmonster.github.io/tgd/img/cherryblossom/%EB%B2%9A%EA%BD%831-1.png">',
                     '<image src="https://patrickmonster.github.io/tgd/img/cherryblossom/%EB%B2%9A%EA%BD%831-2.png">',
                     '<image src="https://patrickmonster.github.io/tgd/img/cherryblossom/%EB%B2%9A%EA%BD%831-3.png">',
@@ -22,8 +28,11 @@ function getEffect(options){
                     '<image src="https://patrickmonster.github.io/tgd/img/chocolate-box-2.png">',
                     '<image src="https://patrickmonster.github.io/tgd/img/chocolate-chip.png">'],
                     minSize:10,maxSize:20,color:options.color},options);
+  }else if (options.effect=="money-bill-wave"){
+    options = $.extend({},{text:['<i class="fad fa-money-bill-wave"></i>'
+      ,'<i class="fad fa-money-bill-wave"></i>'],direction:'left',move:0,count:50,color:options.color},options)
   }else if (options.effect=="raining"){
-    options = $.extend({},{text:"|",move:0,count:10,speed:.1,color:options.color},options)
+    options = $.extend({},{text:"|",move:0,count:10,speed:.5,rspeed:false,color:options.color},options)
   }else if(options.effect=="bubbble"){
     options = $.extend({},{text:"○",minSize:10,maxSize:20,direction:"bottom",color:options.color},options)
   }else if(options.effect=="cloud"){
