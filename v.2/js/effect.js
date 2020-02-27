@@ -37,18 +37,11 @@ $.fn.effect = function(options) {
       (function(o,d,s,e,f){
           var r="";
           if(["rand"].indexOf(d.direction)!=-1){
-              // var pos_rand=(option)=>{
-              //   var istop=Boolean(Math.round(Math.random()));//탑값 렌덤?
-              //   console.log(istop);
-              //   return [option["document"+(istop?"Width":"Height")]()*Math.random(),
-              //     option["document"+(istop?"Width":"Height")]()*Math.random(),istop?"top":"left"];
-              // };
               r="top";
               s.left=options.documentWidth()*d.x*.01;
               s.top=options.documentHeight()*d.y*.01;
               d.func=function(d,r,s,e){
-                //var op=pos_rand(options);
-                e.top=options.documentWidth()*Math.random();
+                e.top=options.documentHeight()*Math.random();
                 e.left=options.documentWidth()*Math.random();
               };
           }else if(["fine_movement","none"].indexOf(d.direction)!=-1){
@@ -78,8 +71,8 @@ $.fn.effect = function(options) {
             (typeof d.func=="function")&&d.func(d,r,s,e);
             d.loop?
               o.css(s).
-              animate({opacity:options.startOpacity},d.time,d.anitiming).
-              animate(e,options.documentHeight()*d.speed+Math.random() * 1000,d.anitiming).delay(Math.random()*d.delay).
+              animate({opacity:options.startOpacity},d.time,d.anitiming).delay(Math.random()*d.delay).
+              animate(e,options.documentHeight()*d.speed+Math.random() * 1000,d.anitiming).
               animate({opacity:options.endOpacity},d.time,d.anitiming,f):0;
             return function(){isplay=false;$(o).remove()}};
           return f;
