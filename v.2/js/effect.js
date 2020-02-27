@@ -27,10 +27,8 @@ $.fn.effect = function(options) {
     },isPlay = true,
     options=$.extend({},defaults,options),
     $flake=$('<div id="flake" />').css({'position':'absolute',color:options.color}).html(options.text);
-    console.log(options.transform);
     $(options.target).css({"transform":options.transform})
-    if(options.glitter)//사용자 애니메이션
-      $flake.css("animation",options.glitter+" "+options.anitime+"s infinite")
+    if(options.glitter)$flake.css("animation",options.glitter+" "+options.anitime+"s infinite")
     for(var i=0;i<options.count;i++){
       var obj=$flake.clone().appendTo(options.target).css("font-size",options.minSize+Math.random()*options.maxSize);
       if(typeof options.text=="object")
@@ -38,13 +36,29 @@ $.fn.effect = function(options) {
       else obj.html(options.text);
       (function(o,d,s,e,f){
           var r="";
-          if(["fine_movement","none"].indexOf(d.direction)!=-1){
+          if(["rand"].indexOf(d.direction)!=-1){
+              // var pos_rand=(option)=>{
+              //   var istop=Boolean(Math.round(Math.random()));//탑값 렌덤?
+              //   console.log(istop);
+              //   return [option["document"+(istop?"Width":"Height")]()*Math.random(),
+              //     option["document"+(istop?"Width":"Height")]()*Math.random(),istop?"top":"left"];
+              // };
+              r="top";
+              s.left=options.documentWidth()*d.x*.01;
+              s.top=options.documentHeight()*d.y*.01;
+              d.func=function(d,r,s,e){
+                //var op=pos_rand(options);
+                e.top=options.documentWidth()*Math.random();
+                e.left=options.documentWidth()*Math.random();
+              };
+          }else if(["fine_movement","none"].indexOf(d.direction)!=-1){
             r="top";
             if(["top","bottom"].indexOf(d["move_direction"])!=-1)r="left";
             if(!d.func)
               d.func=function(d,r,s,e){
                 var wp=Math.random()*options.documentWidth();
-                s[r]=Math.random()*options.documentHeight();s[d["move_direction"]]=wp;
+                s[r]=Math.random()*options.documentHeight();
+                s[d["move_direction"]]=wp;
                 if(d.direction!="none")
                   e[d["move_direction"]]=wp+(options.move*Boolean(Math.round(Math.random())));
               };
@@ -64,9 +78,9 @@ $.fn.effect = function(options) {
             (typeof d.func=="function")&&d.func(d,r,s,e);
             d.loop?
               o.css(s).
-              animate({opacity:options.startOpacity},d.time,d.anitiming).delay(Math.random()*d.delay).
+              animate({opacity:options.startOpacity},d.time,d.anitiming).
               animate(e,options.documentHeight()*d.speed+Math.random() * 1000,d.anitiming).
-              animate({opacity:options.endOpacity},d.time,d.anitiming,f):0;
+              animate({opacity:options.endOpacity},d.time,d.anitiming,f).delay(Math.random()*d.delay):0;
             return function(){isplay=false;$(o).remove()}};
           return f;
       })(obj,options,{
