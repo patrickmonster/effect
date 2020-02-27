@@ -2,7 +2,7 @@ function getEffect(options){
   var sub_op=false;
   if(options.hasOwnProperty("color")&&options['color'].indexOf("#")==-1)options["color"]="#"+options["color"];
   if(options.effect.indexOf("rand")!=-1){
-    options=$.extend({},options,{direction:"rand"});
+    options=$.extend({},options,{direction:"rand",time:0});
     options.effect = options.effect.replace("rand","");
   }
   if(options.effect=="315"){
