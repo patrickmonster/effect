@@ -18,8 +18,8 @@
     <script type="text/javascript" charset="utf-8" src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 		<script type="text/javascript" charset="utf-8" src="https://patrickmonster.github.io/effect/js/anime.min.js" charset="utf-8"></script>
 		<script type="text/javascript" charset="utf-8" src="https://patrickmonster.github.io/effect/v.2/js/effect.js"></script>
-		<!-- <script src="effect.js" charset="utf-8"></script> -->
 		<script type="text/javascript" charset="utf-8" src="https://patrickmonster.github.io/effect/js/option.js"></script>
+		<!-- <script type="text/javascript" charset="utf-8" src="option.js"></script> -->
 		<script type="text/javascript" charset="utf-8" async src="https://www.googletagmanager.com/gtag/js?id=UA-158025067-2"></script>
 		<style>
 *{
@@ -56,11 +56,9 @@ var qury;
 $(document).ready(function(){
 	var options = {};
 	if(document.location.href.indexOf("?") == -1){
-		document.addStyle("html{background:#000;}");
+		document.addStyle("html{background:#333;}");
 		options={
-			effect:"raining",
-			direction:"top",count:50,speed:1,move:0,transform:" translate(-"+document.documentElement.clientHeight/2+"px, -50px) rotate(315deg)",
-			documentHeight:()=>{return document.documentElement.clientHeight*2},
+			effect:"heartrand",count:30,x:50,y:20,speed:1,time:10,delay:10
 		}
 		qury={};
 	}else{
@@ -79,8 +77,8 @@ $(document).ready(function(){
 		}
 	}
 	if(qury.hasOwnProperty("demo"))$("body").css("background","#"+qury.hasOwnProperty("demo"));
-	 $.fn.effect(getEffect(options));
-	//$.fn.effect(options);
+	$.fn.effect(getEffect(options));
+	// $.fn.effect(options);
 });
 		</script>
 	</head>
