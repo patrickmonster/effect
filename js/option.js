@@ -33,14 +33,17 @@ function getEffect(options){
                     '<image src="https://patrickmonster.github.io/tgd/img/chocolate-box-2.png">',
                     '<image src="https://patrickmonster.github.io/tgd/img/chocolate-chip.png">'],
                     minSize:10,maxSize:20,color:options.color},options);
-  }else if(options.effect=="roseos"){//https://cdn.discordapp.com/attachments/682449668428529743/682531595076501556/SPOILER_pepero1.png
+  }else if(options.effect=="whiteday"){
+    options = $.extend({},{text:['<i class="fas fa-flower"></i>'],
+                    minSize:10,maxSize:20,color:options.color},options);
+  }else if(options.effect=="roseos"){
     options = $.extend({},{text:'<image src="https://cdn.discordapp.com/attachments/682449668428529743/682531593570877440/SPOILER_Rose_of_Sharon.png">',
                     minSize:10,maxSize:20,color:options.color},options);
-  }else if(options.effect=="pepero"){//https://cdn.discordapp.com/attachments/682449668428529743/682531595076501556/SPOILER_pepero1.png
+  }else if(options.effect=="pepero"){
     options = $.extend({},{text:['<image src="https://cdn.discordapp.com/attachments/682449668428529743/682531595076501556/SPOILER_pepero1.png">',
                     '<image src="https://cdn.discordapp.com/attachments/682449668428529743/682531596569542737/SPOILER_pepero2.png">'],
                     minSize:10,maxSize:20,color:options.color},options);
-  }else if(options.effect=="flag_korean"){//https://cdn.discordapp.com/attachments/682449668428529743/682531595076501556/SPOILER_pepero1.png
+  }else if(options.effect=="flag_korean"){
     options = $.extend({},{text:'<image src="https://cdn.discordapp.com/attachments/682449668428529743/682531599006695444/SPOILER_Korean_Flag.png">',
                     minSize:10,maxSize:20,color:options.color},options);
   }else if (options.effect=="money-bill-wave"){
