@@ -22,7 +22,7 @@ $.fn.effect = function(options) {
         time:300,anitime:1000,glitter:false,//애니메이션
         startOpacity:1,endOpacity:.2,
         move_direction:"left",move:200,//흔들림 방향
-        delay:10000,speed:10,func:false,easing:"linear",
+        delay:10000,speed:10,rspeed:true,func:false,easing:"linear",
         count:10,loop:true
     },isPlay = true,
     options=$.extend({},defaults,options),
@@ -71,14 +71,14 @@ $.fn.effect = function(options) {
             (typeof d.func=="function")&&d.func(d,r,s,e);
             d.loop?
               o.css(s).delay(Math.random()*d.delay).
-              animate({opacity:options.startOpacity},d.time,d.easing).
-              animate(e,options.documentHeight()*d.speed+Math.random() * 1000,d.easing).
-              animate({opacity:options.endOpacity},d.time,d.easing,f).delay(Math.random()*3000):0;
+              animate({opacity:.2},d.time,d.easing).
+              animate(e,options.documentHeight()*d.speed+(options.rspeed?Math.random():0) * 1000,d.easing).
+              animate({opacity:0},d.time,d.easing,f).delay(Math.random()*3000):0;
             return function(){isplay=false;$(o).remove()}};
           return f;
       })(obj,options,{
           pos:-1*(options.maxSize+50),opacity:0,
-      },{pos:options.documentHeight()+10})();
+      },{pos:options.documentHeight()+10,opacity:options.startOpacity})();
     }
   return function(){isPlay=false};
 };
