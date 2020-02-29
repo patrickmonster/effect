@@ -1,0 +1,101 @@
+<!doctype html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+    <title>Leaderboards</title>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+		<script src="chat.tts.js"></script>
+    <script>
+function randomItem(a) {return a[Math.floor(Math.random() * a.length)]}
+
+var eff = null,option;
+var voices = [];
+function setVoiceList() {
+	voices=window.speechSynthesis.getVoices();
+}
+setVoiceList();
+if(window.speechSynthesis.onvoiceschanged!==undefined)
+	window.speechSynthesis.onvoiceschanged=setVoiceList;
+
+$(document).ready(function(){
+	var qury = document.location.href.split("?")[1],isEffect = true,isChat = true;
+
+	if (!qury)qury="channel=rsj1120";
+	var o = qury.split("&"),options = {},effects = [];
+	for(var i in o){
+		var j = o[i].indexOf("=");
+		options[o[i].substring(0,j)]=o[i].substring(j+1);
+	}
+	if(options["demo"])document.body.style.background = "#"+options["demo"];
+	window.chatClient = new chatClient($.extend({}, {count:1,loop:false},options));
+	option = JSON.parse(localStorage.getItem(options.username));
+	localStorage.setItem(options.username,JSON.stringify(option));//기록 리셋 방지
+	window.chatClient.open();
+	window.chatClient.webSocket.onclose =function(){speech("서버와 연결재요청!");setTimeout(function(){window.chatClient.open()},100)};
+	window.chatClient.onBits=function(bit,name,message){speech(name+"님 "+bit+"비트후원 감사합니다!")};
+	window.chatClient.onCommand =function(message){
+		if(['음성추가','음성제거'].indexOf(message[0])!=-1){}
+	};
+	window.chatClient.onChating =function(parsed){if(parsed["badges"].indexOf("broadcaster")!=-1){speech(parsed.message)}};
+});
+function speech(txt,endf) {
+  if(!window.speechSynthesis) {
+    alert("음성 재생을 지원하지 않는 브라우저입니다. 크롬, 파이어폭스 등의 최신 브라우저를 이용하세요");
+    return;
+  }
+  var lang = 'ko-KR';
+  var utterThis = new SpeechSynthesisUtterance(txt);
+  utterThis.onend = endf;
+  utterThis.onerror = function(event) {
+    console.log('error', event);
+  };
+  var voiceFound = false;
+  for(var i = 0; i < voices.length ; i++) {
+    if(voices[i].lang.indexOf(lang) >= 0 || voices[i].lang.indexOf(lang.replace('-', '_')) >= 0) {
+      utterThis.voice = voices[i];
+      voiceFound = true;
+    }
+  }
+  if(!voiceFound) {
+	  alert('voice not found');
+	  return;
+  }
+  utterThis.lang = lang;
+  utterThis.pitch = 1;
+  utterThis.rate = 1; //속도
+  window.speechSynthesis.speak(utterThis);
+}
+    </script>
+	<style>
+*{
+	margin: 0px;
+	background-color:transparent;
+}
+body{
+	width:100%;/*1920px;*/
+	height:100%;/*1080px;*/
+  overflow:hidden;
+	text-align:center;
+}
+img{
+	width: 4vh;
+	height: 4vh;
+}
+#flake{
+	overflow:hidden;
+}
+@keyframes heartbeat {
+    0% { transform: scale(0); }
+    70% { transform: scale(1); }
+    100% { transform: scale(0); }
+}
+@keyframes opacity_obj {
+    0% {opacity:0}
+    70% {opacity:1}
+    100% {opacity:0}
+}
+	</style>
+</head>
+<body>
+</body>
+</html>
