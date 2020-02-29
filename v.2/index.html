@@ -18,8 +18,9 @@
     <script type="text/javascript" charset="utf-8" src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 		<script type="text/javascript" charset="utf-8" src="https://patrickmonster.github.io/effect/js/anime.min.js" charset="utf-8"></script>
 		<script type="text/javascript" charset="utf-8" src="https://patrickmonster.github.io/effect/v.2/js/effect.js"></script>
-		<script type="text/javascript" charset="utf-8" src="https://patrickmonster.github.io/effect/js/option.js"></script>
-		<!-- <script type="text/javascript" charset="utf-8" src="option.js"></script> -->
+		<!-- <script type="text/javascript" charset="utf-8" src="https://patrickmonster.github.io/effect/js/option.js"></script> -->
+		<script type="text/javascript" charset="utf-8" src="option.js"></script>
+		<script type="text/javascript" charset="utf-8" src="effect.js"></script>
 		<script type="text/javascript" charset="utf-8" async src="https://www.googletagmanager.com/gtag/js?id=UA-158025067-2"></script>
 		<style>
 *{
@@ -30,7 +31,7 @@ body{
 	width: 100%;/*1920px;*/
 	height: 100%;/*1080px;*/
 	background: transparent;
-  overflow:hidden;
+  overflow:hidden !important;
 }
 img{
 	width: 3vh;
@@ -62,7 +63,7 @@ $(document).ready(function(){
 	if(document.location.href.indexOf("?") == -1){
 		document.addStyle("html{background:#333;}");
 		options={
-			effect:"heartrand",count:30,x:50,y:20,speed:1,time:10,delay:10
+			effect:"cherryblossom2"
 		}
 		qury={};
 	}else{
@@ -80,6 +81,8 @@ $(document).ready(function(){
 					options['html'] = h;
 		}
 	}
+	if(options.opacity)
+		document.addStyle("#flake{opacity:"+options.opacity+" !important;}")
 	if(qury.hasOwnProperty("demo"))$("body").css("background","#"+qury.hasOwnProperty("demo"));
 	$.fn.effect(getEffect(options));
 	// $.fn.effect(options);
