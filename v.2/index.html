@@ -81,8 +81,10 @@ $(document).ready(function(){
 					options['html'] = h;
 		}
 	}
-	if(options.opacity)
-		document.addStyle("#flake{opacity:"+options.opacity+" !important;}")
+	if(options.opacity){
+		document.addStyle("#flake{opacity:"+options.opacity+" !important;}");
+		delete options.opacity
+	}
 	if(qury.hasOwnProperty("demo"))$("body").css("background","#"+qury.hasOwnProperty("demo"));
 	$.fn.effect(getEffect(options));
 	// $.fn.effect(options);
