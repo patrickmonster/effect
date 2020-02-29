@@ -71,7 +71,7 @@ $.fn.effect = function(options) {
             (typeof d.func=="function")&&d.func(d,r,s,e);
             d.loop?
               o.css(s).delay(Math.random()*d.delay).
-              animate({opacity:.2},d.time,d.easing).
+              animate({opacity:.7},d.time,d.easing).
               animate(e,options.documentHeight()*d.speed+(options.rspeed?Math.random():0) * 1000,d.easing).
               animate({opacity:0},d.time,d.easing,f).delay(Math.random()*3000):0;
             return function(){isplay=false;$(o).remove()}};
