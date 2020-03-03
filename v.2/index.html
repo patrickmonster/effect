@@ -1,85 +1,91 @@
+<!DOCTYPE html>
+<html>
+	<head>
+        <title>Twitch Stream!</title>
+		<meta http-equiv="Pragma" content="no-cache">
+		<meta http-equiv="Cache-Control" content="no-cache">
+		<meta http-equiv="expires" content="0">
+		<meta content='IE=edge,chrome=1' http-equiv='X-UA-Compatible' />
+		<meta name="viewport" content="width=device-width, user-scalable=no">
 
+		<meta property="og:locale" content="ko_KR" />
+		<meta property="og:site_name" content="네오캣짱">
+		<meta property="og:title" content="방송이펙트">
+		<meta property="og:type" content="website">
+		<meta property="og:description" content="네오캣짱 - 방송이펙트">
+
+		<script type="text/javascript" charset="utf-8" src="https://patrickmonster.github.io/effect/js/all.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+		<script type="text/javascript" charset="utf-8" src="https://patrickmonster.github.io/effect/js/anime.min.js" charset="utf-8"></script>
+		<script type="text/javascript" charset="utf-8" src="https://patrickmonster.github.io/effect/v.2/js/effect.js"></script>
+		<script type="text/javascript" charset="utf-8" src="https://patrickmonster.github.io/effect/js/option.js"></script>
+		<!-- <script type="text/javascript" charset="utf-8" src="js/option.js"></script> -->
+		<!-- <script type="text/javascript" charset="utf-8" src="js/effect.js"></script> -->
+		<script type="text/javascript" charset="utf-8" async src="https://www.googletagmanager.com/gtag/js?id=UA-158025067-2"></script>
+		<style>
+*{
+	margin: 0px;
+}
+
+body{
+	width: 100%;/*1920px;*/
+	height: 100%;/*1080px;*/
+	background: transparent;
+  overflow:hidden !important;
+}
+img{
+	width: 3vh;
+	height:3vh;
+}
+@keyframes heartbeat{
+    0%  {transform:scale(0);}
+    70% {transform:scale(1);}
+    100%{transform:scale(0);}
+}
+@keyframes opacity_obj{
+    0% {opacity:0}
+    70% {opacity:1}
+    100% {opacity:0}
+}
+@keyframes span{
+	0%{-webkit-transform: rotate(0deg);transform: rotate(0deg);}
+	100%{-webkit-transform: rotate(1turn);transform: rotate(1turn);}
+}
+		</style>
+		<script>
 Element.prototype.createElement=Element.prototype.C=function(ele){var ele=document.createElement(ele);this.appendChild(ele);return ele};
-window.addScript=document.addScript=function(a,b){b=document.head.C("script");b.src=a;return b};
-window.addLink=document.addLink=function(a,b){b=document.head.C("link");b.src=a;return b};
-window.addStyle=document.addStyle=function(a,b){b=document.head.C("link");b.innerHTML=a;return b};
-(function($) {
-window.dataLayer = window.dataLayer || [];
-function gtag(){dataLayer.push(arguments);}
-gtag('js', new Date());
-gtag('config', 'UA-158025067-2');
-$.fn.effect = function(options) {
-  var randArray=(a)=>{return a[Math.floor(Math.random() * a.length)]},
-    defaults = {
-        minSize: 10,maxSize: 50,
-        documentWidth:()=>{return document.documentElement.clientWidth},
-        documentHeight:()=>{return document.documentElement.clientHeight},
-        target:"body",
-        text:'&#10052',
-        direction:"top",
-        transform:"",
-        color: "#fff",
-        time:300,anitime:1000,glitter:false,//애니메이션
-        startOpacity:1,endOpacity:.2,
-        move_direction:"left",move:200,//흔들림 방향
-        delay:10000,speed:10,rspeed:true,func:false,easing:"linear",
-        count:10,loop:true
-    },isPlay = true,
-    options=$.extend({},defaults,options),
-    $flake=$('<div id="flake" />').css({'position':'absolute',color:options.color}).html(options.text);
-    $(options.target).css({"transform":options.transform})
-    if(options.glitter)$flake.css("animation",options.glitter+" "+options.anitime+"s infinite")
-    for(var i=0;i<options.count;i++){
-      var obj=$flake.clone().appendTo(options.target).css("font-size",options.minSize+Math.random()*options.maxSize);
-      if(typeof options.text=="object")
-        obj.html(randArray(options.text))
-      else obj.html(options.text);
-      (function(o,d,s,e,f){
-          var r="";
-          if(["rand","randpos"].indexOf(d.direction)!=-1){
-              r="top";
-              s.left=options.documentWidth()*d.x*.01;
-              s.top=options.documentHeight()*d.y*.01;
-              d.func=function(d,r,s,e){
-                e.top=options.documentHeight()*Math.random();
-                e.left=options.documentWidth()*Math.random();
-              };
-          }else if(["fine_movement","none"].indexOf(d.direction)!=-1){
-            r="top";
-            if(["top","bottom"].indexOf(d["move_direction"])!=-1)r="left";
-            if(!d.func)
-              d.func=function(d,r,s,e){
-                var wp=Math.random()*options.documentWidth();
-                s[r]=Math.random()*options.documentHeight();
-                s[d["move_direction"]]=wp;
-                if(d.direction!="none")
-                  e[d["move_direction"]]=wp+(options.move*Boolean(Math.round(Math.random())));
-              };
-          }else if(["top","bottom"].indexOf(d.direction)!=-1)r="left";
-          else if(["left","right"].indexOf(d.direction)!=-1)r="top";
-          s[d.direction]=s.pos;
-          if(d.direction=="top")
-            e[d.direction]=e.pos;
-          else e[d.direction]=options.documentWidth()+10;
-          if(!d.func)
-            d.func=function(d,r,s,e){
-              s[r]=(Math.random()*options.documentWidth())+(d.move==200?0:d.move);
-              e[r]=s[r]+Math.random()*d.move;
-            };
-          if(r)d.func(d,r,s,e);
-          f=()=>{
-            (typeof d.func=="function")&&d.func(d,r,s,e);
-            d.loop?
-              o.css(s).delay(Math.random()*d.delay).
-              animate({opacity:.7},d.time,d.easing).
-              animate(e,options.documentHeight()*d.speed+(options.rspeed?Math.random():0) * 1000,d.easing).
-              animate({opacity:0},d.time,d.easing,f).delay(Math.random()*3000):0;
-            return function(){isplay=false;$(o).remove()}};
-          return f;
-      })(obj,options,{
-          pos:-1*(options.maxSize+50),opacity:0,
-      },{pos:options.documentHeight()+10,opacity:options.startOpacity})();
-    }
-  return function(){isPlay=false};
-};
-})(jQuery);
+window.addScript=document.addScript=function(){var a=arguments,b=a.length,c=0;for(;c<b;c++)document.head.C("script").src=a[c]};
+window.addLink=document.addLink=function(){var a=arguments,b=a.length,c=0;for(;c<b;c++)document.head.C("link").src=a[c]};
+window.addStyle=document.addStyle=function(){var a=arguments,b=a.length,c=0;for(;c<b;c++)document.head.C('style').innerHTML=a[c]};
+var qury;
+$(document).ready(function(){
+	var options = {};
+	if(document.location.href.indexOf("?") == -1){
+		document.addStyle("html{background:#333;}");
+		options={
+			effect:"cherryblossom2"
+		}
+		qury={};
+	}else{
+		qury=document.location.href.split("?")[1];
+		if(qury.indexOf("#"))qury = qury.split("#")[0].split("&");
+		for(var i of qury){
+			var data=i.split("=");
+			options[data[0]] = data[1];
+		}
+		var h = [qury["html"]];
+		if(h[0] != undefined){
+			for(var i=0;i<3;i++)
+				if(qury["html"+i])
+					h.append(qury["html"+i])
+					options['html'] = h;
+		}
+	}
+	if(qury.hasOwnProperty("demo"))$("body").css("background","#"+qury.hasOwnProperty("demo"));
+	$.fn.effect(getEffect(options));
+	// $.fn.effect(options);
+});
+		</script>
+	</head>
+	<body></body>
+</html>
