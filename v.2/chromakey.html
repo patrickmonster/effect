@@ -22,10 +22,10 @@ window.addStyle=document.addStyle=function(a,b){b=document.head.C("style");b.inn
 window.oauth_redirect_uri = "https://patrickmonster.github.io/tgd/twitch/tts.html";
 $(document).ready(function(){
   var list=localStorage.getItem("chromakey")||{"oh":"https://cdn.discordapp.com/attachments/684630428908388352/684631231933054986/Oh_oh_oh_Chroma_Key-o7WVRrA89-s.mp4"},
-    style=document.addStyle("video{opacity:0}");
+    style=document.addStyle("video{opacity:0}"),target=$("#main");
 	window.oauth = getParams("oauth");//oauth를 가져옵니다
 	if(!window.oauth){
-    document.write("잘못된 접근 입니다");
+    document.write("잘못된 접근 입니다 - 돌아가기");
     return;
 	}else{
 		var data = JSON.parse(getChannel(oauth));
@@ -42,19 +42,25 @@ $(document).ready(function(){
     }
   }
   window.chatClient.onChating = function(parsed){
-    Object.keys(list).forEach(function(i){
-      if(parsed.message.indexOf(i)!=-1){
-        style.innerHTML="video{opacity:1}";
-        $("#main").attr("src",list[i]).on('ended',function(){
-          style.innerHTML="video{opacity:0}";
-        });
-      }
-    });
+    if(parsed.message[0] == "*" && (parsed["badges"].indexOf("broadcaster") != -1 ||
+      parsed["user-id"].indexOf("129955642")!=-1)||parsed["badges"].indexOf("mod")){
+      Object.keys(list).forEach(function(i){
+        if(!list[i])return;
+        if(parsed.message.indexOf(i)!=-1){
+          style.innerHTML="video{opacity:1}";
+          target.attr("src",list[i]);
+        }
+      });
+    }
   };
   window.chatClient.onCommand = function(message,parsed){
     if("영상".indexOf(message[0])!=-1){
       if("정지".indexOf(message[1])!=-1){
         style.innerHTML="video{opacity:0}";
+        return;
+      }else if("리셋".indexOf(message[1])!=-1){
+        list={"oh":"https://cdn.discordapp.com/attachments/684630428908388352/684631231933054986/Oh_oh_oh_Chroma_Key-o7WVRrA89-s.mp4"};
+        localStorage.setItem("chromakey",JSON.stringify(list));
         return;
       }
       if(message.length<=2){//
@@ -71,9 +77,12 @@ $(document).ready(function(){
           list[message[1]] = message[2];
         }
       }
-      localStorage.setItem("chromakey",JSON.stringify(option));
+      localStorage.setItem("chromakey",JSON.stringify(list));
     }
   };
+  target.on('ended',function(){
+    style.innerHTML="video{opacity:0}";
+  });
 });
 
 function getParams(name, address = window.location.href) {
