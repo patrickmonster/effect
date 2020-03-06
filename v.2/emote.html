@@ -1,0 +1,112 @@
+
+<!doctype html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+    <title>Leaderboards</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+		<script src="https://patrickmonster.github.io/irc_chat_client/chat.js" charset="utf-8"></script>
+		<script src="https://rawcdn.githack.com/blueimp/JavaScript-MD5/v2.10.0/js/md5.min.js"></script>
+	<style>
+
+*{
+	margin: 0px;
+	background-color:#0000;
+}
+html{
+	background-color:#0000;
+}
+	</style>
+</head>
+<body>
+    <script>
+Element.prototype.createElement=Element.prototype.C=function(ele){var ele=document.createElement(ele);this.appendChild(ele);return ele};
+window.addScript=document.addScript=function(a,b){b=document.head.C("script");b.src=a;return b};
+window.addLink=document.addLink=function(a,b){b=document.head.C("link");b.src=a;return b};
+window.addStyle=document.addStyle=function(a,b){b=document.head.C("style");b.innerHTML=a;return b};
+$.fn.bottomup = function(options) {
+  var defaults ={size: 15,imgSize:4,html:'',color:'fff',direction:"bottom"},
+      options = $.extend({}, defaults, options),
+			$flake = $('<div id="flake" />').css({
+                position: 'absolute',
+                bottom: '0px'
+            }).html(options.html),
+			startPositionLeft = Math.random() * $(document).width() - 100,
+			durationFall = $(document).height() * 10 + Math.random() * 5000;
+	$flake.appendTo('body').css({
+		left: startPositionLeft,
+		opacity: 1,
+		'font-size': options.size,
+		color: "#"+options.color
+	}).animate({
+		bottom: $(document).height() - 40,
+		left: startPositionLeft - 100 + Math.random() * 10,
+		opacity: 0.5
+	}, durationFall,'linear',function(){
+		$(this).remove()
+	});
+};
+function randomItem(a){return a[Math.floor(Math.random()*a.length)]};
+window.oauth_redirect_uri = "https://patrickmonster.github.io/tgd/twitch/tts.html";
+$(document).ready(function(){
+	const oauth = localStorage.getItem("oauth"),
+		default_option={size:15,imgSize:4,color:'fff',direction:"bottom"};
+	var option=JSON.parse(localStorage.getItem("emote"))||$.extend({},default_option),
+		style;
+	localStorage.setItem("emote",JSON.stringify(option));
+	window.channelname = getParams("channel");
+	if(!oauth)location.href=window.oauth_redirect_uri;
+	if(!window.channelname){
+		var data = JSON.parse(getChannel(oauth));
+		window.channelname = data["login"];
+		window.user_id = data["user_id"];
+	}
+	style=document.addStyle("#flake img{width:"+option.imgSize+"vh;height:"+option.imgSize+"vh}");
+	window.chatClient = new chatClient({channel:window.channelname,username:window.channelname,password:oauth});
+	window.chatClient.open();
+	window.chatClient.onEmotes = function(url,length){
+		for(var i=0;i<length;i+=1)
+			$.fn.bottomup($.extend({},default_option,{html:'<image src="'+url+'">'}));
+	};
+	// window.chatClient.onHighlighted = function(message){
+	// 	$.fn.bottomup($.extend({},default_option,{html:message}));
+	// };
+	window.chatClient.onCommand=function(comm,parsed){
+		console.log(comm);
+		if("이모트".indexOf(comm[0])!=-1){//이모트 전용 명령
+			({"크기":function(size){
+				console.log();
+				option.imgSize=size;
+				style=document.addStyle("#flake img{width:"+option.imgSize+"vh;height:"+option.imgSize+"vh}#flake{color:#"+option.color+"}");
+				localStorage.setItem("emote",JSON.stringify(option));
+			},"색상":function(color){
+				option.color=color;
+				style=document.addStyle("#flake img{width:"+option.imgSize+"vh;height:"+option.imgSize+"vh}#flake{color:#"+option.color+"}");
+				style=document.addStyle("#flake img{width:"+option.imgSize+"vh;height:"+option.imgSize+"vh}");
+				localStorage.setItem("emote",JSON.stringify(option));
+			}})[comm[1]](comm[2]);
+		}
+	};
+	window.chatClient.onChating = function(parsed){
+		// console.log(parsed);
+	};
+});
+
+function getParams(name, address = window.location.href) {
+ let url;
+ let results = "";
+ url = new URL(address);
+ if (typeof url.searchParams === 'undefined') {
+	 results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(address);
+	 if (results == null) {
+		 return null;
+	 } else {
+		 return decodeURI(results[1]) || 0;
+	 }
+ } else {
+	 return url.searchParams.get(name);
+ }
+}
+    </script>
+</body>
+</html>
