@@ -66,6 +66,7 @@ $(document).ready(function(){
 		window.chatClient.onSend('#시간 폰트 '+$(this).children('option:selected').val())
 	});
 
+	$("#ui_chatting").append($("<li/>").html(window.channelname+"에 접속!"));
 	$("#color_selecter").minicolors({
 		defaultValue: '673AB7',format:'hex'
 	});
