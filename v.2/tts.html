@@ -4,75 +4,367 @@
 	<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
     <title>Leaderboards</title>
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-		<script src="https://patrickmonster.github.io/effect/v.2/js/chat.js"></script>
+		<!-- <script src="https://patrickmonster.github.io/effect/v.2/js/chat.js"></script> -->
+		<!-- <script src="https://patrickmonster.github.io/tgd/twitch/js/chat.tts.js" charset="utf-8"></script> -->
+		<script src="https://patrickmonster.github.io/irc_chat_client/chat.js" charset="utf-8"></script>
+		<script src="https://rawcdn.githack.com/blueimp/JavaScript-MD5/v2.10.0/js/md5.min.js"></script>
+		<script defer src="https://patrickmonster.github.io/tgd/js/jquery.minicolors.min.js"></script>
+	  <link rel="stylesheet" href="https://patrickmonster.github.io/tgd/css/jquery.minicolors.css"><!-- Global site tag (gtag.js) - Google Analytics -->
+		<script async src="https://www.googletagmanager.com/gtag/js?id=UA-158025067-2"></script>
+		<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','UA-158025067-2');</script>
     <script>
-function randomItem(a) {return a[Math.floor(Math.random() * a.length)]}
+//기본 연결 환경
+window.oauth_client_id = "g1rhyzp1s7y2d755xqjn1otspdgvc3";
+window.oauth_redirect_uri = "https://patrickmonster.github.io/tgd/twitch/tts.html";
 
-var eff = null,option;
 var voices = [];
 function setVoiceList() {
 	voices=window.speechSynthesis.getVoices();
 }
 setVoiceList();
-if(window.speechSynthesis.onvoiceschanged!==undefined)
+if (window.speechSynthesis.onvoiceschanged !== undefined) {
 	window.speechSynthesis.onvoiceschanged=setVoiceList;
+}
 
 $(document).ready(function(){
-	var qury = document.location.href.split("?")[1],isEffect = true,isChat = true;
-
-	if (!qury)qury="channel=rsj1120";
-	var o = qury.split("&"),options = {},effects = [];
-	for(var i in o){
-		var j = o[i].indexOf("=");
-		options[o[i].substring(0,j)]=o[i].substring(j+1);
+	const oauth = localStorage.getItem("oauth");
+	window.channelname = getParams("channel");
+	if(!oauth)permiss();
+	if(!window.channelname){
+		var data = JSON.parse(getChannel(oauth));
+		window.channelname = data["login"];
+		window.user_id = data["user_id"];
 	}
-	if(options["demo"])document.body.style.background = "#"+options["demo"];
-	window.chatClient = new chatClient($.extend({}, {count:1,loop:false},options));
-	option = JSON.parse(localStorage.getItem(options.username));
-	localStorage.setItem(options.username,JSON.stringify(option));//기록 리셋 방지
+	window.chatClient = new chatClient({port:443,channel:window.channelname,username:window.channelname,password:oauth});//접속채널
 	window.chatClient.open();
-	window.chatClient.webSocket.onclose =function(){speech("서버와 연결재요청!");setTimeout(function(){window.chatClient.open()},100)};
-	window.chatClient.onBits=function(bit,name,message){speech(name+"님 "+bit+"비트후원 감사합니다!")};
-	window.chatClient.onCommand =function(message){
-		if(['음성추가','음성제거'].indexOf(message[0])!=-1){}
+	window.chatClient.onJoin=function(user){
+		if($("input:checkbox[id='ui_chatting_hidden']").is(":checked"))join(user);
+		// else{
+		// 	if(users.indexOf(id)!=-1)return;
+		// 	users.push(id);
+		// }
+	}
+	window.chatClient.webSocket.onclose=function(){;};
+	window.chatClient.onBits=function(bit,name,message){tts(name+"님 "+bit+"비트후원 감사합니다!")};
+	window.chatClient.onChating =function(parsed){
+		if(users.indexOf(parsed["display-id"])==-1)
+			join(parsed["display-id"]);
+		if(parsed["badges"].indexOf("broadcaster")!=-1){
+			var i = $("<li/>").html(parsed["message"]);
+			$("#ui_chatting").append(i);
+			scrollChat();
+			if($("input:checkbox[id='ui_chatting_chat_tts']").is(":checked"))tts(parsed.hasOwnProperty("emotes_message")?parsed["emotes_message"]:parsed.message);
+		}
 	};
-	window.chatClient.onChating =function(parsed){if(parsed["badges"].indexOf("broadcaster")!=-1){speech(parsed.message)}};
+	//데이터값 설정
+	get_checkbox.call($("input:checkbox[id='ui_chatting_chat_tts']"))
+	get_checkbox.call($("input:checkbox[id='ui_chatting_join']"))
+	get_checkbox.call($("input:checkbox[id='ui_chatting_tts']"))
+	get_checkbox.call($("input:checkbox[id='ui_chatting_hidden']"))
+	get_input.call($("#ui_greetings_op"));
+	$("#timer_font").change(function(){
+		window.chatClient.onSend('#시간 폰트 '+$(this).children('option:selected').val())
+	});
+
+	$("#color_selecter").minicolors({
+		defaultValue: '673AB7',format:'hex'
+	});
+	$("#emote_color_selecter").minicolors({
+		defaultValue:"ffffff",format:'hax'
+	});
 });
-function speech(txt,endf) {
-  if(!window.speechSynthesis) {
-    alert("음성 재생을 지원하지 않는 브라우저입니다. 크롬, 파이어폭스 등의 최신 브라우저를 이용하세요");
-    return;
-  }
-  var lang = 'ko-KR';
-  var utterThis = new SpeechSynthesisUtterance(txt);
-  utterThis.onend = endf;
-  utterThis.onerror = function(event) {
-    console.log('error', event);
-  };
-  var voiceFound = false;
-  for(var i = 0; i < voices.length ; i++) {
-    if(voices[i].lang.indexOf(lang) >= 0 || voices[i].lang.indexOf(lang.replace('-', '_')) >= 0) {
-      utterThis.voice = voices[i];
-      voiceFound = true;
-    }
-  }
-  if(!voiceFound) {
-	  alert('voice not found');
-	  return;
-  }
-  utterThis.lang = lang;
-  utterThis.pitch = 1;
-  utterThis.rate = 1; //속도
-  window.speechSynthesis.speak(utterThis);
+
+var users=["nightbot","twipkr","bbangddeock","ssakdook","==제외리스트=="];
+//!$("input:checkbox[id='ui_chatting_hidden']").is(":checked")
+function join(id){
+	if(users.indexOf(id)!=-1)return;
+	users.push(id);
+	updateUser();
+	if(id==window.channelname)return;
+	window.chatClient.getUser(id,function(data){
+		var user=JSON.parse(data)["users"][0];
+		var txt=user["display_name"]+$("#ui_greetings_op").val();
+		$("#ui_chatting").append($("<li/>").html(txt));
+		scrollChat();
+		if($("input:checkbox[id='ui_chatting_join']").is(":checked"))
+			window.chatClient.onSend(txt)
+		if($("input:checkbox[id='ui_chatting_tts']").is(":checked"))
+			tts(txt);
+	});
 }
-    </script>
+
+function updateUser(){
+	var e = $("#ui_chatting_user"),v="";
+	for(var u of users)v+=u+"<br>";
+	e.html(v);
+}
+
+function sendChat(){
+	var ele=$("#ui_chatting_in"),msg=ele.val();
+	if(!msg||msg.length<=0)return
+	$("#ui_chatting").append($("<li/>").html(msg));
+	//$("#ui_chatting").prepend($("<li/>").html(msg));
+	ele.val("");
+	scrollChat();
+	window.chatClient.onSend(msg);
+	if($("input:checkbox[id='ui_chatting_tts']").is(":checked"))tts(msg);
+}
+
+function permiss(){//https://lastorder.xyz/chatreader-kor/speech.html 참고
+	if (document.location.hash!==""&&document.location.hash.indexOf("access_token")!==-1){
+		const rawauth = document.location.href.replace("#", "?");
+		const authobj = new URL(rawauth);
+		const oauth = getParams("access_token", rawauth);
+		const state = getParams("state", rawauth);
+		const localstate = localStorage.getItem("state");
+		const last_url = localStorage.getItem("last_url");
+		const last_url_obj = new URL(last_url);
+		document.body.innerHTML = '';
+		if (last_url_obj.origin !== authobj.origin) {
+			document.write("SECURITY ERROR");
+		} else {
+			if (localstate === null||localstate===""|| state !== localstate) {
+				document.write("잘못된 state값이 전달되었습니다. 페이지를 새로고침 해보세요.<br/>Invalid state. please refresh and retry.")
+				localStorage.setItem("oauth","");
+				localStorage.setItem("state","");
+				localStorage.setItem("last_url","");
+			} else {
+				localStorage.setItem("oauth", oauth);
+				localStorage.setItem("state", "");
+				localStorage.setItem("last_url", "");
+				location.href=last_url;
+			}
+		}
+	}else{
+		const state = md5(Date.now());
+		localStorage.setItem("state", state);
+		localStorage.setItem("last_url", location.href);
+		alert("채팅권한이 없어 찾을 수 없습니다!\n권한찾으러 떠납니다...");
+		setTimeout(function(){
+			var link = "https://api.twitch.tv/kraken/oauth2/authorize?response_type=token&client_id="+
+			window.oauth_client_id +//클라이언트 id
+			"&redirect_uri="+window.oauth_redirect_uri+//리다이렉션 아이디
+			"&scope=chat:edit%20chat:read%20channel_editor%20whispers:edit%20whispers:read%20channel:moderate&state="+state;
+			location.href = link;
+		},1000);
+	}
+}
+
+/**
+ * 주소의 GET 인자를 가져오는 함수
+ * @param {String} name 가져올 GET인자 이름
+ * @param {String} address (OPTIONAL) GET인자를 추출할 주소
+ * @returns {String} GET인자 값
+ */
+function getParams(name, address = window.location.href) {
+	let url;
+	let results = "";
+	url = new URL(address);
+	if (typeof url.searchParams === 'undefined') {
+		results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(address);
+		if (results == null) {
+			return null;
+		} else {
+			return decodeURI(results[1]) || 0;
+		}
+	} else {
+		return url.searchParams.get(name);
+	}
+}
+function tts(txt){//tts 호출
+	var lang = 'ko-KR';
+	var utterThis = new SpeechSynthesisUtterance(txt);
+	for(var i = 0; i < voices.length ; i++) {
+		if(voices[i].lang.indexOf(lang) >= 0 || voices[i].lang.indexOf(lang.replace('-', '_')) >= 0) {
+			utterThis.voice = voices[i];
+		}
+	}
+	utterThis.onerror=function(eve){
+		alert(eve.error);
+	}
+	utterThis.lang = lang;
+	utterThis.pitch = 1;
+	utterThis.rate = 1; //속도
+	utterThis.onend=function(){
+		// console.log("end");
+	}
+	window.speechSynthesis.speak(utterThis);
+}
+function replaceTwitchEmoticon(message, emotes) {
+	let ranges, id, emote_id, regExp;
+	const replace_list = {};
+
+	if (typeof emotes != 'undefined') {
+		const emote_list = emotes.split("/");
+		emote_list.forEach(function (emote_replace) {
+			ranges = emote_replace.split(":");
+			id = ranges[0];
+			if (typeof ranges[1] == 'undefined') return;
+			ranges = ranges[1].split(",");
+			if (typeof ranges[0] != 'undefined') {
+				ranges = ranges[0].split("-");
+				emote_id = message.substring(parseInt(ranges[0]), parseInt(ranges[1]) + 1);
+				replace_list[emote_id] = id;
+			}
+		});
+
+		for (const replace_id in replace_list) {
+			regExp = new RegExp(escapeRegExp(replace_id), "g");
+			message = message.replace(regExp, "");
+		}
+	}
+
+	return message;
+}
+function getChannel(oauth){//스트리머 채널값 가져오기
+	var xmlhttp = new XMLHttpRequest(),channel="";
+	xmlhttp.onreadystatechange=function(){if(this.readyState==4&&this.status==200)channel=this.responseText};
+	xmlhttp.open("GET","https://id.twitch.tv/oauth2/validate",false);
+	xmlhttp.setRequestHeader('Authorization','OAuth '+oauth);
+	xmlhttp.send();
+	return channel;
+}
+
+function scrollChat(){
+	var chat=document.getElementById("ui_chatting");
+	$("#ui_chatting").animate({"scrollTop":chat.scrollHeight - chat.clientHeight},300);
+}
+function get_checkbox(){//
+	var e=$(this);
+	e.attr("checked",localStorage.getItem("tts_"+e.attr("id"))==1);
+}
+function set_input(){//
+	var e=$(this);
+	localStorage.setItem("tts_"+e.attr("id"),e.val());
+	return e.val();
+}
+function get_input(){//
+	var data = localStorage.getItem("tts_"+this.attr("id"));
+	if(data)this.val(data);
+}
+
+function copyToClipboard(value) {
+  var aux = document.createElement("input");
+  aux.setAttribute("value", value);
+  document.body.appendChild(aux);
+  aux.select();
+  document.execCommand("copy");
+	document.body.removeChild(aux);
+}
+
+function getColor(){
+	 var color = document.getElementById('color_selecter').value + "";
+	 return color.substring(1);
+}
+</script>
 	<style>
 *{
 	margin: 0px;
 	background-color:transparent;
 }
+input[type=range]{
+	-webkit-appearance:none;
+	outline:none;
+	height:9px;
+	border-radius:4px;
+	border:1px solid #252525;
+	background-color:#f3f3f3;
+	margin-left:0;
+	margin-top:0
+}
+input[type="range"]::-webkit-slider-thumb{
+	-webkit-appearance:none;
+	background-color:#0ae;
+	width:8px;
+	height:7px
+}
 	</style>
 </head>
 <body>
+	<div class="">
+		<nav style="display:inline;float:left">
+			<input id=ui_chatting_chat_tts type="checkbox" onchange="localStorage.setItem('tts_ui_chatting_chat_tts',$(this).is(':checked')?1:0);" name="채팅tts" checked><label for="ui_chatting_chat_tts">채팅tts</label>
+			<input id=ui_chatting_tts type="checkbox" onchange="localStorage.setItem('tts_ui_chatting_tts',$(this).is(':checked')?1:0);" name="tts" checked><label for="ui_chatting_tts">tts</label>
+			<input id=ui_chatting_join type="checkbox" onchange="localStorage.setItem('tts_ui_chatting_join',$(this).is(':checked')?1:0);" name="인사" checked><label for="ui_chatting_join">인사</label>
+			<input id=ui_chatting_hidden type="checkbox" onchange="localStorage.setItem('tts_ui_chatting_hidden',$(this).is(':checked')?1:0);" name="관음" checked><label for="ui_chatting_hidden">관음</label><br>
+			맨트:{닉네임}<input id="ui_greetings_op" onkeydown="if(event.keyCode!=13)return;set_input.call(this)" type="text" name="님 어서오세요." value="님 어서오세요.">
+			<ul id=ui_chatting style="padding:0;list-style:none;width:300px;height:300px;overflow-y:auto;overflow-x:hidden;background:yellow"></ul>
+			<input id=ui_chatting_in   type="text" onkeydown="if(event.keyCode!=13)return;sendChat();" style="width:240px">
+			<button id=ui_chatting_bt type="button" name="button" onclick="sendChat()">전 송</button>
+		</nav>
+		<nav style="display:inline;float:left">
+			<!-- 채팅 유저 -->
+			채팅 유저
+			<div id=ui_chatting_user style="width:130px;height:350px;overflow-x:hidden;overflow-y:auto;background:yellow"></div>
+		</nav>
+		<nav style="display:inline;float:left">
+			<!-- 채팅 유저 -->
+			타이머<br>
+			<button id=ui_chatting_bt type="button" name="button" onclick="copyToClipboard('https://patrickmonster.github.io/tgd/twitch/time.html#'+window.channelname);setTimeout(function(){alert('링크가 복사되었습니다!')},100)">링크복사</button><br>
+			<button onclick="window.chatClient.onSend('#시간')">시 간</button><br>
+			<button onclick="window.chatClient.onSend('#시간 제거')">제 거</button><br>
+			<button onclick="window.chatClient.onSend('#시간 시작')">시 작</button><br>
+			<button onclick="window.chatClient.onSend('#시간 정지')">정 지</button><br>
+			<button onclick="window.chatClient.onSend('#시간 리셋')">리 셋</button><br>
+			<select id="timer_font">
+				<option value="1" select>폰트1</option>
+				<option value="2" select>폰트2</option>
+				<option value="3" select>폰트3</option>
+				<option value="4" select>폰트4</option>
+			</select><br>
+			<input type="text" id="color_selecter" class="form-control" value="#7300ff">
+			<button onclick="window.chatClient.onSend('#시간 색상 '+getColor())">변 경</button><br><br>
+		</nav>
+		<nav style="display:inline;float:left">
+			<!-- 채팅 유저 -->
+			이모티콘<br>
+			<button id=ui_chatting_bt type="button" name="button" onclick="copyToClipboard('https://patrickmonster.github.io/effect/v.2/emote.html?channel='+window.channelname);setTimeout(function(){alert('링크가 복사되었습니다!')},100)">링크복사</button><br>
+			크기<input type="number" id="emote_size_selecter" value="4" min="1" max=100 style="width:20px"><button onclick="window.chatClient.onSend('#이모트 크기 '+document.getElementById('emote_size_selecter').value)">변 경</button><br>
+			<!-- <input type="text" id="emote_color_selecter" class="form-control" value="#ffffff"><button onclick="window.chatClient.onSend('#이모트 색상 '+document.getElementById('emote_color_selecter').value.substring(1))">변 경</button><br><br> -->
+		</nav>
+		<nav style="display:none/*inline*/">
+			<div class="">
+			</div>
+			<div>
+				<div class="selectbox" style="margin:auto">
+					<label for="select">벚꽃</label>
+					<select id="option1">
+						<option value="cherryblossom" select>벚꽃(이미지)</option>
+						<option value="cherryblossom2">벚꽃2(이미지)</option>
+						<option value="chocolate">초콜릿</option>
+						<option value="roseos">무궁화</option>
+						<option value="pepero">빼빼로</option>
+						<option value="flag_korean">태극기</option>
+						<option value="">눈</option>
+						<option value="cannabis">단풍</option>
+						<option value="cloud">구름</option>
+						<option value="heart">하트</option>
+						<option value="carrot">당근</option>
+						<option value="meteor">운석</option>
+						<option value="comment">말풍선</option>
+						<option value="twitch">트위치</option>
+						<option value="umbrella">우산</option>
+						<option value="umbrella-beach">파라솔</option>
+						<option value="raining">비</option>
+						<option value="bubbble">공기방울</option>
+						<option value="star">별</option>
+						<option value="star2">별2</option>
+						<option value="star3">별3</option>
+						<option value="star4">별4</option>
+						<option value="star5">별5</option>
+						<option value="cookie">쿠키</option>
+						<option value="bone">뼈</option>
+						<option value="pig">돼지</option>
+					</select><br>
+					<input type="text" id="color_selecter" class="form-control" value="#7300ff"><br>
+					수량<input type="range" id="count_selecter" style="width:150px" value="10" min="10" max="50"><br>
+					속도<input type="range" id="speed_selecter" style="width:150px" step=".1" value="3" min=".1" max="30"><br>
+					투명<input type="range" id="opacity_selecter" style="width:150px" step=".1" value="1" min=".1" max="1"><br>
+					<button id=ui_effect_bt type="button" style="display:block" onclick="">적용</button>
+					<button id=ui_effect_bt type="button" onclick="">초기화</button>
+				</div>
+			</div>
+		</nav>
+	</div>
 </body>
 </html>
