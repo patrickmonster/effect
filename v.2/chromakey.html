@@ -6,10 +6,15 @@
   <script src="https://patrickmonster.github.io/irc_chat_client/chat.js" charset="utf-8"></script>
 	<script src="https://rawcdn.githack.com/blueimp/JavaScript-MD5/v2.10.0/js/md5.min.js"></script>
   <style media="screen">
+*{
+  margin:0;
+  padding:0;
+  overflow: hidden;
+}
 .footage {
-    width: 100vw;
-    height:auto;
-    filter:  url(#chromakey);
+    width: 1920px;
+    height:1080px;
+    filter:url(#chromakey);
 }
   </style>
   <script type="text/javascript">
@@ -109,7 +114,8 @@ function getParams(name, address = window.location.href) {
   </script>
 </head>
 <body>
-  <svg class="defs-only">
+  <video id="main" class="footage" autoplay></video>
+  <svg class="defs-only" style="width:0px;height:0px">
     <filter id="chromakey" color-interpolation-filters="sRGB" x="0" y="0" height="100%" width="100%">
       <feColorMatrix type="matrix"
           values="1   0   0   0   0
@@ -118,6 +124,5 @@ function getParams(name, address = window.location.href) {
                   1.5 -2  1.5 0   1" />
     </filter>
   </svg>
-  <video id="main" class="footage" autoplay></video>
   <!-- <iframe class="footage" src="https://www.youtube.com/embed/VSZlA01UnO0" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe> -->
 </body>
