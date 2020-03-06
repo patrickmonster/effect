@@ -49,20 +49,21 @@ $.fn.bottomup = function(options) {
 function randomItem(a){return a[Math.floor(Math.random()*a.length)]};
 window.oauth_redirect_uri = "https://patrickmonster.github.io/tgd/twitch/tts.html";
 $(document).ready(function(){
-	const oauth = localStorage.getItem("oauth"),
-		default_option={size:15,imgSize:4,color:'fff',direction:"bottom"};
+	// const oauth = localStorage.getItem("oauth"),
+	const	default_option={size:15,imgSize:4,color:'fff',direction:"bottom"};
 	var option=JSON.parse(localStorage.getItem("emote"))||$.extend({},default_option),
 		style;
 	localStorage.setItem("emote",JSON.stringify(option));
 	window.channelname = getParams("channel");
 	if(!oauth)location.href=window.oauth_redirect_uri;
 	if(!window.channelname){
-		var data = JSON.parse(getChannel(oauth));
-		window.channelname = data["login"];
-		window.user_id = data["user_id"];
+		document.write("잘못된 접근");return;
+		// var data = JSON.parse(getChannel(oauth));
+		// window.channelname = data["login"];
+		// window.user_id = data["user_id"];
 	}
 	style=document.addStyle("#flake img{width:"+option.imgSize+"vh;height:"+option.imgSize+"vh}");
-	window.chatClient = new chatClient({channel:window.channelname,username:window.channelname,password:oauth});
+	window.chatClient = new chatClient({channel:window.channelname});
 	window.chatClient.open();
 	window.chatClient.onEmotes = function(url,length){
 		for(var i=0;i<length;i+=1)
