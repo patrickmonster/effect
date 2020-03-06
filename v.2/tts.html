@@ -96,7 +96,7 @@ function join(id){
 
 function updateUser(){
 	var e = $("#ui_chatting_user"),v="";
-	for(var i in users){if(i<users_lenght)continue;v+=u+"<br>"}
+	for(var i in users){if(i<users_lenght)continue;v+=users[i]+"<br>"}
 	e.html(v);
 }
 
