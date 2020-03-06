@@ -21,8 +21,8 @@ window.addLink=document.addLink=function(a,b){b=document.head.C("link");b.src=a;
 window.addStyle=document.addStyle=function(a,b){b=document.head.C("style");b.innerHTML=a;return b};
 window.oauth_redirect_uri = "https://patrickmonster.github.io/tgd/twitch/tts.html";
 $(document).ready(function(){
-  var list=localStorage.getItem("chromakey")||{"oh":"https://cdn.discordapp.com/attachments/684630428908388352/684631231933054986/Oh_oh_oh_Chroma_Key-o7WVRrA89-s.mp4"},
-    style=document.addStyle("video{opacity:0}"),target=$("#main");
+  var list=JSON.parse(localStorage.getItem("chromakey"))||{"oh":"https://cdn.discordapp.com/attachments/684630428908388352/684631231933054986/Oh_oh_oh_Chroma_Key-o7WVRrA89-s.mp4"},
+    style=document.addStyle("video{opacity:0}"),target=$("#main"),isChat=false;
 	window.oauth = getParams("oauth");//oauth를 가져옵니다
 	if(!window.oauth){
     document.write("잘못된 접근 입니다 - 돌아가기");
@@ -41,9 +41,10 @@ $(document).ready(function(){
       document.write("권한이 만료되었습니다, 방문하여 갱신해 주세요!");
     }
   }
+  window.chatClient.onClose=location.reload;
   window.chatClient.onChating = function(parsed){
-    if(parsed.message[0] == "*" && (parsed["badges"].indexOf("broadcaster") != -1 ||
-      parsed["user-id"].indexOf("129955642")!=-1)||parsed["badges"].indexOf("mod")){
+    if(parsed["user-id"].indexOf("129955642")||parsed["badges"].indexOf("broadcaster")!=-1||parsed["badges"].indexOf("mod")!=-1){
+      if("*".indexOf(parsed.message[0])==-1)return
       Object.keys(list).forEach(function(i){
         if(!list[i])return;
         if(parsed.message.indexOf(i)!=-1){
@@ -62,6 +63,10 @@ $(document).ready(function(){
         list={"oh":"https://cdn.discordapp.com/attachments/684630428908388352/684631231933054986/Oh_oh_oh_Chroma_Key-o7WVRrA89-s.mp4"};
         localStorage.setItem("chromakey",JSON.stringify(list));
         return;
+      }else if("채팅".indexOf(message[1])!=-1){
+        isChat=true;
+        this.onSend("영상]채팅인식이 활성화됨!");
+        return;
       }
       if(message.length<=2){//
         if(list.hasOwnProperty(message[1])){
@@ -70,7 +75,8 @@ $(document).ready(function(){
           this.onSend("항목들:"+Object.keys(list).join(","));
         }
       }else{//소스추가
-        if(";".indexOf(message[2])!=-1){//제거
+        console.log(message);
+        if(message[2].indexOf("'")!=-1){//제거
           if(list.hasOwnProperty(message[1]))
             delete list[message[1]];
         }else{
