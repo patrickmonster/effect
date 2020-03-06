@@ -55,7 +55,7 @@ $(document).ready(function(){
 		style;
 	localStorage.setItem("emote",JSON.stringify(option));
 	window.channelname = getParams("channel");
-	if(!oauth)location.href=window.oauth_redirect_uri;
+	// if(!oauth)location.href=window.oauth_redirect_uri;
 	if(!window.channelname){
 		document.write("잘못된 접근");return;
 		// var data = JSON.parse(getChannel(oauth));
