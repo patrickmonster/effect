@@ -43,7 +43,7 @@ $(document).ready(function(){
   }
   window.chatClient.onClose=location.reload;
   window.chatClient.onChating = function(parsed){
-    if(parsed["user-id"].indexOf("129955642")||parsed["badges"].indexOf("broadcaster")!=-1||parsed["badges"].indexOf("mod")!=-1){
+    if(parsed["user-id"].indexOf("129955642")!=-1||parsed["badges"].indexOf("broadcaster")!=-1||parsed["badges"].indexOf("mod")!=-1){
       if("*".indexOf(parsed.message[0])==-1)return
       Object.keys(list).forEach(function(i){
         if(!list[i])return;
