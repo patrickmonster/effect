@@ -75,7 +75,7 @@ $(document).ready(function(){
 	});
 });
 
-var users=["nightbot","twipkr","bbangddeock","ssakdook","==제외리스트=="];
+var users=["nightbot","twipkr","bbangddeock","ssakdook"],users_lenght=user.length;
 //!$("input:checkbox[id='ui_chatting_hidden']").is(":checked")
 function join(id){
 	if(users.indexOf(id)!=-1)return;
@@ -96,7 +96,7 @@ function join(id){
 
 function updateUser(){
 	var e = $("#ui_chatting_user"),v="";
-	for(var u of users)v+=u+"<br>";
+	for(var i in users){if(i<users_lenght)continue;v+=u+"<br>"}
 	e.html(v);
 }
 
