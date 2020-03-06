@@ -323,6 +323,12 @@ input[type="range"]::-webkit-slider-thumb{
 			크기<input type="number" id="emote_size_selecter" value="4" min="1" max=100 style="width:20px"><button onclick="window.chatClient.onSend('#이모트 크기 '+document.getElementById('emote_size_selecter').value)">변 경</button><br>
 			<!-- <input type="text" id="emote_color_selecter" class="form-control" value="#ffffff"><button onclick="window.chatClient.onSend('#이모트 색상 '+document.getElementById('emote_color_selecter').value.substring(1))">변 경</button><br><br> -->
 		</nav>
+		<nav style="display:inline;float:left">
+			<!-- 채팅 유저 -->
+			크로마키<br>
+			<button id=ui_chatting_bt type="button" name="button" onclick="copyToClipboard('https://patrickmonster.github.io/effect/v.2/chromakey.html?oauth='+localStorage.getItem("oauth"));setTimeout(function(){alert('링크가 복사되었습니다!')},100)">링크복사</button><br>
+			<!-- <input type="text" id="emote_color_selecter" class="form-control" value="#ffffff"><button onclick="window.chatClient.onSend('#이모트 색상 '+document.getElementById('emote_color_selecter').value.substring(1))">변 경</button><br><br> -->
+		</nav>
 		<nav style="display:none/*inline*/">
 			<div class="">
 			</div>
