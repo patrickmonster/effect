@@ -70,7 +70,7 @@ function getEffect(options){
     options = $.extend({},{text:['<i class="far fa-heart"></i>',
                               '<i class="fas fa-heart"></i>'],move:-300,color:options.color},options);
   }else if(options.effect=="meteor"){//운석
-    options = $.extend({},{text:'<i class="fas fa-meteor"></i>',maxSize:15,move:-1000,color:options.color},options);
+    options = $.extend({},{text:'<i class="fas fa-meteor"></i>',maxSize:15,move:-1000,color:options.colaor},options);
   }else if(options.effect=="carrot"){//당근
     options = $.extend({},{text:'<i class="fas fa-carrot"></i>',maxSize:15,color:options.color},options);
   }else if(options.effect=="comment"){//말풍선
@@ -81,7 +81,7 @@ function getEffect(options){
   }else if(options.effect=="twitch"){//트위치 아이콘
     options = $.extend({},{text:'<i class="fab fa-twitch"></i>',maxSize:15,color:options.color},options);
   }else if(options.effect=="umbrella"){//우산
-    options = $.extend({},{text:'<i class="fab fa-twitch"></i>',maxSize:15,color:options.color},options);
+    options = $.extend({},{text:'<i class="fab fa-umbrella"></i>',maxSize:15,color:options.color},options);
   }else if(options.effect=="umbrella-beach"){//파라솔
     options = $.extend({},{text:'<i class="fas fa-umbrella-beach"></i>',maxSize:15,color:options.color},options);
   }else if(options.effect=="star5"){//별
