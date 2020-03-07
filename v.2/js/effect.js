@@ -49,8 +49,8 @@ $.fn.effect = function(options) {
             if(["top","bottom"].indexOf(d["move_direction"])!=-1)r="left";
             if(!d.func)
               d.func=function(d,r,s,e){
-                var wp=Math.random()*options.documentWidth();
-                s[r]=Math.random()*options.documentHeight();
+                var wp=(r=="top"?Math.random()*options.documentWidth():Math.random()*options.documentHeight());
+                s[r]=(r=="top"?Math.random()*options.documentHeight():Math.random()*options.documentWidth());
                 s[d["move_direction"]]=wp;
                 if(d.direction!="none")
                   e[d["move_direction"]]=wp+(options.move*Boolean(Math.round(Math.random())));
@@ -63,10 +63,11 @@ $.fn.effect = function(options) {
           else e[d.direction]=options.documentWidth()+10;
           if(!d.func)
             d.func=function(d,r,s,e){
-              s[r]=(Math.random()*options.documentWidth())+(d.move==200?0:d.move);
+              s[r]=(Math.random()*options.documentWidth());
               e[r]=s[r]+Math.random()*d.move;
             };
           if(r)d.func(d,r,s,e);
+          console.log(d,r,s,e);
           f=()=>{
             (typeof d.func=="function")&&d.func(d,r,s,e);
             d.loop?
