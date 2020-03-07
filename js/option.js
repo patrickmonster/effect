@@ -33,6 +33,14 @@ function getEffect(options){
                     '<image src="https://patrickmonster.github.io/tgd/img/chocolate-box-2.png">',
                     '<image src="https://patrickmonster.github.io/tgd/img/chocolate-chip.png">'],
                     minSize:10,maxSize:20,color:options.color},options);
+  }else if(options.effect=="rose"){
+    options = $.extend({},{text:['<image src="https://cdn.discordapp.com/attachments/682449668428529743/683894829666795530/1.png">',
+                              '<image src="https://cdn.discordapp.com/attachments/682449668428529743/683894830471970887/2.png">'],
+      minSize:10,maxSize:20,color:options.color},options);
+  }else if(options.effect=="rose"){
+    options = $.extend({},{text:['<image src="https://cdn.discordapp.com/attachments/682449668428529743/683894829666795530/1.png">',
+                              '<image src="https://cdn.discordapp.com/attachments/682449668428529743/683894830471970887/2.png">'],
+      minSize:10,maxSize:20,color:options.color},options);
   }else if(options.effect=="whiteday"){
     options = $.extend({},{text:['<i class="fas fa-flower"></i>'],
                     minSize:10,maxSize:20,color:options.color},options);
@@ -57,6 +65,11 @@ function getEffect(options){
     options = $.extend({},{text:'<i class="fa fa-cloud"></i>',maxSize:10,color:options.color},options)
   }else if(options.effect=="cannabis"){//단풍
     options = $.extend({},{text:'<i class="fas fa-cannabis"></i>',maxSize:15,color:options.color},options)
+  }else if(options.effect=="heart2"){
+    options = $.extend({},{text:['<img src="https://cdn.discordapp.com/attachments/682449668428529743/683894816614252592/3.png">',
+                              '<img src=https://cdn.discordapp.com/attachments/682449668428529743/683894835094355978/2.png>',
+                              '<img src=https://cdn.discordapp.com/attachments/682449668428529743/683894832967843885/1.png>'],
+                              minSize:10,maxSize:20,move_direction:"right",move:300,count:500},options)
   }else if(options.effect=="heart"){
     options = $.extend({},{text:['<i class="far fa-heart"></i>',
                               '<i class="fas fa-heart"></i>'],move:-300,color:options.color},options);
