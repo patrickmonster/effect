@@ -35,6 +35,16 @@ img{
 	width: 3vh;
 	height:3vh;
 }
+
+.tail{
+	background: transparent;
+	text-shadow: 0px -10px 3px yellow;
+	color: transparent;
+	width: .5px;
+	position: absolute;
+	top:0;
+	left: 0;
+}
 		</style>
 		<script>
 Element.prototype.createElement=Element.prototype.C=function(ele){var ele=document.createElement(ele);this.appendChild(ele);return ele};
@@ -46,7 +56,7 @@ $(document).ready(function(){
 	var options = {};
 	if(document.location.href.indexOf("?") == -1){
 		document.addStyle("html{background:#333;}");
-		options={effect:"star645+star7",count:5,speed:.7}
+		options={effect:"star_tail45+star7",count:5,speed:.7,tail:3}
 		qury={};
 	}else{
 		qury=document.location.href.split("?")[1];
@@ -96,8 +106,8 @@ function getEffect(options){
     options.effect = options.effect.replace("45","");
   }
 	// console.log(options);
-	if("star6".indexOf(options.effect)!=-1){//별
-    options = $.extend({},{text:['|'],maxSize:30,count:2,speed:1,color:options.color},options);
+	if("star_tail".indexOf(options.effect)!=-1){//별
+    options = $.extend({},{text:['.<div class=tail>|</div>'],maxSize:30,count:2,speed:1,color:options.color},options);
   }else if(options.effect=="star7"){//별
     options = $.extend({},{text:['.'],count:30,speed:10,direction:"none",move:400,color:options.color},options);
   }else{
@@ -108,5 +118,7 @@ function getEffect(options){
 }
 		</script>
 	</head>
-	<body></body>
+	<body>
+		<div class="test"></div>
+	</body>
 </html>
