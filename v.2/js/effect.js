@@ -18,7 +18,7 @@ $.fn.effect = function(options) {
         text:'&#10052',
         direction:"top",
         transform:"",
-        color: "#fff",
+        color: "#fff",tail:false,
         time:300,anitime:1000,glitter:false,//애니메이션
         startOpacity:1,endOpacity:.2,
         move_direction:"left",move:200,//흔들림 방향
@@ -67,7 +67,7 @@ $.fn.effect = function(options) {
               e[r]=s[r]+Math.random()*d.move;
             };
           if(r)d.func(d,r,s,e);
-          console.log(d,r,s,e);
+          // console.log(d,r,s,e);
           f=()=>{
             (typeof d.func=="function")&&d.func(d,r,s,e);
             d.loop?
