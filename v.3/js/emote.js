@@ -21,10 +21,11 @@ window.chatClientE.onEmotes = function(url,length){
 window.chatClientE.onShow=function(url){
   window.chatClientE.queueTimer[url]=0;
   let length=window.chatClientE.queue[url];
+  if(length>=10)length=10;
   const imgElement=new Image();
   setup();
   imgElement.onload=()=>{
-    window.chatClientE.emotes.push(new Emote(imgElement,width*(0.01*length),window.chatClientE.mod));//이미지 개수만큼//야발 옵션값 잘 봐야한다.
+    window.chatClientE.emotes.push(new Emote(imgElement,width*(0.005*length),window.chatClientE.mod));//이미지 개수만큼//야발 옵션값 잘 봐야한다.
   };
   imgElement.src=url;
   window.chatClientE.queue[url]=0;
@@ -99,8 +100,7 @@ let f={"top":function(){
     this.b = Math.random() * height * 0.4 + height * 0.6;
     this.offset = Math.sqrt(Math.abs(this.b / this.a));
     this.x = -this.offset;
-    this.speed = Math.random() * width * 0.002 +
-      (2 * this.offset) / width + width * 0.01;
+    this.speed = Math.random() * width * 0.002 +  width * 0.0005;
     this.update=()=>{
       this.x += this.speed;
       this.shouldBeDeleted = this.x > this.offset;
