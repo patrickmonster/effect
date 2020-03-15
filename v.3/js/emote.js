@@ -13,10 +13,19 @@ window.chatClientE.time=1000
 window.chatClientE.queue={};
 window.chatClientE.queueTimer={};
 window.chatClientE.onEmotes = function(url,length){
-  if(!window.chatClientE.queueTimer[url]){
-    window.chatClientE.queue[url]=length;
-    window.chatClientE.queueTimer[url]=setTimeout(window.chatClientE.onShow,window.chatClientE.time,url);
-  }else window.chatClientE.queue[url]+=length;
+  if(window.chatClientE.mod!="tt"){
+    const imgElement=new Image();
+    setup();
+    imgElement.onload=()=>{
+      window.chatClientE.emotes.push(new Emote(imgElement,width*0.01,window.chatClientE.mod));//이미지 개수만큼//야발 옵션값 잘 봐야한다.
+    };
+    imgElement.src=url;
+  }else{
+    if(!window.chatClientE.queueTimer[url]){
+      window.chatClientE.queue[url]=length;
+      window.chatClientE.queueTimer[url]=setTimeout(window.chatClientE.onShow,window.chatClientE.time,url);
+    }else window.chatClientE.queue[url]+=length;
+  }
 };
 window.chatClientE.onShow=function(url){
   window.chatClientE.queueTimer[url]=0;
