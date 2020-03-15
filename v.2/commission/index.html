@@ -36,14 +36,14 @@ img{
 	height:3vh;
 }
 
-.tail{
+.tail_bottom{
 	background: transparent;
-	text-shadow: 0px -10px 3px yellow;
-	color: transparent;
+	/* text-shadow: 0px -26px 10px #fff,0px -7px 16px #fff; */
+	/* color: transparent; */
 	width: .5px;
 	position: absolute;
-	top:0;
-	left: 0;
+	top:-18px;
+	/* left: 1.5px; */
 }
 		</style>
 		<script>
@@ -107,7 +107,7 @@ function getEffect(options){
   }
 	// console.log(options);
 	if("star_tail".indexOf(options.effect)!=-1){//별
-    options = $.extend({},{text:['.<div class=tail>|</div>'],maxSize:30,count:2,speed:1,color:options.color},options);
+    options = $.extend({},{text:['|'],minSize:30,maxSize:50,count:2,speed:.5,color:options.color},options);
   }else if(options.effect=="star7"){//별
     options = $.extend({},{text:['.'],count:30,speed:10,direction:"none",move:400,color:options.color},options);
   }else{
