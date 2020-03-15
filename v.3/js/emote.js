@@ -18,7 +18,7 @@ window.chatClientE.onEmotes = function(url,length){
       const imgElement=new Image();
       setup();
       imgElement.onload=()=>{
-        window.chatClientE.emotes.push(new Emote(imgElement,width*0.01,window.chatClientE.mod));//이미지 개수만큼//야발 옵션값 잘 봐야한다.
+        window.chatClientE.emotes.push(new Emote(imgElement,width*0.02,window.chatClientE.mod));//이미지 개수만큼//야발 옵션값 잘 봐야한다.
       };
       imgElement.src=l;
     };
