@@ -14,12 +14,15 @@ window.chatClientE.queue={};
 window.chatClientE.queueTimer={};
 window.chatClientE.onEmotes = function(url,length){
   if(window.chatClientE.mod!="tt"){
-    const imgElement=new Image();
-    setup();
-    imgElement.onload=()=>{
-      window.chatClientE.emotes.push(new Emote(imgElement,width*0.01,window.chatClientE.mod));//이미지 개수만큼//야발 옵션값 잘 봐야한다.
+    let f=l=>{
+      const imgElement=new Image();
+      setup();
+      imgElement.onload=()=>{
+        window.chatClientE.emotes.push(new Emote(imgElement,width*0.01,window.chatClientE.mod));//이미지 개수만큼//야발 옵션값 잘 봐야한다.
+      };
+      imgElement.src=l;
     };
-    imgElement.src=url;
+    for(var v=0;v<length;v++)f(url);
   }else{
     if(!window.chatClientE.queueTimer[url]){
       window.chatClientE.queue[url]=length;
@@ -109,7 +112,7 @@ let f={"top":function(){
     this.b = Math.random() * height * 0.4 + height * 0.6;
     this.offset = Math.sqrt(Math.abs(this.b / this.a));
     this.x = -this.offset;
-    this.speed = Math.random() * width * 0.002 +  width * 0.0005;
+    this.speed = Math.random() * width * 0.002 +  width * 0.005;
     this.update=()=>{
       this.x += this.speed;
       this.shouldBeDeleted = this.x > this.offset;
