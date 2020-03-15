@@ -25,7 +25,7 @@ window.chatClientE.onShow=function(url){
   const imgElement=new Image();
   setup();
   imgElement.onload=()=>{
-    window.chatClientE.emotes.push(new Emote(imgElement,width*(0.005*length),window.chatClientE.mod));//이미지 개수만큼//야발 옵션값 잘 봐야한다.
+    window.chatClientE.emotes.push(new Emote(imgElement,width*(0.01*length),window.chatClientE.mod));//이미지 개수만큼//야발 옵션값 잘 봐야한다.
   };
   imgElement.src=url;
   window.chatClientE.queue[url]=0;
