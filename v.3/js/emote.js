@@ -4,8 +4,7 @@ window.oauth_redirect_uri = "https://patrickmonster.github.io/tgd/twitch/tts.htm
 window.channelname = getParams("channel");
 
 if(!window.channelname){
-  // document.write("잘못된 접근");return;
-  window.channelname="neocats_"
+  window.channelname="neocats_";// 연결 타겟
 }
 window.chatClientE = new chatClient({channel:window.channelname});
 window.chatClientE.open();
@@ -83,7 +82,19 @@ const loop = () => {
   window.chatClientE.emotes = window.chatClientE.emotes.filter(emote=>!emote.shouldBeDeleted);
   requestAnimationFrame(loop);
 };
-let f={"top":function(){
+let f={"a":function(){
+    this.x = Math.random() * width;
+    this.y=height+this.height;
+    this.speed = Math.random() * height * 0.01 + height * 0.001;
+    this.update=()=>{
+      this.y -= this.speed;
+      this.shouldBeDeleted = -this.height > this.y;
+    };
+    this.draw=()=>{
+      let x=this.x,y=this.y;
+      window.chatClientE.ctx.drawImage(this.element, x, y, this.width, this.height);
+    }
+},"top":function(){
     this.x = Math.random() * width;
     this.y=height+this.height;
     this.speed = Math.random() * height * 0.01 + height * 0.001;
