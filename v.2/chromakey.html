@@ -61,8 +61,7 @@ $(document).ready(function(){
     }
   };
   window.chatClient.onCommand = function(message,parsed){
-    if(message[0]!="#")return;
-    if("영상".indexOf(message[0])!=-1){
+    if(message[0].indexOf("#영상")!=-1){
       if("정지".indexOf(message[1])!=-1){
         style.innerHTML="video{opacity:0}";
         return;
