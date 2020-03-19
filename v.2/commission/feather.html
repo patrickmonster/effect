@@ -55,7 +55,7 @@ var qury;
 $(document).ready(function(){
 	var options = {};
 	if(document.location.href.indexOf("?") == -1){
-		document.addStyle("html{background:#333;}");
+		// document.addStyle("html{background:#333;}");
 		options={effect:"left+right"}
 		qury={};
 	}else{
@@ -92,9 +92,9 @@ function getEffect(options){
   if(options.hasOwnProperty("color")&&options['color'].indexOf("#")==-1)options["color"]="#"+options["color"];
 
   if(options.effect=="left"){//별
-    options = $.extend({},{text:['<i class="fas fa-feather-alt" style="filter:url(\'#blur\')"></i>'],move:-500,speed:10,count:5,maxSize:15,color:options.color},options);
+    options = $.extend({},{text:['<i class="fas fa-feather-alt" style="filter:url(\'#blur\')"></i>'],move:-500,speed:10,count:10,maxSize:15,color:options.color},options);
   }else{
-    options = $.extend({},{text:['<i class="fas fa-feather-alt" style="filter:url(\'#blur\');transform:rotateY(180deg)"></i>'],move:500,speed:10,count:5,maxSize:15,color:options.color},options);
+    options = $.extend({},{text:['<i class="fas fa-feather-alt" style="filter:url(\'#blur\');transform:rotateY(180deg)"></i>'],move:500,speed:10,count:10,maxSize:15,color:options.color},options);
   }
 	console.log(options);
   return options;
