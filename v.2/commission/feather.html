@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+	<head>
+    <title>방송이펙트!</title>
+		<meta http-equiv="Pragma" content="no-cache">
+		<meta http-equiv="Cache-Control" content="no-cache">
+		<meta http-equiv="expires" content="0">
+		<meta content='IE=edge,chrome=1' http-equiv='X-UA-Compatible'/>
+		<meta name="viewport" content="width=device-width, user-scalable=no">
+
+		<meta property="og:locale" content="ko_KR" />
+		<meta property="og:site_name" content="네오캣짱">
+		<meta property="og:title" content="커미션방송이펙트">
+		<meta property="og:type" content="website">
+		<meta property="og:description" content="네오캣짱 - 커미션방송이펙트">
+
+		<script type="text/javascript" charset="utf-8" src="https://patrickmonster.github.io/effect/js/all.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+		<script type="text/javascript" charset="utf-8" src="https://patrickmonster.github.io/effect/js/anime.min.js" charset="utf-8"></script>
+		<script type="text/javascript" charset="utf-8" src="https://patrickmonster.github.io/effect/v.2/js/effect.js"></script>
+		<!-- <script type="text/javascript" charset="utf-8" src="../js/effect.js"></script> -->
+		<!-- <script type="text/javascript" charset="utf-8" src="https://patrickmonster.github.io/effect/js/option.js"></script> -->
+		<script type="text/javascript" charset="utf-8" async src="https://www.googletagmanager.com/gtag/js?id=UA-158025067-2"></script>
+		<style>
+*{
+	margin: 0px;
+}
+body{
+	width: 100%;/*1920px;*/
+	height: 100%;/*1080px;*/
+	background: transparent;
+  overflow:hidden !important;
+}
+img{
+	width: 3vh;
+	height:3vh;
+}
+
+.tail_bottom{
+	background: transparent;
+	/* text-shadow: 0px -26px 10px #fff,0px -7px 16px #fff; */
+	/* color: transparent; */
+	width: .5px;
+	position: absolute;
+	top:-18px;
+	/* left: 1.5px; */
+}
+		</style>
+		<script>
+Element.prototype.createElement=Element.prototype.C=function(ele){var ele=document.createElement(ele);this.appendChild(ele);return ele};
+window.addScript=document.addScript=function(a,b){b=document.head.C("script");b.src=a;return b};
+window.addLink=document.addLink=function(a,b){b=document.head.C("link");b.src=a;return b};
+window.addStyle=document.addStyle=function(a,b){b=document.head.C('style');b.innerHTML=a;return b};
+var qury;
+$(document).ready(function(){
+	var options = {};
+	if(document.location.href.indexOf("?") == -1){
+		document.addStyle("html{background:#333;}");
+		options={effect:"left+right"}
+		qury={};
+	}else{
+		qury=document.location.href.split("?")[1];
+		if(qury.indexOf("#"))qury = qury.split("#")[0].split("&");
+		for(var i of qury){
+			var data=i.split("=");
+			options[data[0]] = data[1];
+		}
+		var h = [qury["html"]];
+		if(h[0] != undefined){
+			for(var i=0;i<3;i++)
+				if(qury["html"+i])
+					h.append(qury["html"+i])
+					options['html'] = h;
+		}
+	}
+	if(options.effect.indexOf('+')!=-1){
+		var o=options.effect.split("+");
+		for(var i of o){
+			var e=document.body.C("div");
+			e.id=i;
+			$.fn.effect(getEffect({effect:i,target:"#"+i}));
+		}
+		console.log(i);
+	}else{
+		$.fn.effect(getEffect(options));
+	}
+	console.log(options);
+	if(options.hasOwnProperty("demo"))document.addStyle("body{background:#"+options.demo+"}");
+});
+function getEffect(options){
+  var sub_op=false;
+  if(options.hasOwnProperty("color")&&options['color'].indexOf("#")==-1)options["color"]="#"+options["color"];
+
+  if(options.effect=="left"){//별
+    options = $.extend({},{text:['<i class="fas fa-feather-alt" style="filter:url(\'#blur\')"></i>'],move:-500,speed:10,count:5,maxSize:15,color:options.color},options);
+  }else{
+    options = $.extend({},{text:['<i class="fas fa-feather-alt" style="filter:url(\'#blur\');transform:rotateY(180deg)"></i>'],move:500,speed:10,count:5,maxSize:15,color:options.color},options);
+  }
+	console.log(options);
+  return options;
+}
+		</script>
+	</head>
+	<body>
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1">
+  <defs>
+    <filter id="blur">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="1" />
+    </filter>
+  </defs>
+</svg>
+	</body>
+</html>
