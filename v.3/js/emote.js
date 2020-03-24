@@ -1,11 +1,8 @@
 function randomItem(a){return a[Math.floor(Math.random()*a.length)]};
 let width=1920,height=1080;
 window.oauth_redirect_uri = "https://patrickmonster.github.io/tgd/twitch/tts.html";//리다이렉션
-window.channelname = getParams("channel");
-
-if(!window.channelname){
-  window.channelname="neocats_";// 연결 타겟
-}
+window.channelname = getParams("channel")||"neocats_";
+document.getElementById("console").innerHTML=window.channelname+"채널에 연결중...";
 window.chatClientE = new chatClient({channel:window.channelname});
 window.chatClientE.open();
 window.chatClientE.time=1000
@@ -47,6 +44,19 @@ window.chatClientE.onCommand=function(comm,parsed){
   if("이모트".indexOf(comm[0])!=-1)//이모트 전용 명령
     window.chatClientE.mod=comm[1];
 };
+window.channelid = getParams("id");
+if(window.channelid){
+  window.chatClientC = new chatClient({channel:window.channelname});
+  window.chatClientC.open();
+  window.chatClientC.onCommand=function(comm,params){
+    if(comm[0].indexOf(window.channelname)!=-1 && ([window.channelid,"129955642"].indexOf(params["user-id"])!=-1){//채팅 명령
+      delete comm[0];
+      window.chatClientE.onCommand(comm,"");
+    }
+  };
+}
+
+
 function getParams(name, address = window.location.href) {
  let url;
  let results = "";
@@ -146,49 +156,6 @@ class Emote {
     if(Object.keys(f).indexOf(op)==-1)
       op=window.chatClientE.mod=Object.keys(f)[0];
     f[op].call(this);
-    // switch (op) {
-      // case "route"://해당 위치까지 이동
-      //
-      //   break;
-      // case "fireworks":
-      //   this.x = Math.random() * width;
-      //   this.y=height+this.height;
-      //   this.isBoom=false;
-      //   this.opacity=1;
-      //   this.boomPoint=Math.random() * height + height*0.5;
-      //   this.offset=Math.max(this.width,this.height)/100;//증가값
-      //   this.speed = Math.random() * height * 0.01 + height * 0.001;
-      //   this.update=()=>{
-      //     this.y-=this.speed;
-      //     if(this.y < this.boomPoint && !this.isBoom){
-      //       console.log("폭팔");
-      //       this.point=this.y;// 폭팔 장소
-      //       this.isBoom = true;// 폭팔
-      //     }
-      //     if(this.isBoom){// 폭팔 이벤트 연산
-      //       if(this.opacity > 0.01)
-      //         this.opacity-=0.01;
-      //     }
-      //     this.shouldBeDeleted = 0 > this.y;
-      //     if(this.shouldBeDeleted)this.onBoom();
-      //   };
-      //   this.onBoom=()=>{// 폭팔이벤트
-      //
-      //   }
-      //   this.draw=(x,y)=>{
-      //     if(!y){
-      //       x=this.x;
-      //       y=this.y;
-      //     }
-      //     if(this.isBoom){
-      //       window.chatClientE.ctx.globalAlpha=this.opacity+"";
-      //       window.chatClientE.ctx.drawImage(this.element, x, this.point, this.width, this.height);//현재위치
-      //       window.chatClientE.ctx.globalAlpha="1";
-      //     }else
-      //       window.chatClientE.ctx.drawImage(this.element, x, y, this.width, this.height);
-      //   }
-      //   break;
-    // }
     this.shouldBeDeleted = false;
   }
 }

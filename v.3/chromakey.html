@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>크로마키-네오캣짱</title>
+  <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+  <script src="https://patrickmonster.github.io/irc_chat_client/chat.js" charset="utf-8"></script>
+	<script src="https://rawcdn.githack.com/blueimp/JavaScript-MD5/v2.10.0/js/md5.min.js"></script>
+  <style media="screen">
+*{
+  margin:0;
+  padding:0;
+  overflow: hidden;
+}
+html{
+  overflow: hidden;
+}
+.footage {
+    width: 1920px;
+    height:1080px;
+    filter:url(#chromakey);
+}
+  </style>
+  <script type="text/javascript">
+//권한 없을시, 리다이렉션
+
+Element.prototype.createElement=Element.prototype.C=function(ele){var ele=document.createElement(ele);this.appendChild(ele);return ele};
+window.addScript=document.addScript=function(a,b){b=document.head.C("script");b.src=a;return b};
+window.addLink=document.addLink=function(a,b){b=document.head.C("link");b.src=a;return b};
+window.addStyle=document.addStyle=function(a,b){b=document.head.C("style");b.innerHTML=a;return b};
+window.oauth_redirect_uri = "https://patrickmonster.github.io/tgd/twitch/tts.html";
+var list=JSON.parse(localStorage.getItem("chromakey"))||{"oh":"https://cdn.discordapp.com/attachments/684630428908388352/684631231933054986/Oh_oh_oh_Chroma_Key-o7WVRrA89-s.mp4"};
+var target;
+window.onload = function() {
+  target=document.getElementById("main");
+  target.onended=function(){
+    target.style.opacity="0";
+  };
+}
+
+
+// window.oauth = getParams("oauth");//oauth를 가져옵니다
+window.channelname = getParams("channel");//oauth를 가져옵니다
+window.chatClientK = new chatClient({channel:window.channelname});
+window.chatClientC = new chatClient({channel:"recodingbot"});
+window.chatClientC.open();
+window.chatClientC.onChating = function(parsed){
+  if (["470865473","129955642"].indexOf(parsed["user-id"])!=-1 || parsed["display-id"].indexOf(window.channelname)!=-1)
+    runCromark(parsed["message"]);
+};
+window.chatClientK.isMood=true;
+window.chatClientK.open();
+window.chatClientK.onClose=location.reload;
+window.chatClientK.onChating = function(parsed){
+  if(parsed["user-id"].indexOf("129955642")!=-1||parsed["badges"].indexOf("broadcaster")!=-1||parsed["badges"].indexOf("mod")!=-1)
+    runCromark(parsed["message"]);
+};
+
+window.chatClientK.onCommand = function(message,parsed){
+  console.log(message);
+  if(message[0].indexOf("영상")!=-1){
+    if("정지".indexOf(message[1])!=-1){
+      target.style.opacity="0";
+      target.pause();
+      return;
+    }else if("리셋".indexOf(message[1])!=-1){
+      list={"oh":"https://cdn.discordapp.com/attachments/684630428908388352/684631231933054986/Oh_oh_oh_Chroma_Key-o7WVRrA89-s.mp4"};
+      localStorage.setItem("chromakey",JSON.stringify(list));
+      return;
+    }else if("채팅".indexOf(message[1])!=-1){
+      isChat=true;
+      this.onSend("영상]채팅인식이 활성화됨!");
+      return;
+    }
+    if(message.length<=2){//
+      if(list.hasOwnProperty(message[1])){
+        this.onSend(message[1]+"의 항목 :"+list[message[1]]);
+      }else{
+        this.onSend("항목들:"+Object.keys(list).join(","));
+      }
+    }else{//소스추가
+      console.log(message);
+      if(message[2].indexOf("'")!=-1){//제거
+        if(list.hasOwnProperty(message[1]))
+          delete list[message[1]];
+      }else{
+        list[message[1]] = message[2];
+      }
+    }
+    localStorage.setItem("chromakey",JSON.stringify(list));
+  }
+}
+function runCromark(message){
+  if("*".indexOf(message[0])==-1)return
+  Object.keys(list).forEach(function(i){
+    if(!list[i])return;
+    if(message.indexOf(i)!=-1){
+      target.style.opacity="1";
+      target.setAttribute("src",list[i]);
+    }
+  });
+}
+
+function getChannel(oauth){
+	var xmlhttp = new XMLHttpRequest(),channel="";
+	xmlhttp.onreadystatechange=function(){if(this.readyState==4&&this.status==200)channel=this.responseText};
+	xmlhttp.open("GET","https://id.twitch.tv/oauth2/validate",false);
+	xmlhttp.setRequestHeader('Authorization','OAuth '+oauth);
+	xmlhttp.send();
+	return channel;
+}
+
+function getParams(name, address = window.location.href) {
+ let url;
+ let results = "";
+ url = new URL(address);
+ if (typeof url.searchParams === 'undefined') {
+   results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(address);
+   if (results == null) {
+     return null;
+   } else {
+     return decodeURI(results[1]) || 0;
+   }
+ } else {
+   return url.searchParams.get(name);
+ }
+}
+  </script>
+</head>
+<body>
+  <video id="main" style="opacity:0" class="footage" autoplay></video>
+  <svg class="defs-only" style="width:0px;height:0px">
+    <filter id="chromakey" color-interpolation-filters="sRGB" x="0" y="0" height="100%" width="100%">
+      <feColorMatrix type="matrix"
+          values="1   0   0   0   0
+                  0   1   0   0   0
+                  0   0   1   0   0
+                  1.5 -2  1.5 0   1" />
+    </filter>
+  </svg>
+
+</body>
