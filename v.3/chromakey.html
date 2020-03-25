@@ -73,6 +73,8 @@ window.chatClientK.onCommand = function(message,parsed){
       list={"oh":"https://cdn.discordapp.com/attachments/684630428908388352/684631231933054986/Oh_oh_oh_Chroma_Key-o7WVRrA89-s.mp4"};
       localStorage.setItem("chromakey",JSON.stringify(list));
       return;
+    // }else if("소리".indexOf(message[1])!=-1){
+    //   target.volume=Number(message[1])
     }
     if(message.length<=2){//
       ;
@@ -127,7 +129,7 @@ function getParams(name, address = window.location.href) {
   </script>
 </head>
 <body>
-  <video id="main" style="opacity:0" class="footage" autoplay></video>
+  <video id="main" style="opacity:0" volume=".5" class="footage" autoplay></video>
   <svg class="defs-only" style="width:0px;height:0px">
     <filter id="chromakey" color-interpolation-filters="sRGB" x="0" y="0" height="100%" width="100%">
       <feColorMatrix type="matrix"
