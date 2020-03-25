@@ -44,8 +44,15 @@ window.chatClientK = new chatClient({channel:window.channelname});
 window.chatClientC = new chatClient({channel:"recodingbot"});
 window.chatClientC.open();
 window.chatClientC.onChating = function(parsed){
-  if (["470865473","129955642"].indexOf(parsed["user-id"])!=-1 || parsed["display-id"].indexOf(window.channelname)!=-1)
-    runCromark(parsed["message"]);
+  if (["470865473","129955642"].indexOf(parsed["user-id"])!=-1 || parsed["display-id"].indexOf(window.channelname)!=-1){
+    var message = parsed["message"].split(" ");
+    if(message[0].indexOf(window.channelname)!=-1){
+      message.shift();
+      if(message[0].indexOf("#")!=-1)
+        window.chatClientK.onCommand(message,"");
+      else runCromark(message[0]);
+    }
+  }
 };
 window.chatClientK.isMood=true;
 window.chatClientK.open();
@@ -66,17 +73,9 @@ window.chatClientK.onCommand = function(message,parsed){
       list={"oh":"https://cdn.discordapp.com/attachments/684630428908388352/684631231933054986/Oh_oh_oh_Chroma_Key-o7WVRrA89-s.mp4"};
       localStorage.setItem("chromakey",JSON.stringify(list));
       return;
-    }else if("채팅".indexOf(message[1])!=-1){
-      isChat=true;
-      this.onSend("영상]채팅인식이 활성화됨!");
-      return;
     }
     if(message.length<=2){//
-      if(list.hasOwnProperty(message[1])){
-        this.onSend(message[1]+"의 항목 :"+list[message[1]]);
-      }else{
-        this.onSend("항목들:"+Object.keys(list).join(","));
-      }
+      ;
     }else{//소스추가
       console.log(message);
       if(message[2].indexOf("'")!=-1){//제거
@@ -89,6 +88,7 @@ window.chatClientK.onCommand = function(message,parsed){
     localStorage.setItem("chromakey",JSON.stringify(list));
   }
 }
+
 function runCromark(message){
   if("*".indexOf(message[0])==-1)return
   Object.keys(list).forEach(function(i){
