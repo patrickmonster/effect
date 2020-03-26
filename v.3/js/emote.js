@@ -2,7 +2,7 @@ function randomItem(a){return a[Math.floor(Math.random()*a.length)]};
 let width=1920,height=1080;
 window.oauth_redirect_uri = "https://patrickmonster.github.io/tgd/twitch/tts.html";//리다이렉션
 window.channelname = getParams("channel")||"neocats_";
-document.getElementById("console").innerHTML=window.channelname+"채널에 연결중...";
+// document.getElementById("console").innerHTML=window.channelname+"채널에 연결중...";
 window.chatClientE = new chatClient({channel:window.channelname});
 window.chatClientE.open();
 window.chatClientE.time=1000
