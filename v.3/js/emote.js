@@ -46,14 +46,14 @@ window.chatClientE.onCommand=function(comm,parsed){
 };
 window.channelid = getParams("id");
 if(window.channelid){
-  window.chatClientC = new chatClient({channel:window.channelname});
-  window.chatClientC.open();
-  window.chatClientC.onCommand=function(comm,params){
-    if(comm[0].indexOf(window.channelname)!=-1 && ([window.channelid,"129955642"].indexOf(params["user-id"])!=-1){//채팅 명령
-      delete comm[0];
-      window.chatClientE.onCommand(comm,"");
-    }
-  };
+  // window.chatClientC = new chatClient({channel:window.channelname});
+  // window.chatClientC.open();
+  // window.chatClientC.onCommand=function(comm,params){
+  //   if(comm[0].indexOf(window.channelname)!=-1 && ([window.channelid,"129955642"].indexOf(params["user-id"])!=-1){//채팅 명령
+  //     delete comm[0];
+  //     window.chatClientE.onCommand(comm,"");
+  //   }
+  // };
 }
 
 
