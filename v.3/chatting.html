@@ -36,16 +36,17 @@ window.channelname = getParams("channel");
 window.chatClientC = new chatClient({channel:window.channelname});
 window.chatClientC.open();
 window.chatClientC.onClose=location.reload;
-window.chatClientC.isChat=localStorage.getItem("chatting_chat")=="false";
+window.chatClientC.isChat=localStorage.getItem("chatting_chat")||0;
 window.chatClientC.onChating = function(parsed){
   // console.log(parsed);
+  if(["#","!"].indexOf(parsed.message[0])!=-1)return;
   if(window.chatClientC.isChat)
     appendDonate(parsed);
 };
 window.chatClientC.onCommand = function(message,parsed){
-  if("도네".indexOf(message[0])!=-1){
+  if("도네"==message[0]){
     window.chatClientC.isChat=!window.chatClientC.isChat;
-    localStorage.setItem("chatting_chat",window.chatClientC.isChat);
+    localStorage.setItem("chatting_chat",window.chatClientC.isChat?1:0);
     appendDonate({"message-original":"채팅모드:"+window.chatClientC.isChat,color:"#ffffff"})
   }
 };
