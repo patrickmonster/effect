@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>크로마키-네오캣짱</title>
+  <script src="https://patrickmonster.github.io/irc_chat_client/chat.js" charset="utf-8"></script>
+  <!-- <script src="../../irc_chat_client/chat.js" charset="utf-8"></script> -->
+  <style media="screen">
+*{
+  margin:0;
+  padding:0;
+  overflow: hidden;
+}
+html{
+  overflow: hidden;
+}
+.chat-image{
+    width:50px;
+    height:50px;
+}
+p{
+  display: inline-block;
+  white-space:nowrap;
+  font-size:3em;
+}
+
+@keyframes donate-left{
+  from {left:110%}
+  to {left:-10%}
+}
+  </style>
+  <script type="text/javascript">
+Element.prototype.createElement=Element.prototype.C=function(ele){var ele=document.createElement(ele);this.appendChild(ele);return ele};
+// window.addScript=document.addScript=function(a,b){b=document.head.C("script");b.src=a;return b};
+// window.addLink=document.addLink=function(a,b){b=document.head.C("link");b.src=a;return b};
+// window.addStyle=document.addStyle=function(a,b){b=document.head.C("style");b.innerHTML=a;return b};
+window.img_size=50;
+
+window.channelname = getParams("channel");
+window.chatClientC = new chatClient({channel:window.channelname});
+window.chatClientC.open();
+window.chatClientC.onClose=location.reload;
+window.chatClientC.onChating = function(parsed){
+  console.log(parsed);
+  appendDonate(parsed);
+};
+window.chatClientC.onCommand = function(message,parsed){;};
+window.chatClientC.list=[];
+window.chatClientC.point=[];
+window.chatClientC.onHighlighted=function(parsed){//미니도네
+  appendDonate(parsed);
+};
+for(var i=0;i<window.innerHeight/window.img_size;i++)
+  window.chatClientC.point.push(0);
+
+//32크기 / window.innerWidth()
+
+function appendDonate(parsed){
+  var p = document.body.C("p");
+  p.classList.add('mini-donate');
+  p.innerHTML=parsed["message-original"];
+  p.style.color=parsed["color"];
+  p.style.position="absolute";
+  let j=0,size=p.getBoundingClientRect(),isSelect=false;
+  for(var i in window.chatClientC.point){
+    if(!window.chatClientC.point[i]){
+      window.chatClientC.point[i]=1;
+      j=i;
+      isSelect=true;
+      break;
+    }
+  }
+  if(!isSelect){
+    p.remove();
+  }
+  p.point=j;
+  p.style.top=(window.img_size*j)+"px";
+  window.chatClientC.list.push({
+    obj:p,left:window.innerWidth,width:size.width,is:false,
+    move:function(i){
+      i.left-=2.5;
+      i.obj.style.left=i.left+"px";
+    },isOver:function(item){
+      if(item.left + item.width < window.innerWidth && !item.is){
+        item.is=true;
+        window.chatClientC.point[item.obj.point]=0;
+      }
+      if(item.left<-item.width){
+        console.log(item);
+        item.obj.remove();
+        return true;
+      }return false;
+    }
+  });
+  console.log(window.chatClientC.list);
+}
+
+
+const loop = () => {
+  window.chatClientC.list.forEach(item=>{item.move(item)});
+  window.chatClientC.list=window.chatClientC.list.filter(item=>!item.isOver(item));
+  requestAnimationFrame(loop);
+};
+loop();
+
+function getChannel(oauth){
+	var xmlhttp = new XMLHttpRequest(),channel="";
+	xmlhttp.onreadystatechange=function(){if(this.readyState==4&&this.status==200)channel=this.responseText};
+	xmlhttp.open("GET","https://id.twitch.tv/oauth2/validate",false);
+	xmlhttp.setRequestHeader('Authorization','OAuth '+oauth);
+	xmlhttp.send();
+	return channel;
+}
+
+function getParams(name, address = window.location.href) {
+ let url;
+ let results = "";
+ url = new URL(address);
+ if (typeof url.searchParams === 'undefined') {
+   results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(address);
+   if (results == null) {
+     return null;
+   } else {
+     return decodeURI(results[1]) || 0;
+   }
+ } else {
+   return url.searchParams.get(name);
+ }
+}
+  </script>
+</head>
+<body>
+</body>
