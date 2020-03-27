@@ -30,20 +30,25 @@ p{
   </style>
   <script type="text/javascript">
 Element.prototype.createElement=Element.prototype.C=function(ele){var ele=document.createElement(ele);this.appendChild(ele);return ele};
-// window.addScript=document.addScript=function(a,b){b=document.head.C("script");b.src=a;return b};
-// window.addLink=document.addLink=function(a,b){b=document.head.C("link");b.src=a;return b};
-// window.addStyle=document.addStyle=function(a,b){b=document.head.C("style");b.innerHTML=a;return b};
 window.img_size=50;
 
 window.channelname = getParams("channel");
 window.chatClientC = new chatClient({channel:window.channelname});
 window.chatClientC.open();
 window.chatClientC.onClose=location.reload;
+window.chatClientC.isChat=localStorage.getItem("chatting_chat")=="false";
 window.chatClientC.onChating = function(parsed){
-  console.log(parsed);
-  appendDonate(parsed);
+  // console.log(parsed);
+  if(window.chatClientC.isChat)
+    appendDonate(parsed);
 };
-window.chatClientC.onCommand = function(message,parsed){;};
+window.chatClientC.onCommand = function(message,parsed){
+  if("도네".indexOf(message[0])!=-1){
+    window.chatClientC.isChat=!window.chatClientC.isChat;
+    localStorage.setItem("chatting_chat",window.chatClientC.isChat);
+    appendDonate({"message-original":"채팅모드:"+window.chatClientC.isChat,color:"#ffffff"})
+  }
+};
 window.chatClientC.list=[];
 window.chatClientC.point=[];
 window.chatClientC.onHighlighted=function(parsed){//미니도네
@@ -85,13 +90,11 @@ function appendDonate(parsed){
         window.chatClientC.point[item.obj.point]=0;
       }
       if(item.left<-item.width){
-        console.log(item);
         item.obj.remove();
         return true;
       }return false;
     }
   });
-  console.log(window.chatClientC.list);
 }
 
 
