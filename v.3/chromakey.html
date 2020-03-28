@@ -63,7 +63,6 @@ window.chatClientK.onChating = function(parsed){
 };
 
 window.chatClientK.onCommand = function(message,parsed){
-  console.log(message);
   if(message[0].indexOf("영상")!=-1){
     if("정지".indexOf(message[1])!=-1){
       target.style.opacity="0";
@@ -73,8 +72,9 @@ window.chatClientK.onCommand = function(message,parsed){
       list={"oh":"https://cdn.discordapp.com/attachments/684630428908388352/684631231933054986/Oh_oh_oh_Chroma_Key-o7WVRrA89-s.mp4"};
       localStorage.setItem("chromakey",JSON.stringify(list));
       return;
-    // }else if("소리".indexOf(message[1])!=-1){
-    //   target.volume=Number(message[1])
+    }else if("소리".indexOf(message[1])!=-1){
+      target.volume=Number(message[1])
+      localStorage.setItem("chromakey_volume",target.volume);
     }
     if(message.length<=2){//
       ;
