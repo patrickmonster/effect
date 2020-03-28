@@ -49,10 +49,10 @@ if(window.channelid){
   window.chatClientC = new chatClient({channel:window.channelname});
   window.chatClientC.open();
   window.chatClientC.onCommand=function(comm,params){
-    if(comm[0].indexOf(window.channelname)!=-1 && ([window.channelid,"129955642"].indexOf(params["user-id"])!=-1){
-      delete comm[0];
-      window.chatClientE.onCommand(comm,"");
-    }
+    // if(comm[0].indexOf(window.channelname)!=-1 && ([window.channelid,"129955642"].indexOf(params["user-id"])!=-1){
+    //   delete comm[0];
+    //   window.chatClientE.onCommand(comm,"");
+    // }
   };
 }
 
