@@ -28,6 +28,169 @@ canvas{
 </head>
 <body>
   <canvas id="canvas" width="1920" height="1080"></canvas>
-  <script src="js/emote.js" charset="utf-8"></script>
+	<script type="text/javascript">
+function randomItem(a){return a[Math.floor(Math.random()*a.length)]};
+let width=1920,height=1080;
+window.oauth_redirect_uri = "https://patrickmonster.github.io/tgd/twitch/tts.html";//리다이렉션
+window.channelname = getParams("channel")||"neocats_";
+// document.getElementById("console").innerHTML=window.channelname+"채널에 연결중...";
+window.chatClientE = new chatClient({channel:window.channelname});
+window.chatClientE.open();
+window.chatClientE.time=1000
+window.chatClientE.queue={};
+window.chatClientE.queueTimer={};
+window.chatClientE.onEmotes = function(url,length){
+  if(window.chatClientE.mod!="tt"){
+    let f=l=>{
+      const imgElement=new Image();
+      setup();
+      imgElement.onload=()=>{
+        window.chatClientE.emotes.push(new Emote(imgElement,width*0.02,window.chatClientE.mod));//이미지 개수만큼//야발 옵션값 잘 봐야한다.
+      };
+      imgElement.src=l;
+    };
+    for(var v=0;v<length;v++)f(url);
+  }else{
+    if(!window.chatClientE.queueTimer[url]){
+      window.chatClientE.queue[url]=length;
+      window.chatClientE.queueTimer[url]=setTimeout(window.chatClientE.onShow,window.chatClientE.time,url);
+    }else window.chatClientE.queue[url]+=length;
+  }
+};
+window.chatClientE.onShow=function(url){
+  window.chatClientE.queueTimer[url]=0;
+  let length=window.chatClientE.queue[url];
+  if(length>=10)length=10;
+  const imgElement=new Image();
+  setup();
+  imgElement.onload=()=>{
+    window.chatClientE.emotes.push(new Emote(imgElement,width*(0.01*length),window.chatClientE.mod));//이미지 개수만큼//야발 옵션값 잘 봐야한다.
+  };
+  imgElement.src=url;
+  window.chatClientE.queue[url]=0;
+}
+window.chatClientE.mods={};
+window.chatClientE.mod="1";
+window.chatClientE.onCommand=function(comm,parsed){
+  if(comm[0].indexOf("이모트")!=-1)//이모트 전용 명령
+    window.chatClientE.mod=comm[1];
+};
+window.channelid = getParams("id");
+if(window.channelid){
+  window.chatClientC = new chatClient({channel:window.channelname});
+  window.chatClientC.open();
+  window.chatClientC.onCommand=function(comm,params){
+    // if(comm[0].indexOf(window.channelname)!=-1 && ([window.channelid,"129955642"].indexOf(params["user-id"])!=-1){
+    //   delete comm[0];
+    //   window.chatClientE.onCommand(comm,"");
+    // }
+  };
+}
+
+
+function getParams(name, address = window.location.href) {
+ let url;
+ let results = "";
+ url = new URL(address);
+ if (typeof url.searchParams === 'undefined') {
+	 results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(address);
+	 if (results == null) {
+		 return null;
+	 } else {
+		 return decodeURI(results[1])||0;
+	 }
+ } else {
+	 return url.searchParams.get(name);
+ }
+}
+
+function setup(){
+  if(window.chatClientE.canvas)return;
+  window.chatClientE.canvas = document.querySelector("#canvas");
+  window.chatClientE.ctx=window.chatClientE.canvas.getContext("2d");
+  window.chatClientE.emotes=[];
+  width=1920;
+  height=1080;
+  loop();
+}
+
+const loop = () => {
+  window.chatClientE.ctx.clearRect(0, 0, 1920, 1080);
+  window.chatClientE.emotes.forEach(emote=>{
+    emote.draw();
+    emote.update();
+  });
+  window.chatClientE.emotes = window.chatClientE.emotes.filter(emote=>!emote.shouldBeDeleted);
+  requestAnimationFrame(loop);
+};
+let f={"a":function(){
+    this.x = Math.random() * width;
+    this.y=height+this.height;
+    this.speed = Math.random() * height * 0.01 + height * 0.001;
+    this.update=()=>{
+      this.y -= this.speed;
+      this.shouldBeDeleted = -this.height > this.y;
+    };
+    this.draw=()=>{
+      let x=this.x,y=this.y;
+      window.chatClientE.ctx.drawImage(this.element, x, y, this.width, this.height);
+    }
+},"top":function(){
+    this.x = Math.random() * width;
+    this.y=height+this.height;
+    this.speed = Math.random() * height * 0.01 + height * 0.001;
+    this.update=()=>{
+      this.y -= this.speed;
+      this.shouldBeDeleted = -this.height > this.y;
+    };
+    this.draw=()=>{
+      let x=this.x,y=this.y;
+      window.chatClientE.ctx.drawImage(this.element, x, y, this.width, this.height);
+    }
+  },"bottom":function(){
+    this.x = Math.random() * width;
+    this.y=-this.height;
+    this.speed = Math.random() * width * 0.01 + width * 0.0005;
+    this.update=()=>{
+      this.y += this.speed;
+      this.shouldBeDeleted = height < (this.y + this.height);
+    };
+    this.draw=()=>{
+      let x=this.x,y=this.y;
+      window.chatClientE.ctx.drawImage(this.element, x, y, this.width, this.height);
+    }
+  },"!":function(){
+    this.a = -Math.random() * 0.005 - 0.0002;
+    this.b = Math.random() * height * 0.4 + height * 0.6;
+    this.offset = Math.sqrt(Math.abs(this.b / this.a));
+    this.x = -this.offset;
+    this.speed = Math.random() * width * 0.002 +  width * 0.005;
+    this.update=()=>{
+      this.x += this.speed;
+      this.shouldBeDeleted = this.x > this.offset;
+    };
+    this.draw=()=>{
+      if(!this.height)
+        this.shouldBeDeleted=true;
+      let x = this.x + this.offset;
+      let y = height - (this.a * Math.pow(this.x, 2) + this.b)
+      window.chatClientE.ctx.drawImage(this.element, x, y, this.width, this.height);
+    }
+  },//end list
+};
+class Emote {
+  constructor(element,size,op) {
+    this.element = element;
+    this.height = size;
+    this.width = size * element.width / element.height;
+    console.log(Object.keys(f).indexOf(op),op);
+    if(Object.keys(f).indexOf(op)==-1)
+      op=window.chatClientE.mod=Object.keys(f)[0];
+    f[op].call(this);
+    this.shouldBeDeleted = false;
+  }
+}
+
+	</script>
 </body>
 </html>
