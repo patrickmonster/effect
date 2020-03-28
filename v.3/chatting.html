@@ -5,6 +5,10 @@
   <script src="https://patrickmonster.github.io/irc_chat_client/chat.js" charset="utf-8"></script>
   <!-- <script src="../../irc_chat_client/chat.js" charset="utf-8"></script> -->
   <style media="screen">
+@font-face {font-family: 'NanumBarunpen';src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_two@1.0/NanumBarunpen.woff');}
+@font-face { font-family: 'NanumBarunGothic'; font-style: normal; font-weight: 300; src: url('https://cdn.jsdelivr.net/font-nanumlight/1.0/NanumBarunGothicWebLight.ttf') format('truetype'); }
+@font-face { font-family: 'yg-jalnan'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_four@1.2/JalnanOTF00.woff') format('woff'); font-weight: normal; font-style: normal; }
+@import url('https://cdn.rawgit.com/YJSoft/Webfonts/0.1/BM_JUA.css');
 *{
   margin:0;
   padding:0;
@@ -28,10 +32,17 @@ p{
   to {left:-10%}
 }
   </style>
+</head>
+<body>
+
   <script type="text/javascript">
 Element.prototype.createElement=Element.prototype.C=function(ele){var ele=document.createElement(ele);this.appendChild(ele);return ele};
+window.addStyle=document.addStyle=function(a,b){b=document.head.C("style");b.innerHTML=a;return b};
 window.img_size=50;
-
+window.fonts=["NanumBarunpen","yg-jalnan","BM JUA"];
+var t=localStorage.getItem("chatting_chat_font")||0;
+window.font=window.fonts[parseInt(t)];
+window.font_styles=window.addStyle("p{font-family: '"+window.font+"'}");
 window.channelname = getParams("channel");
 window.chatClientC = new chatClient({channel:window.channelname});
 window.chatClientC.open();
@@ -39,6 +50,7 @@ window.chatClientC.onClose=location.reload;
 window.chatClientC.isChat=localStorage.getItem("chatting_chat")||0;
 window.chatClientC.speed=parseFloat(localStorage.getItem("chatting_chat_speed"))||3;
 window.chatClientC.textleng=parseInt(localStorage.getItem("chatting_chat_textleng"))||0;
+//https://clips.twitch.tv/OutstandingArborealCheeseVoHiYo 홍보
 window.chatClientC.onChating = function(parsed){
   // console.log(parsed);
   if(["#","!"].indexOf(parsed.message[0])!=-1)return;
@@ -47,21 +59,24 @@ window.chatClientC.onChating = function(parsed){
 };
 window.chatClientC.onCommand = function(message,parsed){
   if("도네"==message[0]){
-    console.log(message);
-    ({"속도":function(i){
+    ({"폰트":function(i){
+      if(!i)return;
+      i=parseInt(i);
+      if(i>3)return;
+      window.font = window.fonts[i];
+      window.font_styles.innerHTML="p{font-family: '"+window.font+"'}";
+      localStorage.setItem("chatting_chat_font",i);
+    },"속도":function(i){
       if(!i)return;
       window.chatClientC.speed = parseFloat(i);
       localStorage.setItem("chatting_chat_speed",i);
-      appendDonate({"message-original":"글자속도:"+i,color:"#ffffff"});
     },"글자수":function(i){
       if(!i)return;
       window.chatClientC.textleng = parseInt(i);
       localStorage.setItem("chatting_chat_textleng",i);
-      appendDonate({"message-original":"최대글자수:"+i,color:"#ffffff"});
     },"채팅":function(){
       window.chatClientC.isChat=!window.chatClientC.isChat;
       localStorage.setItem("chatting_chat",window.chatClientC.isChat?1:0);
-      appendDonate({"message-original":"채팅모드:"+window.chatClientC.isChat,color:"#ffffff"});
     }})[message[1]](message[2]);
   }
 };
@@ -74,11 +89,11 @@ for(var i=0;i<window.innerHeight/window.img_size;i++)
 //32크기 / window.innerWidth()
 
 function appendDonate(parsed){
+  var count = parsed["message-original"].match(/<img class='chat-image' src=/g);
+  count=count||"";
+  console.log(!parsed.hasOwnProperty("message") , parsed["message"].length > (window.chatClientC.textleng-count.length) , window.chatClientC.textleng != 0);
+  if(!parsed.hasOwnProperty("message") || parsed["message"].length > (window.chatClientC.textleng-count.length) && window.chatClientC.textleng != 0)return;
   console.log(parsed);
-  if(!parsed.hasOwnProperty("message") && window.chatClientC.textleng != 0)return;
-  if(parsed["message"].length > window.chatClientC.textleng){
-
-  }
   var p = document.body.C("p");
   p.classList.add('mini-donate');
   p.innerHTML=parsed["message-original"];
@@ -149,6 +164,4 @@ function getParams(name, address = window.location.href) {
  }
 }
   </script>
-</head>
-<body>
 </body>
