@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-  <title>크로마키-네오캣짱</title>
+  <title>채팅-네오캣짱</title>
   <script src="https://patrickmonster.github.io/irc_chat_client/chat.js" charset="utf-8"></script>
   <!-- <script src="../../irc_chat_client/chat.js" charset="utf-8"></script> -->
   <style media="screen">
@@ -91,9 +91,7 @@ for(var i=0;i<window.innerHeight/window.img_size;i++)
 function appendDonate(parsed){
   var count = parsed["message-original"].match(/<img class='chat-image' src=/g);
   count=count||"";
-  console.log(!parsed.hasOwnProperty("message") , parsed["message"].length > (window.chatClientC.textleng-count.length) , window.chatClientC.textleng != 0);
   if(!parsed.hasOwnProperty("message") || parsed["message"].length > (window.chatClientC.textleng-count.length) && window.chatClientC.textleng != 0)return;
-  console.log(parsed);
   var p = document.body.C("p");
   p.classList.add('mini-donate');
   p.innerHTML=parsed["message-original"];
