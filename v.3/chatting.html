@@ -47,7 +47,7 @@ window.channelname = getParams("channel");
 window.chatClientC = new chatClient({channel:window.channelname});
 window.chatClientC.open();
 window.chatClientC.onClose=location.reload;
-window.chatClientC.isChat=localStorage.getItem("chatting_chat")||0;
+window.chatClientC.isChat=Number(localStorage.getItem("chatting_chat"))||0;
 window.chatClientC.speed=parseFloat(localStorage.getItem("chatting_chat_speed"))||3;
 window.chatClientC.textleng=parseInt(localStorage.getItem("chatting_chat_textleng"))||0;
 //https://clips.twitch.tv/OutstandingArborealCheeseVoHiYo 홍보
