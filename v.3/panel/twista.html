@@ -1,10 +1,12 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
   <title>Twista</title>
-  <script src="https://patrickmonster.github.io/irc_chat_client/chat.js" charset="utf-8"></script>
+  <!-- <script src="https://patrickmonster.github.io/irc_chat_client/chat.js" charset="utf-8"></script> -->
+	<script src="../js/chat.js" charset="utf-8"></script>
   <style media="screen">
 :root{
-  --nav-size:80px;
+  /* --nav-size:80px; */
+	--nav-size:0	;
   --section-padding:10px;
   --left-margin: 3%;
   --svg-color: #fff;
@@ -183,7 +185,7 @@ section .chat-user{
   border-top-right-radius: 30px;
 }
 section .option{
-  line-height:22px;
+  line-height:45px;
 }
 section .chat-user svg{
   display:inline-block;
@@ -195,7 +197,8 @@ section .chat-user svg{
 .chat-board > .main-img.chatting-bord{
   position: relative;
   width:100%;
-  height:85%;
+  /* height:85%; */
+	height: 80%;
   margin:2%;
   margin-top:0;
   margin-bottom: 0;
@@ -257,34 +260,34 @@ section .chat-user svg{
   overflow: hidden;
 }
 .message .item .text{
-  padding: 12px;
-  margin:1px 1px 1px 1px;
+  padding: 5px 20px;
+  margin: 1px 1px 1px 1px;
   border-radius: 50px;
-  border: 1px solid;
+  border: 1px solid #8a8a8a;
   display: inline-block;
-  word-break:break-all
+  word-break: break-all;
+  font-size: 2.7em;
+  background: #00000038;
 }
 .message.broadcast .item .text{
   float:right;
-	font-size: 2em;
 }
 
   </style>
 </head>
 <body>
 
-  <nav>
+  <!-- <nav>
     <div class="logo">
       <svg aria-hidden="true" focusable="false" data-prefix="fab" data-icon="twitch" class="svg-inline--fa fa-twitch fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M391.17,103.47H352.54v109.7h38.63ZM285,103H246.37V212.75H285ZM120.83,0,24.31,91.42V420.58H140.14V512l96.53-91.42h77.25L487.69,256V0ZM449.07,237.75l-77.22,73.12H294.61l-67.6,64v-64H140.14V36.58H449.07Z"></path></svg>
     </div>
     <div class="sub-profile">
       <img id="profile-broadcast-img-src-sub" alt="프로필 이미지">
       <svg aria-hidden="true" focusable="false" data-prefix="fab" data-icon="instagram" class="svg-inline--fa fa-instagram fa-w-14" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M224.1 141c-63.6 0-114.9 51.3-114.9 114.9s51.3 114.9 114.9 114.9S339 319.5 339 255.9 287.7 141 224.1 141zm0 189.6c-41.1 0-74.7-33.5-74.7-74.7s33.5-74.7 74.7-74.7 74.7 33.5 74.7 74.7-33.6 74.7-74.7 74.7zm146.4-194.3c0 14.9-12 26.8-26.8 26.8-14.9 0-26.8-12-26.8-26.8s12-26.8 26.8-26.8 26.8 12 26.8 26.8zm76.1 27.2c-1.7-35.9-9.9-67.7-36.2-93.9-26.2-26.2-58-34.4-93.9-36.2-37-2.1-147.9-2.1-184.9 0-35.8 1.7-67.6 9.9-93.9 36.1s-34.4 58-36.2 93.9c-2.1 37-2.1 147.9 0 184.9 1.7 35.9 9.9 67.7 36.2 93.9s58 34.4 93.9 36.2c37 2.1 147.9 2.1 184.9 0 35.9-1.7 67.7-9.9 93.9-36.2 26.2-26.2 34.4-58 36.2-93.9 2.1-37 2.1-147.8 0-184.8zM398.8 388c-7.8 19.6-22.9 34.7-42.6 42.6-29.5 11.7-99.5 9-132.1 9s-102.7 2.6-132.1-9c-19.6-7.8-34.7-22.9-42.6-42.6-11.7-29.5-9-99.5-9-132.1s-2.6-102.7 9-132.1c7.8-19.6 22.9-34.7 42.6-42.6 29.5-11.7 99.5-9 132.1-9s102.7-2.6 132.1 9c19.6 7.8 34.7 22.9 42.6 42.6 11.7 29.5 9 99.5 9 132.1s2.7 102.7-9 132.1z"></path></svg>
-      <!-- <svg aria-label="구독" class="_8-yf5 " height="24" viewBox="0 0 48 48" width="24"><path clip-rule="evenodd" d="M34.3 3.5C27.2 3.5 24 8.8 24 8.8s-3.2-5.3-10.3-5.3C6.4 3.5.5 9.9.5 17.8s6.1 12.4 12.2 17.8c9.2 8.2 9.8 8.9 11.3 8.9s2.1-.7 11.3-8.9c6.2-5.5 12.2-10 12.2-17.8 0-7.9-5.9-14.3-13.2-14.3zm-1 29.8c-5.4 4.8-8.3 7.5-9.3 8.1-1-.7-4.6-3.9-9.3-8.1-5.5-4.9-11.2-9-11.2-15.6 0-6.2 4.6-11.3 10.2-11.3 4.1 0 6.3 2 7.9 4.2 3.6 5.1 1.2 5.1 4.8 0 1.6-2.2 3.8-4.2 7.9-4.2 5.6 0 10.2 5.1 10.2 11.3 0 6.7-5.7 10.8-11.2 15.6z" fill-rule="evenodd"></path></svg> -->
       <svg aria-label="구독 취소" class="_8-yf5 " fill="#ed4956" height="24" viewBox="0 0 48 48" width="24"><path clip-rule="evenodd" d="M35.3 35.6c-9.2 8.2-9.8 8.9-11.3 8.9s-2.1-.7-11.3-8.9C6.5 30.1.5 25.6.5 17.8.5 9.9 6.4 3.5 13.7 3.5 20.8 3.5 24 8.8 24 8.8s3.2-5.3 10.3-5.3c7.3 0 13.2 6.4 13.2 14.3 0 7.8-6.1 12.3-12.2 17.8z" fill-rule="evenodd"></path></svg>
     </div>
-  </nav>
-  <wl></wl>
+  </nav> -->
+  <!-- <wl></wl> -->
   <main>
     <!-- 좌측 -->
     <section>
@@ -315,7 +318,7 @@ section .chat-user svg{
         <h5 id="follow-name">이름없는 사람</h5><h5> 님등 </h5>
         <h5 id="follow_count">100명</h5><h5>명</h5><br>
       </div>
-      <div class="main-comment">
+      <div id=stream-title class="main-comment">
         라이브방송중! 여러분 잘부탁해~
       </div>
       <div class="main-comment-hash-tag">
@@ -330,8 +333,8 @@ section .chat-user svg{
           <svg aria-label="트위치" aria-hidden="true" focusable="false" data-prefix="fab" data-icon="twitch" class="svg-inline--fa fa-twitch fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M391.17,103.47H352.54v109.7h38.63ZM285,103H246.37V212.75H285ZM120.83,0,24.31,91.42V420.58H140.14V512l96.53-91.42h77.25L487.69,256V0ZM449.07,237.75l-77.22,73.12H294.61l-67.6,64v-64H140.14V36.58H449.07Z"></path></svg>
           <!-- <h1 id="chat-user-channel">neocats_</h1> -->
           <div class="option">
-            <h1 id="stream-title">스트리머 닉네임</h1>
-            <h5 id="stream-game">서브타이틀</h5>
+						<!-- <h1 id="stream-title">스트리머 닉네임</h1> -->
+            <h1 id="stream-game">서브타이틀</h1>
           </div>
         </div>
         <div class="main-img chatting-bord">
@@ -367,16 +370,40 @@ getData();
 window.chatClientM=new chatClient({channel:window.broadcast["name"]});
 window.chatClientM.open();
 window.chatClientM.onChating = function(parsed){
+	return;
   if(!window.imgs_user.hasOwnProperty(parsed["user-id"]))
     window.imgs_user[parsed["user-id"]]=JSON.parse(getAPI("https://api.twitch.tv/kraken/channels/"+parsed["user-id"]));
-  append_message(parsed["display-id"],parsed["message"],window.imgs_user[parsed["user-id"]].logo,parsed["badges"].indexOf("broadcaster")!=-1);
+  append_message(parsed["display-id"],parsed["message"],parsed["id"],window.imgs_user[parsed["user-id"]].logo,parsed["badges"].indexOf("broadcaster")!=-1);
 }
+window.chatClientM.onCommand = function(message,parsed){
+
+}
+
+window.chatClientM.onDelChating = function(parsed){
+	return;
+	let target = document.getElementById("chatting_bord").getElementsByClassName("message");
+	console.log(parsed);
+	if(parsed.hasOwnProperty("ban-duration")){//사용자 모든 메세지 제거
+		target.forEach(item => {
+			if(item.getAttribute("data-name") == parsed){
+
+			}
+
+		});
+
+	}else if(parsed.hasOwnProperty("target-msg-id")){
+
+	}
+
+	//document.getElementById("chatting_bord").getElementsByClassName("message")
+
+};
 
 function getData(){
   let follow = document.getElementById("follow_count");
   console.log("업데이트");
 
-  setTimeout(getData,5*60*1000);
+  setTimeout(getData,3*60*1000);
 
   window.broadcast = JSON.parse(getAPI("https://api.twitch.tv/kraken/channels/"+window.user_id));
   let is=follow.getAttribute("data-follow") == window.broadcast["followers"];
@@ -385,7 +412,7 @@ function getData(){
 
   document.getElementById("follow_count").innerHTML=window.broadcast["followers"]
   document.getElementById("profile-broadcast-img-src").src=window.broadcast["logo"];
-  document.getElementById("profile-broadcast-img-src-sub").src=window.broadcast["logo"];
+  // document.getElementById("profile-broadcast-img-src-sub").src=window.broadcast["logo"];
 
 	//profile-broadcast-img-src-sub
   document.getElementById("profile-broadcast").innerHTML=window.broadcast["display_name"];
@@ -397,9 +424,8 @@ function getData(){
   if(is)return;//데이터 변경사항 없음
 
   follow.setAttribute("data-follow",window.broadcast["followers"]);
-  let l = getFollow();
-  window.last_follow=l[l.length-1];
-  console.log(window.last_follow);
+  window.last_follow=getFollow()[0];
+	if(!window.last_follow)return;
   document.getElementById("follow-img").src=window.last_follow.logo;
   document.getElementById("follow-name").innerHTML=window.last_follow.name;
   // window.follows = JSON.parse());
@@ -413,7 +439,7 @@ function getFollow(){
   })
 }
 
-function append_message(user,msg,img,isright){
+function append_message(user,msg,id,img,isright){
   console.log(user,msg,img,isright);
   let bord = document.getElementById("chatting_bord").getElementsByClassName("message");
   let message = bord[bord.length-1];
@@ -427,6 +453,7 @@ function append_message(user,msg,img,isright){
   }
   let ele = message.C("div");
   ele.classList.add("item");
+	ele.setAttribute("data-id",id)
   ele = ele.C("div");
   ele.classList.add("text");
   ele.innerHTML=msg;
