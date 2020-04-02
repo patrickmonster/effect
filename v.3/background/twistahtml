@@ -1,0 +1,466 @@
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+  <title>Twista</title>
+  <script src="https://patrickmonster.github.io/irc_chat_client/chat.js" charset="utf-8"></script>
+  <style media="screen">
+:root{
+  --nav-size:80px;
+  --section-padding:10px;
+  --left-margin: 3%;
+  --svg-color: #fff;
+  --section-count: 2;
+  --camera-background:#ffffff42;
+}
+*{
+  margin:0;
+  padding:0;
+}
+html{
+  overflow:hidden;
+  background:transparent;
+}
+
+body{
+  width:1920px;
+  height:1080px;
+  /* background: #ff6c6c; */
+  background:transparent;
+  overflow:hidden;
+}
+
+nav{
+  width:calc(100% - var(--left-margin)*2);
+  height:var(--nav-size);
+  margin-left: 5%;
+}
+
+main{
+  width: 100%;
+  height:calc(100% - var(--nav-size));
+  margin: 0 auto;
+}
+section{
+  display:inline;
+  float:left;
+  width:calc(100%/var(--section-count) - (var(--left-margin) * (var(--section-count))));
+  height:calc(100% - var(--nav-size));
+  color:#fff;
+  margin:0 var(--left-margin);
+}
+.space{
+  width:100%;
+  height:13px;
+}
+
+wl{
+  display:block;
+  width:100%;
+  height: 1px;
+  background:#fff;
+}
+
+svg{
+  width: 70px;
+  height:70px;
+  color: var(--svg-color);
+  fill: var(--svg-color);
+}
+/* 기본 */
+
+nav .logo{
+  display: inline-block;
+  margin:5px;
+  font-size:5em;
+  color: #4c6ef5;
+}
+nav .surch{
+  display: contents;
+  width:100px;
+  font-size: 3em;
+  margin: 0 auto;
+}
+nav .sub-profile{
+  float: right;
+}
+nav .sub-profile svg{
+  float:left;
+  font-size: 4em;
+  margin-right: 30px;
+}
+
+.profile{
+  width:100%;
+  height: 100px;
+}
+.profile img{
+  float: left;
+  width: 100px;
+  height:100px;
+  border-radius: 50%;
+  vertical-align: baseline;
+  box-sizing: border-box;
+  flex: 0 0 auto;
+  overflow: hidden;
+}
+.profile .option{
+  padding-top: 3%;
+  line-height:30px;
+  width: 70%;
+}
+.profile svg{
+  float: right;
+  width: 50px;
+  height:50px;
+  padding: 25px;
+}
+section .main-img{
+  display: block;
+  width: 90%;
+  height: 70%;
+  margin: 5%;
+  margin-bottom: 0;
+  border: 3px solid #fff;
+}
+section .main-icon{
+  display: block;
+  width: 90%;
+  margin: 0 5%;
+  font-size: 2em;
+  margin-top: 10px;
+  color:#fff;
+}
+section .main-icon svg{
+  width: 40px;
+  height: 40px;
+  fill:#fff;
+}
+section .main-icon label:hover #follwow-off{
+  animation: heart-on 1s ease;
+}
+
+@keyframes heart-on{
+  from {transform: scale(1)}
+   to  {transform: scale(1.5)}
+}
+
+section .main-follows,
+section .main-comment{
+  margin: 0 5%;
+  font-size: 2em;
+  color: #fff;
+}
+section .main-follows #follow-img{
+  float: left;
+  width:35px;
+  height:35px;
+
+  border-radius: 50%;
+  overflow: hidden;
+}
+section .main-follows h5{
+  float:left;
+}
+section .main-comment-hash-tag{
+  margin: 0 5%;
+  font-size: 2em;
+  color: #fff;
+}
+
+section .chat-user{
+  padding: 1%;
+  border: 3px solid #fff;
+  border-bottom: 0;
+  width: 98%;
+  margin: 2%;
+  margin-bottom: 0;
+  border-top-left-radius: 30px;
+  border-top-right-radius: 30px;
+}
+section .option{
+  line-height:22px;
+}
+section .chat-user svg{
+  display:inline-block;
+  float: left;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+}
+.chat-board > .main-img.chatting-bord{
+  position: relative;
+  width:100%;
+  height:85%;
+  margin:2%;
+  margin-top:0;
+  margin-bottom: 0;
+  overflow:hidden;
+}
+.chat-board > .main-img.chatting-bord .content{
+  position: absolute;
+  width: 100%;
+  bottom: 0;
+}
+.chat-board > .main-img.chatting-input{
+  width:100%;
+  height:8%;
+  margin:2%;
+  margin-top:0;
+  border-top:0;
+  border-bottom-left-radius: 30px;
+  border-bottom-right-radius:30px;
+}
+.chat-board > .chatting-input> div{
+  display:inline-block;
+}
+.chat-board > .chatting-input> .chatting-input-right,
+.chat-board > .chatting-input> .chatting-input-camera{
+  text-align: center;
+  padding: 2%;
+  border-radius:50%;
+}
+.chat-board > .chatting-input> .chatting-input-camera{
+  background:var(--camera-background);
+}
+.chat-board > .chatting-input> .chatting-input-right svg,
+.chat-board > .chatting-input> .chatting-input-camera svg{
+  width:40px;
+  height:40px;
+}
+.chat-board > .chatting-input> .chatting-input-right{
+  float:right;
+}
+/* 채팅 */
+.message{
+  margin-top:5px;
+}
+.message img{
+  width:70px;
+  height:70px;
+}
+.message.broadcast img,.message.broadcast ul{
+    float: right;
+}
+.message img, .message ul{
+  float: left;
+}
+.message .item{
+  padding: 1px;
+  overflow: hidden;
+}
+.message .item .text{
+  padding: 12px;
+  margin:1px 1px 1px 1px;
+  border-radius: 50px;
+  border: 1px solid;
+  display: inline-block;
+  word-break:break-all
+}
+.message.broadcast .item .text{
+  float:right;
+}
+
+  </style>
+</head>
+<body>
+
+  <nav>
+    <div class="logo">
+      <svg aria-hidden="true" focusable="false" data-prefix="fab" data-icon="twitch" class="svg-inline--fa fa-twitch fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M391.17,103.47H352.54v109.7h38.63ZM285,103H246.37V212.75H285ZM120.83,0,24.31,91.42V420.58H140.14V512l96.53-91.42h77.25L487.69,256V0ZM449.07,237.75l-77.22,73.12H294.61l-67.6,64v-64H140.14V36.58H449.07Z"></path></svg>
+    </div>
+    <div class="sub-profile">
+      <img src="https://static-cdn.jtvnw.net/jtv_user_pictures/acff79a2-7560-4c8b-bb89-efd7a7594447-profile_image-70x70.png" alt="프로필 이미지">
+      <svg aria-hidden="true" focusable="false" data-prefix="fab" data-icon="instagram" class="svg-inline--fa fa-instagram fa-w-14" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M224.1 141c-63.6 0-114.9 51.3-114.9 114.9s51.3 114.9 114.9 114.9S339 319.5 339 255.9 287.7 141 224.1 141zm0 189.6c-41.1 0-74.7-33.5-74.7-74.7s33.5-74.7 74.7-74.7 74.7 33.5 74.7 74.7-33.6 74.7-74.7 74.7zm146.4-194.3c0 14.9-12 26.8-26.8 26.8-14.9 0-26.8-12-26.8-26.8s12-26.8 26.8-26.8 26.8 12 26.8 26.8zm76.1 27.2c-1.7-35.9-9.9-67.7-36.2-93.9-26.2-26.2-58-34.4-93.9-36.2-37-2.1-147.9-2.1-184.9 0-35.8 1.7-67.6 9.9-93.9 36.1s-34.4 58-36.2 93.9c-2.1 37-2.1 147.9 0 184.9 1.7 35.9 9.9 67.7 36.2 93.9s58 34.4 93.9 36.2c37 2.1 147.9 2.1 184.9 0 35.9-1.7 67.7-9.9 93.9-36.2 26.2-26.2 34.4-58 36.2-93.9 2.1-37 2.1-147.8 0-184.8zM398.8 388c-7.8 19.6-22.9 34.7-42.6 42.6-29.5 11.7-99.5 9-132.1 9s-102.7 2.6-132.1-9c-19.6-7.8-34.7-22.9-42.6-42.6-11.7-29.5-9-99.5-9-132.1s-2.6-102.7 9-132.1c7.8-19.6 22.9-34.7 42.6-42.6 29.5-11.7 99.5-9 132.1-9s102.7-2.6 132.1 9c19.6 7.8 34.7 22.9 42.6 42.6 11.7 29.5 9 99.5 9 132.1s2.7 102.7-9 132.1z"></path></svg>
+      <!-- <svg aria-label="구독" class="_8-yf5 " height="24" viewBox="0 0 48 48" width="24"><path clip-rule="evenodd" d="M34.3 3.5C27.2 3.5 24 8.8 24 8.8s-3.2-5.3-10.3-5.3C6.4 3.5.5 9.9.5 17.8s6.1 12.4 12.2 17.8c9.2 8.2 9.8 8.9 11.3 8.9s2.1-.7 11.3-8.9c6.2-5.5 12.2-10 12.2-17.8 0-7.9-5.9-14.3-13.2-14.3zm-1 29.8c-5.4 4.8-8.3 7.5-9.3 8.1-1-.7-4.6-3.9-9.3-8.1-5.5-4.9-11.2-9-11.2-15.6 0-6.2 4.6-11.3 10.2-11.3 4.1 0 6.3 2 7.9 4.2 3.6 5.1 1.2 5.1 4.8 0 1.6-2.2 3.8-4.2 7.9-4.2 5.6 0 10.2 5.1 10.2 11.3 0 6.7-5.7 10.8-11.2 15.6z" fill-rule="evenodd"></path></svg> -->
+      <svg aria-label="구독 취소" class="_8-yf5 " fill="#ed4956" height="24" viewBox="0 0 48 48" width="24"><path clip-rule="evenodd" d="M35.3 35.6c-9.2 8.2-9.8 8.9-11.3 8.9s-2.1-.7-11.3-8.9C6.5 30.1.5 25.6.5 17.8.5 9.9 6.4 3.5 13.7 3.5 20.8 3.5 24 8.8 24 8.8s3.2-5.3 10.3-5.3c7.3 0 13.2 6.4 13.2 14.3 0 7.8-6.1 12.3-12.2 17.8z" fill-rule="evenodd"></path></svg>
+    </div>
+  </nav>
+  <wl></wl>
+  <main>
+    <!-- 좌측 -->
+    <section>
+      <div id="profile-broadcast-img" class="profile">
+        <img src="https://static-cdn.jtvnw.net/jtv_user_pictures/acff79a2-7560-4c8b-bb89-efd7a7594447-profile_image-70x70.png" alt="프로필 이미지">
+        <!-- <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="paper-plane" class="svg-inline--fa fa-paper-plane fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M476 3.2L12.5 270.6c-18.1 10.4-15.8 35.6 2.2 43.2L121 358.4l287.3-253.2c5.5-4.9 13.3 2.6 8.6 8.3L176 407v80.5c0 23.6 28.5 32.9 42.5 15.8L282 426l124.6 52.2c14.2 6 30.4-2.9 33-18.2l72-432C515 7.8 493.3-6.8 476 3.2z"></path></svg> -->
+        <!-- <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="bell" class="svg-inline--fa fa-bell fa-w-14" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M224 512c35.32 0 63.97-28.65 63.97-64H160.03c0 35.35 28.65 64 63.97 64zm215.39-149.71c-19.32-20.76-55.47-51.99-55.47-154.29 0-77.7-54.48-139.9-127.94-155.16V32c0-17.67-14.32-32-31.98-32s-31.98 14.33-31.98 32v20.84C118.56 68.1 64.08 130.3 64.08 208c0 102.3-36.15 133.53-55.47 154.29-6 6.45-8.66 14.16-8.61 21.71.11 16.4 12.98 32 32.1 32h383.8c19.12 0 32-15.6 32.1-32 .05-7.55-2.61-15.27-8.61-21.71z"></path></svg> -->
+        <svg aria-label="게시물 공유" class="_8-yf5 " height="24" viewBox="0 0 48 48" width="24"><path d="M46.5 3.5h-45C.6 3.5.2 4.6.8 5.2l16 15.8 5.5 22.8c.2.9 1.4 1 1.8.3L47.4 5c.4-.7-.1-1.5-.9-1.5zm-40.1 3h33.5L19.1 18c-.4.2-.9.1-1.2-.2L6.4 6.5zm17.7 31.8l-4-16.6c-.1-.4.1-.9.5-1.1L41.5 9 24.1 38.3z"></path><path d="M14.7 48.4l2.9-.7"></path></svg>
+        <div class="option">
+          <h1 id="profile-broadcast">스트리머 닉네임</h1>
+          <h5 id="profile-broadcast-id">서브타이틀</h5>
+        </div>
+      </div>
+      <wl style="background:#fff"></wl>
+      <!-- 팔로우 바 -->
+      <div class="main-img"></div>
+      <div class="main-icon">
+        <input id="follow" type="checkbox" name="" style="display:none">
+        <label for="follow">
+          <svg id="follow-off" aria-label="좋아요" class="_8-yf5 " height="24" viewBox="0 0 48 48" width="24"><path clip-rule="evenodd" d="M34.3 3.5C27.2 3.5 24 8.8 24 8.8s-3.2-5.3-10.3-5.3C6.4 3.5.5 9.9.5 17.8s6.1 12.4 12.2 17.8c9.2 8.2 9.8 8.9 11.3 8.9s2.1-.7 11.3-8.9c6.2-5.5 12.2-10 12.2-17.8 0-7.9-5.9-14.3-13.2-14.3zm-1 29.8c-5.4 4.8-8.3 7.5-9.3 8.1-1-.7-4.6-3.9-9.3-8.1-5.5-4.9-11.2-9-11.2-15.6 0-6.2 4.6-11.3 10.2-11.3 4.1 0 6.3 2 7.9 4.2 3.6 5.1 1.2 5.1 4.8 0 1.6-2.2 3.8-4.2 7.9-4.2 5.6 0 10.2 5.1 10.2 11.3 0 6.7-5.7 10.8-11.2 15.6z" fill-rule="evenodd"></path></svg>
+          <!-- <svg id="follow-on" aria-label="좋아요 취소" class="_8-yf5 " fill="#ed4956" height="24" viewBox="0 0 48 48" width="24"><path clip-rule="evenodd" d="M35.3 35.6c-9.2 8.2-9.8 8.9-11.3 8.9s-2.1-.7-11.3-8.9C6.5 30.1.5 25.6.5 17.8.5 9.9 6.4 3.5 13.7 3.5 20.8 3.5 24 8.8 24 8.8s3.2-5.3 10.3-5.3c7.3 0 13.2 6.4 13.2 14.3 0 7.8-6.1 12.3-12.2 17.8z" fill-rule="evenodd"></path></svg> -->
+        </label>
+        <svg aria-label="댓글 달기" class="_8-yf5 " height="24" viewBox="0 0 48 48" width="24"><path clip-rule="evenodd" d="M47.5 46.1l-2.8-11c1.8-3.3 2.8-7.1 2.8-11.1C47.5 11 37 .5 24 .5S.5 11 .5 24 11 47.5 24 47.5c4 0 7.8-1 11.1-2.8l11 2.8c.8.2 1.6-.6 1.4-1.4zm-3-22.1c0 4-1 7-2.6 10-.2.4-.3.9-.2 1.4l2.1 8.4-8.3-2.1c-.5-.1-1-.1-1.4.2-1.8 1-5.2 2.6-10 2.6-11.4 0-20.6-9.2-20.6-20.5S12.7 3.5 24 3.5 44.5 12.7 44.5 24z" fill-rule="evenodd"></path></svg>
+        <svg aria-label="저장" class="_8-yf5 " fill="#262626" height="24" viewBox="0 0 48 48" width="24" style="float:right"><path d="M43.5 48c-.4 0-.8-.2-1.1-.4L24 29 5.6 47.6c-.4.4-1.1.6-1.6.3-.6-.2-1-.8-1-1.4v-45C3 .7 3.7 0 4.5 0h39c.8 0 1.5.7 1.5 1.5v45c0 .6-.4 1.2-.9 1.4-.2.1-.4.1-.6.1zM24 26c.8 0 1.6.3 2.2.9l15.8 16V3H6v39.9l15.8-16c.6-.6 1.4-.9 2.2-.9z"></path></svg>
+      </div>
+      <div class="main-follows">
+        <img id="follow-img" src="https://static-cdn.jtvnw.net/jtv_user_pictures/acff79a2-7560-4c8b-bb89-efd7a7594447-profile_image-70x70.png" alt="">
+        <h5 id="follow-name">이름없는 사람</h5><h5> 님등 </h5>
+        <h5 id="follow_count">100명</h5><h5>명</h5><br>
+      </div>
+      <div class="main-comment">
+        라이브방송중! 여러분 잘부탁해~
+      </div>
+      <div class="main-comment-hash-tag">
+        #트위치 #라이브 #저스트_채팅
+      </div>
+    </section>
+    <!-- 우측 -->
+    <section>
+      <div class="space"></div>
+      <div class="chat-board">
+        <div class="chat-user">
+          <svg aria-label="트위치" aria-hidden="true" focusable="false" data-prefix="fab" data-icon="twitch" class="svg-inline--fa fa-twitch fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M391.17,103.47H352.54v109.7h38.63ZM285,103H246.37V212.75H285ZM120.83,0,24.31,91.42V420.58H140.14V512l96.53-91.42h77.25L487.69,256V0ZM449.07,237.75l-77.22,73.12H294.61l-67.6,64v-64H140.14V36.58H449.07Z"></path></svg>
+          <!-- <h1 id="chat-user-channel">neocats_</h1> -->
+          <div class="option">
+            <h1 id="stream-title">스트리머 닉네임</h1>
+            <h5 id="stream-game">서브타이틀</h5>
+          </div>
+        </div>
+        <div class="main-img chatting-bord">
+          <div id="chatting_bord" class="content">
+          </div>
+        </div>
+        <div class="main-img chatting-input">
+          <div class="chatting-input-camera">
+            <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="camera" class="svg-inline--fa fa-camera fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M512 144v288c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48V144c0-26.5 21.5-48 48-48h88l12.3-32.9c7-18.7 24.9-31.1 44.9-31.1h125.5c20 0 37.9 12.4 44.9 31.1L376 96h88c26.5 0 48 21.5 48 48zM376 288c0-66.2-53.8-120-120-120s-120 53.8-120 120 53.8 120 120 120 120-53.8 120-120zm-32 0c0 48.5-39.5 88-88 88s-88-39.5-88-88 39.5-88 88-88 88 39.5 88 88z"></path></svg>
+          </div>
+          <div class="chatting-input-right">
+            <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="microphone-alt" class="svg-inline--fa fa-microphone-alt fa-w-11" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 352 512"><path fill="currentColor" d="M336 192h-16c-8.84 0-16 7.16-16 16v48c0 74.8-64.49 134.82-140.79 127.38C96.71 376.89 48 317.11 48 250.3V208c0-8.84-7.16-16-16-16H16c-8.84 0-16 7.16-16 16v40.16c0 89.64 63.97 169.55 152 181.69V464H96c-8.84 0-16 7.16-16 16v16c0 8.84 7.16 16 16 16h160c8.84 0 16-7.16 16-16v-16c0-8.84-7.16-16-16-16h-56v-33.77C285.71 418.47 352 344.9 352 256v-48c0-8.84-7.16-16-16-16zM176 352c53.02 0 96-42.98 96-96h-85.33c-5.89 0-10.67-3.58-10.67-8v-16c0-4.42 4.78-8 10.67-8H272v-32h-85.33c-5.89 0-10.67-3.58-10.67-8v-16c0-4.42 4.78-8 10.67-8H272v-32h-85.33c-5.89 0-10.67-3.58-10.67-8v-16c0-4.42 4.78-8 10.67-8H272c0-53.02-42.98-96-96-96S80 42.98 80 96v160c0 53.02 42.98 96 96 96z"></path></svg>
+            <svg aria-hidden="true" focusable="false" data-prefix="far" data-icon="image" class="svg-inline--fa fa-image fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M464 64H48C21.49 64 0 85.49 0 112v288c0 26.51 21.49 48 48 48h416c26.51 0 48-21.49 48-48V112c0-26.51-21.49-48-48-48zm-6 336H54a6 6 0 0 1-6-6V118a6 6 0 0 1 6-6h404a6 6 0 0 1 6 6v276a6 6 0 0 1-6 6zM128 152c-22.091 0-40 17.909-40 40s17.909 40 40 40 40-17.909 40-40-17.909-40-40-40zM96 352h320v-80l-87.515-87.515c-4.686-4.686-12.284-4.686-16.971 0L192 304l-39.515-39.515c-4.686-4.686-12.284-4.686-16.971 0L96 304v48z"></path></svg>
+            <svg aria-hidden="true" focusable="false" data-prefix="far" data-icon="smile-wink" class="svg-inline--fa fa-smile-wink fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><path fill="currentColor" d="M248 8C111 8 0 119 0 256s111 248 248 248 248-111 248-248S385 8 248 8zm0 448c-110.3 0-200-89.7-200-200S137.7 56 248 56s200 89.7 200 200-89.7 200-200 200zm117.8-146.4c-10.2-8.5-25.3-7.1-33.8 3.1-20.8 25-51.5 39.4-84 39.4s-63.2-14.3-84-39.4c-8.5-10.2-23.7-11.5-33.8-3.1-10.2 8.5-11.5 23.6-3.1 33.8 30 36 74.1 56.6 120.9 56.6s90.9-20.6 120.9-56.6c8.5-10.2 7.1-25.3-3.1-33.8zM168 240c17.7 0 32-14.3 32-32s-14.3-32-32-32-32 14.3-32 32 14.3 32 32 32zm160-60c-25.7 0-55.9 16.9-59.9 42.1-1.7 11.2 11.5 18.2 19.8 10.8l9.5-8.5c14.8-13.2 46.2-13.2 61 0l9.5 8.5c8.5 7.4 21.6.3 19.8-10.8-3.8-25.2-34-42.1-59.7-42.1z"></path></svg>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+  <script type="text/javascript">
+Element.prototype.C=function(ele){var ele=document.createElement(ele);this.appendChild(ele);return ele};
+
+window.oauth_client_id = "g1rhyzp1s7y2d755xqjn1otspdgvc3";
+
+window.filter_user=[];
+window.imgs_user={};
+window.last_follow="";
+
+window.user_id=getParams("user-id")||"129955642";
+getData();
+
+// window.channelname=getParams("channel")||"neocats_";
+window.chatClientM=new chatClient({channel:window.broadcast["name"]});
+window.chatClientM.open();
+window.chatClientM.onChating = function(parsed){
+  if(!window.imgs_user.hasOwnProperty(parsed["user-id"]))
+    window.imgs_user[parsed["user-id"]]=JSON.parse(getAPI("https://api.twitch.tv/kraken/channels/"+parsed["user-id"]));
+  append_message(parsed["display-id"],parsed["message"],window.imgs_user[parsed["user-id"]].logo,parsed["badges"].indexOf("broadcaster")!=-1);
+}
+
+function getData(){
+  let follow = document.getElementById("follow_count");
+  console.log("업데이트");
+
+  setTimeout(getData,5*60*1000);
+
+  window.broadcast = JSON.parse(getAPI("https://api.twitch.tv/kraken/channels/"+window.user_id));
+  let is=follow.getAttribute("data-follow") == window.broadcast["followers"];
+
+  follow.innerHTML=numberToKorean(window.broadcast["followers"]);
+
+  document.getElementById("follow_count").innerHTML=window.broadcast["followers"]
+  document.getElementById("profile-broadcast-img").src=window.broadcast["logo"];
+  document.getElementById("profile-broadcast").innerHTML=window.broadcast["display_name"];
+  document.getElementById("profile-broadcast-id").innerHTML=window.broadcast["name"];
+
+  document.getElementById("stream-title").innerHTML=window.broadcast["status"];
+  document.getElementById("stream-game").innerHTML=window.broadcast["game"];
+
+  if(is)return;//데이터 변경사항 없음
+
+  follow.setAttribute("data-follow",window.broadcast["followers"]);
+  let l = getFollow();
+  window.last_follow=l[l.length-1];
+  console.log(window.last_follow);
+  document.getElementById("follow-img").src=window.last_follow.logo;
+  document.getElementById("follow-name").innerHTML=window.last_follow.name;
+  // window.follows = JSON.parse());
+  // console.log(window.follows.follows);
+}
+
+function getFollow(){
+  let follows=JSON.parse(getAPI("https://api.twitch.tv/kraken/channels/" +window.user_id+ '/follows'))["follows"];
+  return follows.map(x=>{
+    return{user:x.user["_id"],name:x.user["display_name"],logo:x.user.logo}
+  })
+}
+
+function append_message(user,msg,img,isright){
+  console.log(user,msg,img,isright);
+  let bord = document.getElementById("chatting_bord").getElementsByClassName("message");
+  let message = bord[bord.length-1];
+  if(!message || user!=message.getAttribute("data-name")){
+    message=document.getElementById("chatting_bord").C("div");
+    message.classList.add("message");
+    if(isright)message.classList.add("broadcast");
+    message.setAttribute("data-name",user);
+    let imgE = message.C("img");
+    imgE.src=img;
+  }
+  let ele = message.C("div");
+  ele.classList.add("item");
+  ele = ele.C("div");
+  ele.classList.add("text");
+  ele.innerHTML=msg;
+}
+function numberToKorean(number){
+    var inputNumber  = number < 0 ? false : number;
+    var unitWords    = ['', 'K', 'M', 'G', 'T'];
+    var splitUnit    = 1000;
+    var resultArray  = [];
+    var resultString = '';
+    var convert=(n,width)=>{n+="";return n.length >= width ? n : new Array(width - n.length + 1).join('0') + n};
+    for (var i = 0; i < unitWords.length; i++){
+         var unitResult = (inputNumber % Math.pow(splitUnit, i + 1)) / Math.pow(splitUnit, i);
+        unitResult = Math.floor(unitResult);
+        if (unitResult > 0){
+            resultArray[i] = unitResult;
+        }
+    }
+    if(resultArray.length>1)
+      return resultArray[resultArray.length-1]+"."+convert(resultArray[resultArray.length-2],3)[0]+ unitWords[resultArray.length-1];
+    return resultArray[resultArray.length-1]+unitWords[resultArray.length-1];
+}
+
+function getParams(name, address = window.location.href) {
+	let url;
+	let results = "";
+	url = new URL(address);
+	if (typeof url.searchParams === 'undefined') {
+		results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(address);
+		if (results == null) {
+			return null;
+		} else {
+			return decodeURI(results[1]) || 0;
+		}
+	} else {
+		return url.searchParams.get(name);
+	}
+}
+
+function getAPI(host){
+	var xmlhttp = new XMLHttpRequest(),state="";
+	xmlhttp.onreadystatechange=function(){if(this.readyState==4&&this.status==200)state=this.responseText};
+	xmlhttp.open("GET",host,false);
+  xmlhttp.setRequestHeader('Client-ID',window.oauth_client_id);
+  xmlhttp.setRequestHeader('Accept',"application/vnd.twitchtv.v5+json");
+	xmlhttp.send();
+	return state;
+}
+  </script>
+</body>
