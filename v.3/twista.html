@@ -1,3 +1,5 @@
+<!doctype html>
+<html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
   <title>Twista</title>
@@ -363,9 +365,9 @@ getData();
 window.chatClientM=new chatClient({channel:window.broadcast["name"]});
 window.chatClientM.open();
 window.chatClientM.onChating = function(parsed){
-  if(!window.imgs_user.hasOwnProperty(parsed["user-id"]))
-    window.imgs_user[parsed["user-id"]]=JSON.parse(getAPI("https://api.twitch.tv/kraken/channels/"+parsed["user-id"]));
-  append_message(parsed["display-id"],parsed["message"],window.imgs_user[parsed["user-id"]].logo,parsed["badges"].indexOf("broadcaster")!=-1);
+  // if(!window.imgs_user.hasOwnProperty(parsed["user-id"]))
+    // window.imgs_user[parsed["user-id"]]=JSON.parse(getAPI("https://api.twitch.tv/kraken/channels/"+parsed["user-id"]));
+  // append_message(parsed["display-id"],parsed["message"],window.imgs_user[parsed["user-id"]].logo,parsed["badges"].indexOf("broadcaster")!=-1);
 }
 
 function getData(){
@@ -473,3 +475,4 @@ function getAPI(host){
 }
   </script>
 </body>
+</html>
