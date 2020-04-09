@@ -11,6 +11,16 @@ function getEffect(options){
       transform:" translate(-"+document.documentElement.clientWidth/2+"px, -50px) rotate(315deg)",
 			documentHeight:()=>{return document.documentElement.clientHeight*2},
 		},options);
+  }else if(options.effect=="cherryblossom3"){
+    options = $.extend({},{text:['<image src="https://discordapp.com/channels/674559799861706762/682449668428529743/697740100217602128">',
+                    '<image src="https://discordapp.com/channels/674559799861706762/682449668428529743/697740104135082044">',
+                    '<image src="https://discordapp.com/channels/674559799861706762/682449668428529743/697740104776548382">',
+                    '<image src="https://discordapp.com/channels/674559799861706762/682449668428529743/697740105103704124">',
+                    '<image src="https://discordapp.com/channels/674559799861706762/682449668428529743/697740104944582667">',
+                    '<image src="https://discordapp.com/channels/674559799861706762/682449668428529743/697740106152280064">',
+                    '<image src="https://discordapp.com/channels/674559799861706762/682449668428529743/697740108270665798">',
+                    '<image src="https://discordapp.com/channels/674559799861706762/682449668428529743/697740109499465790">'],
+                    minSize:10,maxSize:20,move_direction:"right",move:300,color:options.color},options)
   }else if(options.effect=="cherryblossom2"){
     options = $.extend({},{text:['<image src="https://patrickmonster.github.io/tgd/img/cherryblossom/%EB%B2%9A%EA%BD%831-1.png">',
                     '<image src="https://patrickmonster.github.io/tgd/img/cherryblossom/%EB%B2%9A%EA%BD%831-2.png">',
