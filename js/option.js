@@ -12,14 +12,14 @@ function getEffect(options){
 			documentHeight:()=>{return document.documentElement.clientHeight*2},
 		},options);
   }else if(options.effect=="cherryblossom3"){
-    options = $.extend({},{text:['<image src="https://discordapp.com/channels/674559799861706762/682449668428529743/697740100217602128">',
-                    '<image src="https://discordapp.com/channels/674559799861706762/682449668428529743/697740104135082044">',
-                    '<image src="https://discordapp.com/channels/674559799861706762/682449668428529743/697740104776548382">',
-                    '<image src="https://discordapp.com/channels/674559799861706762/682449668428529743/697740105103704124">',
-                    '<image src="https://discordapp.com/channels/674559799861706762/682449668428529743/697740104944582667">',
-                    '<image src="https://discordapp.com/channels/674559799861706762/682449668428529743/697740106152280064">',
-                    '<image src="https://discordapp.com/channels/674559799861706762/682449668428529743/697740108270665798">',
-                    '<image src="https://discordapp.com/channels/674559799861706762/682449668428529743/697740109499465790">'],
+    options = $.extend({},{text:['<image src="https://cdn.discordapp.com/attachments/682449668428529743/697740099907092520/sakura_posom-6.png">',
+                    '<image src="https://cdn.discordapp.com/attachments/682449668428529743/697740103770046514/sakura_posom-1.png">',
+                    '<image src="https://cdn.discordapp.com/attachments/682449668428529743/697740104541798418/sakura_posom-8.png">',
+                    '<image src="https://cdn.discordapp.com/attachments/682449668428529743/697740104822947890/sakura_posom-2.png">',
+                    '<image src="https://cdn.discordapp.com/attachments/682449668428529743/697740101962170429/sakura_posom-7.png">',
+                    '<image src="https://cdn.discordapp.com/attachments/682449668428529743/697740105929982092/sakura_posom-3.png">',
+                    '<image src="https://cdn.discordapp.com/attachments/682449668428529743/697740107993841664/sakura_posom-4.png">',
+                    '<image src="https://cdn.discordapp.com/attachments/682449668428529743/697740109289750528/sakura_posom-5.png">'],
                     minSize:10,maxSize:20,move_direction:"right",move:300,color:options.color},options)
   }else if(options.effect=="cherryblossom2"){
     options = $.extend({},{text:['<image src="https://patrickmonster.github.io/tgd/img/cherryblossom/%EB%B2%9A%EA%BD%831-1.png">',
