@@ -11,6 +11,13 @@ function getEffect(options){
       transform:" translate(-"+document.documentElement.clientWidth/2+"px, -50px) rotate(315deg)",
 			documentHeight:()=>{return document.documentElement.clientHeight*2},
 		},options);
+  }else if(options.effect=="macaroon"){
+    options = $.extend({},{text:['<image src="https://cdn.discordapp.com/attachments/682449668428529743/706147061380153434/macaron_3.png">',
+                    '<image src="https://cdn.discordapp.com/attachments/682449668428529743/706147062466740304/macaron_2.png">',
+                    '<image src="https://cdn.discordapp.com/attachments/682449668428529743/706147065050300467/macaron_5.png">',
+                    '<image src="https://cdn.discordapp.com/attachments/682449668428529743/706147065574588486/macaron_1.png">',
+                    '<image src="https://cdn.discordapp.com/attachments/682449668428529743/706147068980232266/macaron_4.png">'],
+                    minSize:10,maxSize:20,move_direction:"right",move:300,color:options.color},options)
   }else if(options.effect=="cherryblossom3"){
     options = $.extend({},{text:['<image src="https://cdn.discordapp.com/attachments/682449668428529743/697740099907092520/sakura_posom-6.png">',
                     '<image src="https://cdn.discordapp.com/attachments/682449668428529743/697740103770046514/sakura_posom-1.png">',
