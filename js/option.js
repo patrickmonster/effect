@@ -50,6 +50,16 @@ function getEffect(options){
                     '<image src="https://patrickmonster.github.io/tgd/img/chocolate-box-2.png">',
                     '<image src="https://patrickmonster.github.io/tgd/img/chocolate-chip.png">'],
                     minSize:10,maxSize:20,color:options.color},options);
+  }else if(options.effect=="rose1"){
+    options = $.extend({},{text:['<image src="https://cdn.discordapp.com/attachments/682449668428529743/716624601215664230/1.png">',
+                    '<image src="https://cdn.discordapp.com/attachments/682449668428529743/716624594139873348/2.png">',
+                    '<image src="https://cdn.discordapp.com/attachments/682449668428529743/716624600267620392/3.png">'],
+                    minSize:10,maxSize:20,color:options.color},options);
+  }else if(options.effect=="rose2"){
+    options = $.extend({},{text:['<image src="https://cdn.discordapp.com/attachments/682449668428529743/716625654283501599/1.png">',
+                    '<image src="https://cdn.discordapp.com/attachments/682449668428529743/716625656313544734/2.png">',
+                    '<image src="https://cdn.discordapp.com/attachments/682449668428529743/716625652962557952/3.png">'],
+                    minSize:10,maxSize:20,color:options.color},options);
   }else if(options.effect=="rose"){
     options = $.extend({},{text:['<image src="https://cdn.discordapp.com/attachments/682449668428529743/683894829666795530/1.png">',
                               '<image src="https://cdn.discordapp.com/attachments/682449668428529743/683894830471970887/2.png">'],
@@ -127,6 +137,9 @@ function getEffect(options){
   }else if(options.effect=="pig"){//돼지
     options = $.extend({},{text:['<i class="fas fa-pig"></i>',
                                 '<i class="far fa-pig"></i>'],direction:"left",color:options.color},options)
+  }else if(options.effect=="fish"){//물고기 #op text far fish fas fish fad fish
+    options = $.extend({},{text:['<i class="fas fa-fish"></i>','<i class="far fa-fish"></i>','<i class="fad fa-fish"></i>'],
+                                direction:"left",color:options.color},options)
   }else{
     options = $.extend({},{text:['.','&#10052'],maxSize:15,color:options.color},options);
   }

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>채팅-네오캣짱</title>
+  <script src="https://patrickmonster.github.io/irc_chat_client/chat.js" charset="utf-8"></script>
+  <!-- <script src="../../irc_chat_client/chat.js" charset="utf-8"></script> -->
+  <style media="screen">
+*{
+  margin:0;
+  padding:0;
+  overflow: hidden;
+}
+html{
+  overflow: hidden;
+}
+  </style>
+</head>
+<body>
+  
+
+
+  <script type="text/javascript">
+
+window.chatClientC = new chatClient({channel:window.channelname});
+window.chatClientC.open();
+window.chatClientC.onClose=location.reload;
+window.chatClientC.onChating = function(parsed){
+  // console.log(parsed);
+  if(["#","!"].indexOf(parsed.message[0])!=-1)return;
+  if(window.chatClientC.isChat)
+    appendDonate(parsed);
+};
+window.chatClientC.onCommand = function(message,parsed){
+  if("도네"==message[0]){
+    ({"속도":function(i){
+
+    })[message[1]](message[2]);
+  }
+};
+
+function getChannel(oauth){
+	var xmlhttp = new XMLHttpRequest(),channel="";
+	xmlhttp.onreadystatechange=function(){if(this.readyState==4&&this.status==200)channel=this.responseText};
+	xmlhttp.open("GET","https://id.twitch.tv/oauth2/validate",false);
+	xmlhttp.setRequestHeader('Authorization','OAuth '+oauth);
+	xmlhttp.send();
+	return channel;
+}
+
+function getParams(name, address = window.location.href) {
+ let url;
+ let results = "";
+ url = new URL(address);
+ if (typeof url.searchParams === 'undefined') {
+   results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(address);
+   if (results == null) {
+     return null;
+   } else {
+     return decodeURI(results[1]) || 0;
+   }
+ } else {
+   return url.searchParams.get(name);
+ }
+}
+  </script>
+</body>
