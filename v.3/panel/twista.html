@@ -361,46 +361,11 @@ section .chat-user svg{
 Element.prototype.C=function(ele){var ele=document.createElement(ele);this.appendChild(ele);return ele};
 
 window.oauth_client_id = "g1rhyzp1s7y2d755xqjn1otspdgvc3";
-
-window.filter_user=[];
-window.imgs_user={};
 window.last_follow="";
-
 window.user_id=getParams("user-id")||"129955642";
 getData();
 
 // window.channelname=getParams("channel")||"neocats_";
-window.chatClientM=new chatClient({channel:window.broadcast["name"]});
-window.chatClientM.open();
-window.chatClientM.onChating = function(parsed){
-	return;
-  if(!window.imgs_user.hasOwnProperty(parsed["user-id"]))
-    window.imgs_user[parsed["user-id"]]=JSON.parse(getAPI("https://api.twitch.tv/kraken/channels/"+parsed["user-id"]));
-  append_message(parsed["display-id"],parsed["message"],parsed["id"],window.imgs_user[parsed["user-id"]].logo,parsed["badges"].indexOf("broadcaster")!=-1);
-}
-window.chatClientM.onCommand = function(message,parsed){
-
-}
-
-window.chatClientM.onDelChating = function(parsed){
-	return;
-	let target = document.getElementById("chatting_bord").getElementsByClassName("message");
-	console.log(parsed);
-	if(parsed.hasOwnProperty("ban-duration")){//사용자 모든 메세지 제거
-		target.forEach(item => {
-			if(item.getAttribute("data-name") == parsed){
-
-			}
-
-		});
-
-	}else if(parsed.hasOwnProperty("target-msg-id")){
-
-	}
-
-	//document.getElementById("chatting_bord").getElementsByClassName("message")
-
-};
 
 function getData(){
   let follow = document.getElementById("follow_count");
