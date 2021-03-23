@@ -16,7 +16,7 @@ window.EFFECT = (function () {
   const randomHexColorCode = () =>
     `#${(Math.random() * 0xfffff * 1000000).toString(16).slice(0, 6)}`;
 
-  const exception_style = ["font-size"];
+  const exception_style = ["font-size", "opacity"];
 
   const TYPE = {
     default: "ani_default",
