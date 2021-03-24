@@ -443,20 +443,19 @@ window.EFFECT = (function () {
     const frameSleep =
       frameSize / Math.min(location.x.length, location.y.length); // 건너뛰어야 하는 시간
 
-    style["font-size"] = selectArrayValue(this.size, 0); // 폰트크기
+    style["font-size"] = `${selectArrayValue(this.size, 0)}px`; // 폰트크기
     style.animationFunction = this.animationFunction; // 프레임 조작
     style.animationType = this.animationType; // 에니메이션 옵션
     style.subStyle = Object.assign({}, this.subStyle); // 보조 옵션
     style.init = pos;
-    style.left = pos[0]; //x
-    style.top = pos[1]; // y
+    style.left = `${pos[0]}px`; //x
+    style.top = `${pos[1]}px`; // y
     style.speed = speeds;
     style.frame = 0;
     style.delay = delay;
     style.location = location;
     style.frameSize = frameSize;
     style.frameSleep = frameSleep;
-    // style.transform = "rotate(45deg)";
     style.frameTarget = location.x.length == frameSize ? "x" : "y";
     style.frameNTarget = location.x.length == frameSize ? "y" : "x";
 
@@ -520,12 +519,14 @@ window.EFFECT = (function () {
           });
         }
         // 프레임이 진행중
-        style[frameTarget === "x" ? "left" : "top"] =
-          location[frameTarget][frame];
+        style[
+          frameTarget === "x" ? "left" : "top"
+        ] = `${location[frameTarget][frame]}px`;
         // 매인프레임
         const index = Math.floor(frame / style.frameSleep);
-        style[frameNTarget === "x" ? "left" : "top"] =
-          location[frameNTarget][index];
+        style[
+          frameNTarget === "x" ? "left" : "top"
+        ] = `${location[frameNTarget][index]}px`;
         // 보조 프레임
 
         // console.log(location, frameTarget, frameNTarget);
