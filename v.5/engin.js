@@ -78,6 +78,21 @@ window.EFFECT = (function () {
   }
 
   /**
+   * 이동 경로 가중치 연산
+   * @param {*} weigths 가중치
+   */
+  function getLocationSpeed(weigths) {
+    let weg = [];
+    for (let i = 1; i < weigths.length; i++) {
+      weg.push(parseFloat((weigths[i] - weigths[i - 1]).toFixed(5)));
+    }
+    const weigth = parseFloat((1 / weg.length).toFixed(5));
+    console.log(weigth, weg);
+    weg = weg.map((o) => (o == 0 ? 0 : (o + (o > 0 ? -weigth : weigth)) * 10));
+    return weg;
+  }
+
+  /**
    * 프레임 조작 디폴트 함수
    * @param {*} frame 현재 오브젝트의 프레임 값
    * @param {*} style 해당하는 오브젝트가 가지고 있는 스타일 정보
@@ -105,13 +120,13 @@ window.EFFECT = (function () {
       subStyle.init_ani_subRotate = true;
       subStyle.rotateP = selectArrayValue(subStyle.rotateP, 0);
       subStyle.rotate = randomNumberInRange(0, 360);
+      subStyle.rotateV = subStyle.rotateP > 0 ? 0 : 360;
     }
     let index = subStyle.rotate + subStyle.rotateP;
     style.transform = `rotate(${index}deg)`;
-    if (index > 360) {
-      subStyle.rotate = 0;
+    if (index > 360 || index < 0) {
+      subStyle.rotate = subStyle.rotateV;
     } else if (index < 0) {
-      subStyle.rotate = 360;
     } else {
       subStyle.rotate = index;
     }
@@ -123,67 +138,33 @@ window.EFFECT = (function () {
     if (!subStyle.init_ani_opacity) {
       subStyle.init_ani_opacity = true;
       if (isArrayLike(subStyle.opacity_animation_time)) {
-        //배열일경우
-        const animation_time = subStyle.opacity_animation_time;
-
-        subStyle.opacity_frame_size =
-          subStyle.opacity_frame_size ||
-          style.frameSize ||
-          randomNumberInRange(1, 1000);
-
-        // 구역 개수
-        subStyle.opacity_size = Math.floor(
-          subStyle.opacity_frame_size / animation_time.length
+        subStyle.opacity_location = getLocationSpeed(
+          subStyle.opacity_animation_time
         );
-
-        // 배열 나눔 (영역 분류)
-        // subStyle.opacity_animation_location = chunkIntoN(
-        //   animation_time,
-        //   subStyle.opacity_size
-        // );
-
-        subStyle.opacity_speed = []; // 각 영역별 속도
-        subStyle.opacity_direction = []; // 방향
-        const base_time = 1 / animation_time.length; // 기준시간
-
-        for (let i = 1; i < animation_time.length; i++) {
-          const now = animation_time[i]; // 현재 시간
-          const direction = animation_time[i - 1] <= now; // 방향 (true - 정방향)
-          const time =
-            (direction
-              ? now - animation_time[i - 1]
-              : animation_time[i - 1] - now) - base_time; // 진행시간 - 기준시간 = 오차시간
-
-          const isFast = time > 0; // 빠른지/느린지 여부
-          const percent = (Math.abs(time) / base_time) * 100; // 진행상황에 따른 퍼센트
-
-          subStyle.opacity_direction.push(animation_time[i - 1]);
-          subStyle.opacity_speed.push(
-            ((subStyle.opacity_size * percent) / 100) * (isFast ? 1 : -1)
+        if (style.frameSize > subStyle.opacity_animation_location.length) {
+          subStyle.opacity_count = Math.floor(
+            style.frameSize / console.log(subStyle)
           );
+          subStyle.opacity_size = style.frameSize;
+        } else {
+          subStyle.opacity_count = Math.floor(
+            subStyle.opacity_animation_location.length / console.log(subStyle)
+          );
+          subStyle.opacity_size = subStyle.opacity_animation_location.length;
         }
-
-        console.log(subStyle);
       } else {
         subStyle.opacityP = 0;
         subStyle.opacity = subStyle.opacity_animation_time;
       }
-      subStyle.opacity_frame = 0;
+      subStyle.opacity_frame_count = 0; // 고정적인 프레임
+      subStyle.opacity_frame = 0; // 프레임 카운터
     }
 
-    if (!subStyle.opacity_animation_location) {
+    if (!subStyle.opacity_size) {
       return frame;
     }
-
-    if (subStyle.opacityP) {
-      const index = Math.floor(subStyle.opacity_size / subStyle.opacity_frame); //
-      const subIndex = subStyle.opacity_size % subStyle.opacity_frame; //
-      // const value = subStyle.opacity_animation_location[index][subIndex];
-      // style.opacity = value;
-      // console.log(value);
-
-      subStyle.opacity_frame++;
-    }
+    subStyle.opacity_frame_count++;
+    subStyle.opacity_frame;
 
     return frame;
   };
