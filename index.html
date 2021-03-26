@@ -289,14 +289,21 @@ button:hover:before,button:hover:after{
 			<h1>링크를 복사해 주세요!</h1>
 			<button onclick="copyToClipboard('https://patrickmonster.github.io/effect/v.2/?'+getqury());setTimeout(function(){alert('소스가 복사되었습니다!')},100)">이펙트 복사하기</button>
 			<h2>이모지 & 이펙트 - 베타</h2>
-			<input id="user_id" type="text" style="width:200px;height:30px;margin-top:20px" placeholder="트위치 아이디를 입력 해 주세요!"></input><br>
-			<button onclick="if(!$('#user_id').val()){alert('아이디를 입력해 주세요!');return;}copyToClipboard('https://patrickmonster.github.io/effect/chat_emote/?channel='+$('#user_id').val());setTimeout(function(){alert('소스가 복사되었습니다!\n하단으로 내려, 적용해주세요!')},100)">이모지&이펙트 복사하기</button><br>
+			<input id="user_id" type="text" style="width:200px;height:30px;margin-top:20px" placeholder="트위치 아이디를 입력 해 주세요!" onkeyup="$('#user_id_2').val(this.value)"></input><br>
+			<button onclick="if(!$('#user_id').val()){alert('아이디를 입력해 주세요!');return;}copyToClipboard('https://patrickmonster.github.io/effect/chat_emote/?channel='+$('#user_id').val());setTimeout(function(){alert('소스가 복사되었습니다!\n하단의 적용방법을 참조하여 적용해 보세요!')},100)">이모지&이펙트 복사하기</button><br>
 			<a href="#page3" style="color:#fff">Obs설정 바로가기</a>
 			<a href="#page4" style="color:#fff">XSplit설정 바로가기</a><br>
 			<a href="#page5" style="color:#fff">디스코드 바로가기</a><br>
 		</div>
 	</div>
-	<div class="section" id="section2"></div>
+	<div class="section" id="section2">
+		<div class="slide active">
+			<input id="user_id_2" type="text" style="width:200px;height:30px;margin-top:20px" placeholder="트위치 아이디를 입력 해 주세요!" onkeyup="$('#user_id').val(this.value)"></input><br><br>
+			<p style="display: inline-block;">패널태두리색상 :</p>
+			<input type="text" id="color_selecter_2" class="form-control" value="#7300ff"><br><br>
+			<button onclick="if(!$('#user_id_2').val()){alert('아이디를 입력해 주세요!');return;}let color = $('#color_selecter_2').val();if(color[0]=='#')color=color.substr(1);copyToClipboard(`https://patrickmonster.github.io/effect/v.3/panel/twista.html?username=${$('#user_id').val()}&color=${color}`);setTimeout(function(){alert('소스가 복사되었습니다!\n하단의 적용방법을 참조하여 적용해 보세요!')},100)">트위스타링크 복사하기</button><br>
+		</div>
+	</div>
 	<!-- <div class="section" id="section3">
 			<div class="slide active">
 				<iframe src="https://clips.twitch.tv/embed?clip=AlluringOnerousSashimiKevinTurtle&autoplay=false" frameborder="0" allowfullscreen="true" height="378" width="620"></iframe>
@@ -370,7 +377,7 @@ button:hover:before,button:hover:after{
 window.addStyle=document.addStyle=function(){var a=arguments,b=a.length,c=0;for(;c<b;c++)document.head.C('style').innerHTML=a[c]};
 var myFullpage = new fullpage('#fullpage', {
 	anchors: ['page1', 'page2', 'page3', 'page4','page5','page6','page7'],
-  navigationTooltips: ['이펙트 설정', /*'소계',*/ 'Obs 설정', 'XSplit','공지사항'],
+  navigationTooltips: ['이펙트 설정', '보조기능', 'Obs 설정', 'XSplit','공지사항'],
 	navigationColor:"#ffffff",
   css3: true,scrollingSpeed: 1000,responsiveHeight: 330,
 	slidesNavigation: true,dragAndMove: true,navigation: true,
@@ -409,6 +416,11 @@ $(document).ready( function(){
 		format:'hex',
 		//change: function(hex, opacity) {}
 	}).change(func);
+	$("#color_selecter_2").minicolors({
+		control: 'hue',
+		defaultValue: '7300ff',
+		format:'hex',
+	});
 	$("#count_selecter").change(func);
 	$("#move_selecter").change(func);
 	$("#speed_selecter").change(func);

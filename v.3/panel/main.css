@@ -238,7 +238,7 @@ section .chat-user {
 }
 section .option {
   line-height: 45px;
-  width: 300px;
+  width: 500px;
   display: inline-block;
 }
 section .chat-user svg {
