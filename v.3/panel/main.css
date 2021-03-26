@@ -133,6 +133,7 @@ nav .sub-profile #profile-broadcast-img-src-sub {
 }
 .profile img {
   float: left;
+  margin-left: 30px;
   width: 100px;
   height: 100px;
   border: 3px solid;
