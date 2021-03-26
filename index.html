@@ -299,9 +299,10 @@ button:hover:before,button:hover:after{
 	<div class="section" id="section2">
 		<div class="slide active">
 			<input id="user_id_2" type="text" style="width:200px;height:30px;margin-top:20px" placeholder="트위치 아이디를 입력 해 주세요!" onkeyup="$('#user_id').val(this.value)"></input><br><br>
-			<p style="display: inline-block;">패널태두리색상 :</p>
-			<input type="text" id="color_selecter_2" class="form-control" value="#7300ff"><br><br>
-			<button onclick="if(!$('#user_id_2').val()){alert('아이디를 입력해 주세요!');return;}let color = $('#color_selecter_2').val();if(color[0]=='#')color=color.substr(1);copyToClipboard(`https://patrickmonster.github.io/effect/v.3/panel/twista.html?username=${$('#user_id').val()}&color=${color}`);setTimeout(function(){alert('소스가 복사되었습니다!\n하단의 적용방법을 참조하여 적용해 보세요!')},100)">트위스타링크 복사하기</button><br>
+			<p style="display: inline-block;">패널태두리색상 :</p><input type="text" id="color_selecter_2" class="form-control" value="#7300ff"><br>
+			<label><input type="checkbox" name="좌우정렬" id="select_checkbox">정렬(프로필 우측)</label>
+			<br>
+			<button onclick="if(!$('#user_id_2').val()){alert('아이디를 입력해 주세요!');return;}let color = $('#color_selecter_2').val();if(color[0]=='#')color=color.substr(1);const isCk=$('#select_checkbox').checked?'&direction=1':'';copyToClipboard(`https://patrickmonster.github.io/effect/v.3/panel/twista.html?user-name=${$('#user_id').val()}&color=${color}${isCk}`);setTimeout(function(){alert('소스가 복사되었습니다!\n하단의 적용방법을 참조하여 적용해 보세요!')},100)">트위스타링크 복사하기</button><br>
 		</div>
 	</div>
 	<!-- <div class="section" id="section3">

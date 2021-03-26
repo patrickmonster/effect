@@ -21,6 +21,16 @@ if (!window.user_id) {
 }
 getData();
 
+/**
+ * 방향전환
+ * @returns
+ */
+if (getParams("direction")) {
+  const sections = document.getElementsByTagName("section");
+  const parent = sections[0].parentNode;
+  parent.insertBefore(sections[1], sections[0]);
+}
+
 // window.channelname=getParams("channel")||"neocats_";
 
 function getData() {
