@@ -46,8 +46,6 @@ function getData() {
 
   follow.innerHTML = numberToKorean(window.broadcast["followers"]);
 
-  document.getElementById("follow_count").innerHTML =
-    window.broadcast["followers"];
   document.getElementById("profile-broadcast-img-src").src =
     window.broadcast["logo"];
   // document.getElementById("profile-broadcast-img-src-sub").src=window.broadcast["logo"];
@@ -121,12 +119,11 @@ function append_message(user, msg, id, img, isright) {
   ele.innerHTML = msg;
 }
 function numberToKorean(number) {
-  var inputNumber = number < 0 ? false : number;
-  var unitWords = ["", "K", "M", "G", "T"];
-  var splitUnit = 1000;
-  var resultArray = [];
-  var resultString = "";
-  var convert = (n, width) => {
+  const inputNumber = number < 0 ? false : number;
+  const unitWords = ["", "K", "M", "G", "T"];
+  const splitUnit = 1000;
+  const resultArray = [];
+  const convert = (n, width) => {
     n += "";
     return n.length >= width
       ? n
