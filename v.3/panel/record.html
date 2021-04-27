@@ -4,48 +4,20 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=1920, initial-scale=1.0">
+    <script src="https://patrickmonster.github.io/tgd/javascript/jwt-decode.js"></script>
     <title>Twcod</title>
-    <style>
-:root {
-    --base-size : 150px;
-    --holl-size : 30px;
-    --holl-border-size : 15px;
-    --background-animation: background_scale;
-    --background-animation-blur: 1rem;
-    --background-animation-speed: 30s;
-}
-@keyframes cloudOrbit {
-  0%{
-    transform: rotate(0deg);
-  }
-  50%{
-    transform: rotate(180deg);
-  }
-  100%{
-    transform: rotate(360deg);
-  }
-}
-html, *{
-	margin: 0;
-    padding: 0;
-	background-color:transparent;
-}
-body{
-    margin: 0;
-    padding: 0;
-    height :100%;
-    width: 100%;
+    <script>
+function getParams(){
+    const params = {};
+    location.search.substr(1).split("&").map(function(o){
+        const [key,val] = o.split("=");
+        if(key)
+            params[key] = val;
+    });
+    return params;
 }
 
-html{
-    background: #333;
-    /* border: 5px solid; */
-}
-    </style>
-    <!-- <link rel="stylesheet" href="css/record1.css"> -->
-    <!-- <link rel="stylesheet" href="css/record2.css"> -->
-    <!-- <link rel="stylesheet" href="css/record3.css"> -->
-    <script>
+
 function getAverageRGB(imgEl) {
 
     var blockSize = 5, // only visit every 5 pixels
@@ -91,29 +63,10 @@ function getAverageRGB(imgEl) {
 
     return rgb;
 }
-const eles = {};
 
 function randomItem(a) {
-  return a[Math.floor(Math.random() * a.length)];
+    return a[Math.floor(Math.random() * a.length)];
 }
-
-function getParams(){
-    const params = {};
-    location.search.substr(1).split("&").map(function(o){
-        const [key,val] = o.split("=");
-        if(key)
-            params[key] = val;
-    });
-    return params;
-}
-
-const params = getParams();
-if(!params.index || ![1,2,3].includes(parseInt(params.index)))params.index = 3;
-const style = document.createElement("link");
-style.setAttribute("rel", "stylesheet");
-style.setAttribute("href", `css/record${params.index}.css`);
-document.head.appendChild(style);
-
 
 function imageToUri(url, callback) {
     const canvas = document.createElement('canvas');
@@ -126,28 +79,135 @@ function imageToUri(url, callback) {
         canvas.height = base_image.height;
 
         ctx.drawImage(base_image, 0, 0);
-    
+
         callback(canvas.toDataURL('image/png'));
 
         canvas.remove();
     }
 }
-window.onload=()=>{
-    eles.mainImg = new Image();
-    const img = "./img/" + randomItem([
+
+const params = getParams();
+const style_option = {};
+if(params.code){
+    const data = window.jwt_decode(params.code, {header: true});
+    console.log(data);
+    params.index = data.index || 2;
+    params.img = data.img
+    
+    style_option["base-size"] = data["base-size"] || "150px";
+    let i =  parseInt(typeof style_option["base-size"] != "number" &&  style_option["base-size"].endsWith("px") ? style_option["base-size"].substring(0,style_option["base-size"].length-2) : style_option["base-size"]);
+
+    if(typeof style_option["base-size"] != "number" && !style_option["base-size"].endsWith("px"))style_option["base-size"] += "px";
+    style_option["holl-size"] = `${i/5}px`;
+    style_option["holl-border-size"] = `${(i/5)/2}px`;
+    style_option["background-animation"] = data["background-animation"] || "background_scale";
+    style_option["background-animation-blur"] = data["background-animation-blur"] || "1rem";
+    style_option["background-animation-speed"] = data["background-animation-speed"] || "30s";
+
+    let style = document.createElement("link");
+    style.setAttribute("rel", "stylesheet");
+    style.setAttribute("href", `css/record${data.index}.css`);
+    document.head.appendChild(style);
+    
+}else{
+    if(!params.index || ![1,2,3].includes(parseInt(params.index)))params.index = 3;
+    params.img = "./img/" + randomItem([
         "1.png","2.jpg","3.png","4.png","5.jpg","6.png","7.png",
     ]);
-    eles.mainImg.src = img;
-    [document.getElementsByClassName("cover")[0], document.getElementsByClassName("cd")[0],eles.mainImg].forEach(o=>{
-        if(o)o.style["background-image"] = `url(${img})`;
+    style_option["base-size"] = "300px";
+    // style_option["holl-size"] = `30px`;
+    // style_option["holl-border-size"] = `15px`;
+    style_option["background-animation"] = "background_scale";
+    style_option["background-animation-blur"] = "1.5rem";
+    style_option["background-animation-speed"] = "30s";
+}
+let style = document.createElement("link");
+style.setAttribute("rel", "stylesheet");
+style.setAttribute("href", `css/record${params.index}.css`);
+document.head.appendChild(style);
+
+const root_sty = document.createElement("style");
+root_sty.innerHTML= `:root{ ${Object.keys(style_option).map(o=>`--${o}: ${style_option[o]}`).join(";")} }`;
+document.head.appendChild(root_sty);
+
+
+window.onload=()=>{
+    const mainImg = new Image();
+    mainImg.src = params.img;
+    [document.getElementsByClassName("cover")[0], document.getElementsByClassName("cd")[0],mainImg].forEach(o=>{
+        if(o)o.style["background-image"] = `url(${params.img})`;
     });
     
-    eles.mainImg.onload = () => {
-        const i = getAverageRGB(eles.mainImg);
+    mainImg.onload = () => {
+        const i = getAverageRGB(mainImg);
         document.getElementsByClassName("out")[0].style.background = document.getElementsByClassName("recorder")[0].style.background = `rgb(${i.r},${i.g},${i.b})`;
     }
 }
+
+function reload(data){
+
+    style_option["base-size"] = data["base-size"] || style_option["base-size"];
+    let i =  parseInt(typeof style_option["base-size"] != "number" &&  style_option["base-size"].endsWith("px") ? style_option["base-size"].substring(0,style_option["base-size"].length-2) : style_option["base-size"]);
+    if(typeof style_option["base-size"] != "number" && !style_option["base-size"].endsWith("px"))style_option["base-size"] += "px";
+    style_option["holl-size"] = `${i/5}px`;
+    style_option["holl-border-size"] = `${(i/5)/2}px`;
+    style_option["background-animation"] = data["background-animation"] || style_option["background-animation"];
+    style_option["background-animation-blur"] = data["background-animation-blur"] || style_option["background-animation-blur"];
+    style_option["background-animation-speed"] = data["background-animation-speed"] || style_option["background-animation-speed"];
+    return style_option;
+}
+
+function makeNew(data){
+    reload(data);
+    style_option.index = data.index || params.index;
+    style_option.img = data.img || params.img;
+    location.href = location.pathname + "?code=" + jwt_encode(style_option);
+}
     </script>
+    <style>
+/* :root {
+    --base-size : 150px;
+    --holl-size : 30px;
+    --holl-border-size : 15px;
+    --background-animation: background_scale;
+    --background-animation-blur: 1rem;
+    --background-animation-speed: 30s;
+} */
+@keyframes cloudOrbit {
+  0%{
+    transform: rotate(0deg);
+  }
+  50%{
+    transform: rotate(180deg);
+  }
+  100%{
+    transform: rotate(360deg);
+  }
+}
+html, *{
+	margin: 0;
+    padding: 0;
+	background-color:transparent;
+}
+body{
+    margin: 0;
+    padding: 0;
+    height :100%;
+    width: 100%;
+}
+
+html{
+    /* background: #333; */
+    /* border: 5px solid; */
+}
+    </style>
+    <!-- <link rel="stylesheet" href="css/record1.css"> -->
+    <!-- <link rel="stylesheet" href="css/record2.css"> -->
+    <!-- <link rel="stylesheet" href="css/record3.css"> -->
+
+    <style>
+
+    </style>
 </head>
 <body>
     <div class="recorder">
