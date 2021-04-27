@@ -36,6 +36,11 @@ body{
     height :100%;
     width: 100%;
 }
+
+html{
+    background: #333;
+    /* border: 5px solid; */
+}
     </style>
     <!-- <link rel="stylesheet" href="css/record1.css"> -->
     <!-- <link rel="stylesheet" href="css/record2.css"> -->
@@ -109,24 +114,36 @@ style.setAttribute("rel", "stylesheet");
 style.setAttribute("href", `css/record${params.index}.css`);
 document.head.appendChild(style);
 
+
+function imageToUri(url, callback) {
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+
+    base_image = new Image();
+    base_image.src = url;
+    base_image.onload = function() {
+        canvas.width = base_image.width;
+        canvas.height = base_image.height;
+
+        ctx.drawImage(base_image, 0, 0);
+    
+        callback(canvas.toDataURL('image/png'));
+
+        canvas.remove();
+    }
+}
 window.onload=()=>{
     eles.mainImg = new Image();
-    const img = randomItem([
-        "https://t1.daumcdn.net/cfile/tistory/999DC33A604E88FE0D",
-        "https://images.genius.com/d375d6936de68f37377aee06aa077058.1000x1000x1.jpg",
-        "https://static-cdn.jtvnw.net/jtv_user_pictures/601906fa-d31f-4fdd-99f6-3990b8aad708-profile_image-300x300.png",
-        "https://panels-images.twitch.tv/panel-177214992-image-7e6d49aa-2e5d-4af0-b1df-a70c7a41f30e",
-        "https://static-cdn.jtvnw.net/jtv_user_pictures/ad14e8e4-5048-475c-b227-dee1d3af10d7-profile_image-300x300.png",
-        "https://static-cdn.jtvnw.net/jtv_user_pictures/97bd0b5a-7637-46c8-8fd9-22d9b4bb8110-profile_image-300x300.png",
-        "https://lyricstranslate.com/files/styles/large/public/mushvenom_1.png?itok=ZJTdKUUY"
+    const img = "./img/" + randomItem([
+        "1.png","2.jpg","3.png","4.png","5.jpg","6.png","7.png",
     ]);
+    eles.mainImg.src = img;
     [document.getElementsByClassName("cover")[0], document.getElementsByClassName("cd")[0],eles.mainImg].forEach(o=>{
-        if(o)
-        o.style["background-image"] = `url(${img})`;
-    })
+        if(o)o.style["background-image"] = `url(${img})`;
+    });
+    
     eles.mainImg.onload = () => {
-        const i = getAverageRGB(eles.mainImg);;
-        console.log(document.getElementsByClassName("recorder"));
+        const i = getAverageRGB(eles.mainImg);
         document.getElementsByClassName("out")[0].style.background = document.getElementsByClassName("recorder")[0].style.background = `rgb(${i.r},${i.g},${i.b})`;
     }
 }
