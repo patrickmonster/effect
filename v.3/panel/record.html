@@ -10,6 +10,9 @@
     --base-size : 150px;
     --holl-size : 30px;
     --holl-border-size : 15px;
+    --background-animation: background_scale;
+    --background-animation-blur: 1rem;
+    --background-animation-speed: 30s;
 }
 @keyframes cloudOrbit {
   0%{
@@ -34,7 +37,9 @@ body{
     width: 100%;
 }
     </style>
-    <link rel="stylesheet" href="css/record1.css">
+    <!-- <link rel="stylesheet" href="css/record1.css"> -->
+    <!-- <link rel="stylesheet" href="css/record2.css"> -->
+    <!-- <link rel="stylesheet" href="css/record3.css"> -->
     <script>
 function getAverageRGB(imgEl) {
 
@@ -83,13 +88,41 @@ function getAverageRGB(imgEl) {
 }
 const eles = {};
 
+function randomItem(a) {
+  return a[Math.floor(Math.random() * a.length)];
+}
+
+function getParams(){
+    const params = {};
+    location.search.substr(1).split("&").map(function(o){
+        const [key,val] = o.split("=");
+        if(key)
+            params[key] = val;
+    });
+    return params;
+}
+
+const params = getParams();
+if(!params.index || ![1,2,3].includes(parseInt(params.index)))params.index = 3;
+const style = document.createElement("link");
+style.setAttribute("rel", "stylesheet");
+style.setAttribute("href", `css/record${params.index}.css`);
+document.head.appendChild(style);
+
 window.onload=()=>{
     eles.mainImg = new Image();
+    const img = randomItem([
+        "https://t1.daumcdn.net/cfile/tistory/999DC33A604E88FE0D",
+        "https://images.genius.com/d375d6936de68f37377aee06aa077058.1000x1000x1.jpg",
+        "https://static-cdn.jtvnw.net/jtv_user_pictures/601906fa-d31f-4fdd-99f6-3990b8aad708-profile_image-300x300.png",
+        "https://panels-images.twitch.tv/panel-177214992-image-7e6d49aa-2e5d-4af0-b1df-a70c7a41f30e",
+        "https://static-cdn.jtvnw.net/jtv_user_pictures/ad14e8e4-5048-475c-b227-dee1d3af10d7-profile_image-300x300.png",
+        "https://static-cdn.jtvnw.net/jtv_user_pictures/97bd0b5a-7637-46c8-8fd9-22d9b4bb8110-profile_image-300x300.png",
+        "https://lyricstranslate.com/files/styles/large/public/mushvenom_1.png?itok=ZJTdKUUY"
+    ]);
     [document.getElementsByClassName("cover")[0], document.getElementsByClassName("cd")[0],eles.mainImg].forEach(o=>{
-        console.log(o);
-        // o.style["background-image"] = "url(https://images.genius.com/d375d6936de68f37377aee06aa077058.1000x1000x1.jpg)";
-        //https://static-cdn.jtvnw.net/jtv_user_pictures/079aaddb-f2b3-41b6-b643-4f75e296e6f5-profile_image-70x70.png
-        o.style["background-image"] = "url(https://lyricstranslate.com/files/styles/large/public/mushvenom_1.png?itok=ZJTdKUUY)";
+        if(o)
+        o.style["background-image"] = `url(${img})`;
     })
     eles.mainImg.onload = () => {
         const i = getAverageRGB(eles.mainImg);;
@@ -100,10 +133,8 @@ window.onload=()=>{
     </script>
 </head>
 <body>
-    test
     <div class="recorder">
-        <div class="cd"></div>
-        <div class="cd-hand">
+        <div class="cd">
             <div class="holl"></div>
             <div class="out"></div>
         </div>

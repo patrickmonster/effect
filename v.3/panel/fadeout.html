@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Document</title>
+	<script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+	<style>
+/* https://cdn.discordapp.com/attachments/682449668428529743/836456341723021322/51b2c8c287cf21515f12f7cb330fb5db.svg */
+html, * {
+	margin: 0;
+	padding: 0;
+	background-color: blueviolet;
+}
+.bord{
+	width: 100px;
+	height: 100px;
+	background-color: black;
+}
+.cover{
+	background-color: white;
+	width: 100%;
+	height: 100%;
+
+	/* mask-image: url(https://media.discordapp.net/attachments/682449668428529743/836249254166134814/1.png); */
+	/* -webkit-mask-image: url(https://media.discordapp.net/attachments/682449668428529743/682545539362848819/acff79a2-7560-4c8b-bb89-efd7a7594447-profile_image-300x300.png); */
+	/* -webkit-mask-image: url(https://static-cdn.jtvnw.net/jtv_user_pictures/36afe4dd-951e-4050-a48f-9b9b6a15b09e-profile_image-300x300.png); */
+	mask-image: url(https://media.discordapp.net/attachments/682449668428529743/836487053117095956/panel-177214992-image-b07fd452-8d23-48e3-81d3-f50b242a8867.png);
+	-webkit-mask-image: url(https://media.discordapp.net/attachments/682449668428529743/836487053117095956/panel-177214992-image-b07fd452-8d23-48e3-81d3-f50b242a8867.png);
+	/* -webkit-mask-image: url(https://static-cdn.jtvnw.net/jtv_user_pictures/4a4bb686-d5de-4cb3-baa8-c53ffcb89ca9-profile_image-300x300.png); */
+	/* -webkit-mask-image: url(https://media.discordapp.net/attachments/682449668428529743/682449706693165066/9fa40e01b8cfb2486a61ee0998251ea1.png?width=630&height=630); */
+	mask-origin: inherit;
+	mask-position: 0 0;
+	mask-size: 100%;
+	mask-repeat: no-repeat;
+	mask-attachment: initial;
+	/* 마스크 이동 여부 */
+	mask-origin: content-box;
+
+	-webkit-mask-origin: inherit;
+	-webkit-mask-position: 0 0;
+	-webkit-mask-size: 100%;
+	-webkit-mask-repeat: no-repeat;
+	-webkit-mask-attachment: initial;
+	/* 마스크 이동 여부 */
+	-webkit-mask-origin: content-box;
+	/* -webkit-bl; */
+	mix-blend-mode: difference;
+	/* -webkit-mask-composite: ; */
+	/* -webkit-clip-path: url(https://media.discordapp.net/attachments/682449668428529743/836249254166134814/1.png); */
+}
+#test{    
+	background-color: blue;
+	width: 100px;
+	height: 100px;
+	mask: url(#filter);
+	-webkit-mask: url(#filter);
+	mask-origin: inherit;
+	mask-position: 0 0;
+	mask-size: 100%;
+	mask-repeat: no-repeat;
+	mask-attachment: initial;
+	/* 마스크 이동 여부 */
+	mask-origin: content-box;
+
+	-webkit-mask-origin: inherit;
+	-webkit-mask-position: 0 0;
+	-webkit-mask-size: 100%;
+	-webkit-mask-repeat: no-repeat;
+	-webkit-mask-attachment: initial;
+	/* 마스크 이동 여부 */
+	-webkit-mask-origin: content-box;
+	font-size: 5em;
+}
+	</style>
+</head>
+<body>
+	<div id="test"></div>
+	<div id=filter class=bord><div class=cover></div></div>
+</body>
+</html>
