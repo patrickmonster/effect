@@ -86,14 +86,15 @@ body{
 						1.5 -2  1.5 0   1" />
 		</filter>
 		<filter id="chromakeyBlack">
-			<feColorMatrix
+			<feColorMatrix 
+			color-interpolation-filters="sRGB"
 			type="matrix"
-			values="0 1 0 0 0
-					0 1 0 0 0
-					0 1 0 0 0
-					0 1 0 1 0 "/>
-		  </filter>
+			values="0.00 0   0   0   0
+					0   0.00  0   0   0
+					0   0   0.00  0   0
+					0   0   0   1   0 "/>
 		  <!-- https://kazzkiq.github.io/svg-color-filter/ -->
+		  <!-- https://codepen.io/brucebentley/pen/orGPRg -->
 	</svg>
 
 	<script>
