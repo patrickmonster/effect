@@ -114,7 +114,7 @@ if(params.code){
     params.img = "./img/" + randomItem([
         "1.png","2.jpg","3.png","4.png","5.jpg","6.png","7.png",
     ]);
-    style_option["base-size"] = "300px";
+    style_option["base-size"] = "100px";
     // style_option["holl-size"] = `30px`;
     // style_option["holl-border-size"] = `15px`;
     style_option["background-animation"] = "background_scale";
@@ -130,6 +130,10 @@ const root_sty = document.createElement("style");
 root_sty.innerHTML= `:root{ ${Object.keys(style_option).map(o=>`--${o}: ${style_option[o]}`).join(";")} }`;
 document.head.appendChild(root_sty);
 
+
+setTimeout(()=>{
+    location.reload();
+}, 1000 * 5)
 
 window.onload=()=>{
     const mainImg = new Image();
@@ -188,26 +192,18 @@ html, *{
 	margin: 0;
     padding: 0;
 	background-color:transparent;
+    overflow: hidden;
+    /* background: #333; */
+    /* border: 5px solid; */
 }
 body{
     margin: 0;
     padding: 0;
-    height :100%;
-    width: 100%;
-}
-
-html{
-    /* background: #333; */
-    /* border: 5px solid; */
+    height : 1080px;
+    width: 1920px;
 }
     </style>
-    <!-- <link rel="stylesheet" href="css/record1.css"> -->
-    <!-- <link rel="stylesheet" href="css/record2.css"> -->
-    <!-- <link rel="stylesheet" href="css/record3.css"> -->
 
-    <style>
-
-    </style>
 </head>
 <body>
     <div class="recorder">
