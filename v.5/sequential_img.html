@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Document</title>
+	<style>
+.frame{
+	width: 500px;
+	height: 500px;
+}
+.frame img{
+	position: fixed;
+	border-radius: 30px;
+	width: 500px;
+	height: 500px;
+}
+.frame p{
+	
+	position: fixed;
+}
+	</style>
+	<script>
+window.onload = function(){
+	const imgs = document.getElementsByTagName("img");
+	const ps = document.getElementsByTagName("p");
+	for (const img of imgs){
+		img.style.opacity = 0;
+	}
+	for(const p of ps)
+		p.style.opacity = 0;
+	let index = 0;
+	ps[index].style.opacity = 1;
+	imgs[index].style.opacity = 1;
+	setInterval((o, p)=>{
+		if(o.length <= 1)return;
+		const disguise = o[index % o.length];
+		
+		try{ p[index % o.length].style.opacity = 0;
+		}catch(e){;}
+		disguise.animate([
+			{opacity : 1},
+			{opacity : 0}
+		], 1000).addEventListener('finish', ()=>{
+			disguise.style.opacity = 0;
+		});
+		index ++;
+		const show = o[index % o.length];
+		show.animate([
+			{opacity : 0},
+			{opacity : 1}
+		], 1000).addEventListener('finish', ()=>{
+			show.style.opacity = 1;
+			try{ p[index % o.length].style.opacity = 1;
+			}catch(e){;}
+		});
+		console.log(index);
+		if(index >= o.length)index = 0;
+	}, 1000 * 5, imgs, ps);
+}
+	</script>
+</head>
+<body>
+	<div class="frame">
+		<img src="https://media.discordapp.net/attachments/682449668428529743/837282062565113896/2021-04-29_7.37.56.jpg">
+		<img src="https://media.discordapp.net/attachments/682449668428529743/837279536332275742/75393719_p0_master1200.jpg">
+		<img src="https://media.discordapp.net/attachments/682449668428529743/837277193549774858/77246974_p0_master1200.jpg">
+		<img src="https://media.discordapp.net/attachments/682449668428529743/836995053292486767/2021-04-29_12.58.13.jpg">
+		<img src="https://media.discordapp.net/attachments/751878543616770109/839094215677181962/image0.png?width=760&height=609">
+		<img src="https://media.discordapp.net/attachments/751878543616770109/778657175970644019/1b90630aa51804b9.JPG">
+		<p>이름1</p>
+		<p>이름2</p>
+		<p>이름3</p>
+		<p>이름4</p>
+	</div>
+</body>
+</html>
