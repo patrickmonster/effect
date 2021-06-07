@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>화면전환 - neocats_</title>
+	<script src="http://patrickmonster.github.io/moderator/js/main.js"></script>
+	<script src="https://kit.fontawesome.com/aacb03e8a3.js" crossorigin="anonymous"></script>
+</head>
+<body>
+	<!-- 화면전환 애니메이션 -->
+	
+	<script>
+window.location.hash = window.location.hash || "#up_down"
+document.head.C("style").html(`
+html, body{width: 100%; height: 101%;margin:0;padding:0;overflow: hidden;background:#fff0}
+div{
+	display:inline-block;
+	background: #000;
+	border-radius: 100px;
+	position: relative;
+}
+`);
+
+window.screen_change_eles = [];
+const target = document.body;
+const style = document.head.C("style").html(``);
+const count = 7;
+for(let i = 0; i < count; i++){//개수추가
+	window.screen_change_eles.push(target.C("div"));
+}
+if(window.location.hash.startsWith("#left_right")){
+	style.html("div{display:block}");
+	window.screen_change_value = [-130, -10, 3];
+	window.screen_change_next_time = 100;
+	window.screen_change_type_i = window.location.hash.replace("#left_right", "");
+	window.screen_change_init = function(){
+		this.data("now-position-x", window.screen_change_value[0]).styles("left", `${window.screen_change_value[0]}%`);
+	}
+	window.screen_change_type = [
+		function(args){
+			if(!args)return;//애니메이션 종료
+			let now = parseInt(this.data("now-position-x"));// 현재위치
+			if(isNaN(now))now = args[0];
+			now += args[2];//속도 가산
+			this.data("now-position-x", now).styles("left", `${now}%`);
+			if(now == -100)return 2;
+			return now <= args[1];
+		},
+		function(args){
+			if(!args)return;//애니메이션 종료
+			let now = parseInt(this.data("now-position-x"));// 현재위치
+			if(isNaN(now))now = args[1];
+			now -= args[2];//속도 가산
+			this.data("now-position-x", now).styles("left", `${now}%`);
+			if(now == -40)return 2;
+			return now >= args[0];
+		},
+		function(args){
+			if(!args)return;//애니메이션 종료
+			// 목표 100
+			let now = parseInt(this.data("now-position-x"));// 현재위치
+			if(isNaN(now))now = args[0];
+			now += args[2];//속도 가산
+			this.data("now-position-x", now).styles("left", `${now}%`);
+			if(now == 0)return 2;
+			return now <= 100;
+		},
+	];
+	window.screen_change_eles.forEach(element => {
+		element.styles("height",`${100/count}%`).styles("width","calc(100% + (100px * 2))").styles("left", `130%`)
+	});
+}else if(window.location.hash.startsWith("#up_down")){
+	window.screen_change_value = [-130, -10, 3];
+	window.screen_change_init = function(){
+		this.data("now-position-y", window.screen_change_value[0]).styles("top", `${window.screen_change_value[0]}%`);
+	}
+	window.screen_change_next_time = 100;
+	window.screen_change_type_i = window.location.hash.replace("#up_down", "");
+	window.screen_change_type = [
+		function(args){
+			if(!args)return;//애니메이션 종료
+			let now = parseInt(this.data("now-position-y"));// 현재위치
+			if(isNaN(now))now = args[0];
+			now += args[2];//속도 가산
+			this.data("now-position-y", now).styles("top", `${now}%`);
+			if(now == -100)return 2;
+			return now <= args[1];
+		},
+		function(args){
+			if(!args)return;//애니메이션 종료
+			let now = parseInt(this.data("now-position-y"));// 현재위치
+			if(isNaN(now))now = args[1];
+			now -= args[2];//속도 가산
+			this.data("now-position-y", now).styles("top", `${now}%`);
+			if(now == -40)return 2;
+			return now >= args[0];
+		},
+		function(args){
+			if(!args)return;//애니메이션 종료
+			let now = parseInt(this.data("now-position-y"));// 현재위치
+			if(isNaN(now))now = args[0];
+			now += args[2];//속도 가산
+			this.data("now-position-y", now).styles("top", `${now}%`);
+			if(now == 0)return 2;
+			return now <= 100;
+		},
+	];
+	
+	window.screen_change_eles.forEach(element => {
+		element.styles("width",`${100/count}%`).styles("height","calc(100% + (100px * 2))").styles("top", `130%`);
+	});
+}else if(window.location.hash.startsWith("#heart")){
+	//<i class="fas fa-heart"></i>
+	window.screen_change_value = [-80,1];// 
+	for(let i = count; i < 30; i++){//개수추가
+		window.screen_change_eles.push(target.C("div"));
+	}
+	style.html("div{display:block;position:absolute;background: none;}");
+	window.screen_change_init = function(){
+		this.data("now-position-x", window.screen_change_value[0]).styles("left", `${window.screen_change_value[0]}%`).styles("opacity", "1").data("now-opacity",1);
+	}
+	window.screen_change_next_time_default = 80;
+	window.screen_change_next_time = window.screen_change_next_time_default;
+	window.screen_change_type_i = window.location.hash.replace("#heart", "");
+	window.screen_change_type = [
+		function(args){
+			window.screen_change_next_time = window.screen_change_type_i == 1 ? 0 : window.screen_change_next_time_default;
+			if(!args)return;//애니메이션 종료
+			const now = getInt(this.data("now-position-x"), args[0]) +  args[1];
+			this.data("now-position-x", now).styles("left", `${now}%`);
+			return now <= getInt(this.data("target-position-x"), 100);
+		},
+		function(args){// 사라지기
+			window.screen_change_next_time = window.screen_change_next_time_default;
+			if(!args)return;//애니메이션 종료
+			const now = getFloat(this.data("now-opacity"),1) -(args[1] * .05);
+			this.data("now-opacity", now).styles("opacity", now);
+			return now > 0;
+		},
+		function(args){
+			window.screen_change_next_time = window.screen_change_next_time_default;
+			if(!args)return;//애니메이션 종료
+			const now = getInt(this.data("now-position-x"), getInt(this.data("target-position-x"), 100)) -  args[1];
+			this.data("now-position-x", now).styles("left", `${now}%`);
+			return now >= -100;
+		},
+	];
+	
+	// window.colors = "#EBA4D6,#EDABF5,#CAA8DF,#C5ABF5,#A9A4EB".split(",");
+	// window.colors = "#EDC36F,#FAD74C,#E0D975,#CFFA41,#96ED6F".split(",");
+	window.colors = "#5F86ED,#3952FA,#6765E0,#B0A2FA,#8C5FED".split(",");
+	const random = (a)=> a[Math.floor(Math.random() * a.length)];
+	window.screen_change_eles.forEach(element => {
+		const size = `1px`;
+		const top = `${getRandomArbitrary(-20,70)}%`;
+		const end = `${getRandomArbitrary(-10,70)}`;
+		const font = `${getRandomArbitrary(5,40)}em`;
+		const rotate = `rotate(${getInt(getRandomArbitrary(-50,50), 0)}deg);`
+		element
+		//transform: rotate(45deg);
+		.html(`<i class="fas fa-heart"></i>`)
+		// .html(`<i class="fas fa-snowflake"></i>`)
+		.styles("transform",rotate).styles("color", random(window.colors)).styles("width",size).styles("height",size).styles("left", "-100%").styles("top", top).data("target-position-x",end).styles("font-size",font);
+	});
+	// window.screen_change_eles[window.screen_change_eles.length-1].styles("left", "-170%").styles("top", "-95%").data("target-position-x","-24%").styles("font-size","130em");
+}
+
+function getInt(v,d){
+	v =  parseInt(v);// 현재위치
+	if(isNaN(v))v = d;
+	return v;
+}
+function getFloat(v,d){
+	v =  parseFloat(v);// 현재위치
+	if(isNaN(v))v = d;
+	return v;
+}
+function getRandomArbitrary(min, max) {
+  return Math.random() * (max - min) + min;
+}
+
+if(window.screen_change_type_i <= 0 || window.screen_change_type_i >= window.screen_change_type.length)
+	window.screen_change_type_i = 1;
+// window.scroll_position = {x:0,y:(document.body.scrollHeight - document.body.clientHeight) / 2};
+// window.scrollTo(window.scroll_position.x, window.scroll_position.y);
+
+function runningLoop(index,f,type=0){
+	const element = window.screen_change_eles[index];
+	if(!element){
+		return false;
+	}else if(index == -1){
+		window.screen_change_eles.forEach(element => {
+			window.screen_change_init.call(element);
+		});
+	}else{
+		addLoop(element,function(...args){
+			const isEnd = window.screen_change_type[type].call(element, ...args);
+			isEnd || f(index);
+			return isEnd;
+		},...window.screen_change_value);
+	}
+	return true;
+}
+
+document.body.onclick=function(){
+	if(document.body.data("animation-mode") == 1)return;
+	document.body.data("animation-mode",1);
+	//screen_change
+	let target = document.body.data("animation-direction") || 0;
+	let index = 0;
+	let c = 0;
+	if(target != 0){
+		document.body.data("animation-direction", 0);
+		// index = window.screen_change_eles.length;
+		index = 0;
+	}else {
+		index = 0;
+		document.body.data("animation-direction", window.screen_change_type_i || 1);
+		window.screen_change_eles.forEach(element => {
+			window.screen_change_init.call(element);
+		});
+	}
+	if(index==0)c = 1;
+	else c = -1;
+	let endCount = 0;
+	const f = ()=>{
+		endCount++;
+		if(endCount >= window.screen_change_eles.length){
+			document.body.data("animation-mode",0);
+		}
+	};
+	runningLoop(index,f, target);
+	index +=c;
+	const loop_id = setInterval(()=>{
+		if(!runningLoop(index,f,target))
+			clearInterval(loop_id);
+		index +=c
+	}, window.screen_change_next_time);
+}
+//////////////////////////////////////////////////////////////
+/**
+ * ele 타겟 엘리먼트
+ * f 이벤트 처리 함수
+ * args 추가 아규먼트들
+ */
+window._animation_loop_queue = [];
+// 애니메이션 루프
+function loop(){
+	window.requestAnimationFrame(loop);
+	if(!window._animation_loop_queue.length)return;// 루프가 비어있으면 패스
+	window._animation_loop_queue = window._animation_loop_queue.filter(({ele,f, args}) => {
+		return f.call(ele,args);
+	});
+}
+loop();
+function addLoop(ele, f, ...args){
+	window._animation_loop_queue.push({ele,f,args});
+}
+// let last_known_scroll_position = 0;
+// let ticking = false;
+// window.addEventListener('scroll', function(e) {
+//   last_known_scroll_position = window.scrollY;
+
+//   if (!ticking) {
+//     window.requestAnimationFrame(function() {
+// 		console.log("이벤트", last_known_scroll_position);
+// 		// window.scrollTo(window.scroll_position.x, window.scroll_position.y);
+
+
+//     //   doSomething(last_known_scroll_position);
+//       ticking = false;
+//     });
+
+//     ticking = true;
+//   }
+// });
+
+function scrollDiv(target){
+    target.scrollTop = target.scrollHeight;
+}
+	</script>
+</body>
+</html>
