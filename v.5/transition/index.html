@@ -23,20 +23,25 @@ div{
 }
 `);
 
+const random = (a)=> a[Math.floor(Math.random() * a.length)];
 window.screen_change_eles = [];
 const target = document.body;
 const style = document.head.C("style").html(``);
-const count = 7;
+const count = 10;
 for(let i = 0; i < count; i++){//개수추가
 	window.screen_change_eles.push(target.C("div"));
 }
 if(window.location.hash.startsWith("#left_right")){
 	style.html("div{display:block}");
-	window.screen_change_value = [-130, -10, 3];
+	window.screen_change_value = [-130, -7, 3];
 	window.screen_change_next_time = 100;
 	window.screen_change_type_i = window.location.hash.replace("#left_right", "");
+	window.screen_change_type_auto = true;
 	window.screen_change_init = function(){
 		this.data("now-position-x", window.screen_change_value[0]).styles("left", `${window.screen_change_value[0]}%`);
+	}
+	window.screen_change_close = function(){// 다가린 화면
+		this.data("now-position-x", window.screen_change_value[1]).styles("left", `${window.screen_change_value[1]}%`)
 	}
 	window.screen_change_type = [
 		function(args){
@@ -76,8 +81,12 @@ if(window.location.hash.startsWith("#left_right")){
 	window.screen_change_init = function(){
 		this.data("now-position-y", window.screen_change_value[0]).styles("top", `${window.screen_change_value[0]}%`);
 	}
+	window.screen_change_close = function(){// 다가린 화면
+		this.data("now-position-y", window.screen_change_value[1]).styles("top", `${window.screen_change_value[1]}%`);
+	}
 	window.screen_change_next_time = 100;
 	window.screen_change_type_i = window.location.hash.replace("#up_down", "");
+	window.screen_change_type_auto = true;
 	window.screen_change_type = [
 		function(args){
 			if(!args)return;//애니메이션 종료
@@ -113,16 +122,20 @@ if(window.location.hash.startsWith("#left_right")){
 	});
 }else if(window.location.hash.startsWith("#heart")){
 	//<i class="fas fa-heart"></i>
-	window.screen_change_value = [-80,1];// 
-	for(let i = count; i < 30; i++){//개수추가
+	window.screen_change_value = [-80,2];// 
+	for(let i = count; i < 50; i++){//개수추가
 		window.screen_change_eles.push(target.C("div"));
 	}
 	style.html("div{display:block;position:absolute;background: none;}");
 	window.screen_change_init = function(){
 		this.data("now-position-x", window.screen_change_value[0]).styles("left", `${window.screen_change_value[0]}%`).styles("opacity", "1").data("now-opacity",1);
 	}
-	window.screen_change_next_time_default = 80;
+	window.screen_change_close = function(){// 다가린 화면
+		this.data("now-position-x", this.data("target-position-x")).styles("left", `${this.data("target-position-x")}%`).styles("opacity", "1").data("now-opacity",1);
+	}
+	window.screen_change_next_time_default = 20;
 	window.screen_change_next_time = window.screen_change_next_time_default;
+	window.screen_change_type_auto = true;
 	window.screen_change_type_i = window.location.hash.replace("#heart", "");
 	window.screen_change_type = [
 		function(args){
@@ -148,23 +161,47 @@ if(window.location.hash.startsWith("#left_right")){
 		},
 	];
 	
-	// window.colors = "#EBA4D6,#EDABF5,#CAA8DF,#C5ABF5,#A9A4EB".split(",");
+	window.colors = "#EBA4D6,#EDABF5,#C5ABF5,#A9A4EB".split(",");
 	// window.colors = "#EDC36F,#FAD74C,#E0D975,#CFFA41,#96ED6F".split(",");
-	window.colors = "#5F86ED,#3952FA,#6765E0,#B0A2FA,#8C5FED".split(",");
-	const random = (a)=> a[Math.floor(Math.random() * a.length)];
-	window.screen_change_eles.forEach(element => {
+	// window.colors = "#5F86ED,#3952FA,#6765E0,#B0A2FA,#8C5FED".split(",");
+	// const rand_end_position = [];
+	// for(let i = 0; i < window.screen_change_eles.length; i++){
+	// 	rand_end_position.push(i * 2.2);
+	// }
+	// console.log(rand_end_position);
+	// shuffle(rand_end_position);// 렌덤값
+	// console.log(rand_end_position);
+	const rand_end_position = [96.80000000000001, 8.8, 22, 68.2, 39.6, 99.00000000000001, 26.400000000000002, 4.4, 30.800000000000004, 57.2, 24.200000000000003, 63.800000000000004, 81.4, 37.400000000000006, 83.60000000000001, 6.6000000000000005, 0, 17.6, 13.200000000000001, 72.60000000000001, 15.400000000000002, 52.800000000000004, 88, 59.400000000000006, 41.800000000000004, 107.80000000000001, 103.4, 85.80000000000001, 61.60000000000001, 105.60000000000001, 70.4, 55.00000000000001, 101.2, 44, 28.6, 35.2, 79.2, 74.80000000000001, 48.400000000000006, 2.2, 92.4, 50.6, 19.8, 66, 90.2, 11, 33, 94.60000000000001, 77, 46.2];
+	const font_sizes = [
+		["48.99743812610605em", "17.445014843615102em", "46.38673234597107em", "10.040374380856738em", "40.4633369642531em", "45.408190884875715em", "49.03326814854856em", "44.04548031991352em", "40.135906932392665em", "44.45693070477472em", "20.353773781128957em", "40.507949819114216em", "13.272692962161765em", "33.97378269408921em", "18.38652876848337em", "46.41862395017371em", "36.661656611067755em", "37.10763387999278em", "22.186929726699486em", "25.81368143263482em", "22.95277826293205em", "39.80694969755687em", "36.82020209017381em", "32.911021081571626em", "42.9308099711468em", "41.78147418776257em", "47.763085136970126em", "37.991150147096576em", "7.861779444429384em", "33.018267753698716em", "24.99580666024906em", "25.35724885884805em", "32.12681012824601em", "12.673068956330479em", "26.99972949494097em", "11.02912893284023em", "24.38444496678064em", "45.146475056087596em", "8.4620503454996em", "20.874176014659426em", "17.5077300868246em", "48.03603212621181em", "16.91155907239444em", "9.676528598023589em", "36.69044783845306em", "9.059936508944363em", "40.30336897834313em", "35.03297708523286em", "44.13853597605551em", "27.790117137600703em"],
+		["35.40077770178304em", "46.81651921767908em", "12.20448923309031em", "31.186929413242026em", "55.29803834921526em", "57.29843858762955em", "41.85832716389753em", "27.97464936618269em", "62.53054946300403em", "31.781512378036677em", "67.18242935224711em", "37.55803366429227em", "51.62236077207221em", "22.693738576482737em", "25.23505789201969em", "50.632606095517176em", "24.435956559316637em", "47.559110115450316em", "30.134160155911857em", "53.54875223775146em", "43.38524803818351em", "29.349449089872515em", "12.568506718632749em", "28.557288054192206em", "49.89757019131832em", "5.603888854649225em", "38.629074871376275em", "61.71825743180764em", "25.65936708685963em", "68.49620594402565em", "54.592884310312364em", "61.85815187284443em", "52.96826934525532em", "19.519097300454256em", "44.38830852947403em", "32.30403005693336em", "64.63516458463299em", "48.07741230456012em", "27.059683870420432em", "53.68561963005326em", "31.291276858906503em", "38.91331626986103em", "22.10000296374013em", "60.740387210014134em", "12.510061004314792em", "40.61385832344658em", "58.892407427485175em", "7.201231904426067em", "55.82046112605824em", "66.52666995524794em"],
+		["17.11403087146074em", "8.05455021343335em", "17.829833531914247em", "33.91520055170096em", "53.31821587102182em", "36.10105709497358em", "65.74578231383671em", "57.077350375486716em", "5.646461566030576em", "6.911434350449489em", "11.891609562398532em", "45.58980131894731em", "60.77976698614199em", "49.319521561377606em", "35.03530745281914em", "57.9323457795086em", "62.67579554902826em", "17.762320466285278em", "24.962846095432553em", "45.84207980605123em", "66.37437065687294em", "29.482928107773546em", "65.21981115333745em", "29.93339432819646em", "17.789468273135206em", "67.64785586862922em", "53.821970311913084em", "11.42009382927693em", "11.894186290744763em", "34.44466081237235em", "23.979733824967457em", "31.991519271412635em", "42.137867877328894em", "69.79845225343244em", "18.478184616302602em", "24.688853005152424em", "6.85006291305271em", "64.46339405507601em", "68.20997395999795em", "46.87004571749172em", "41.657518353886275em", "57.49987314345274em", "36.532241358350724em", "32.70300139541736em", "25.26314976989878em", "47.23579916588411em", "67.30622308791297em", "48.49883483931048em", "30.574295476040078em", "22.20275183742657em"],
+		["51.36251572571199em", "13.018575183938466em", "20.947289788101827em", "53.3102270269131em", "65.42838112905169em", "31.72552256626726em", "43.09338533099106em", "61.60810682829426em", "25.891270796483344em", "33.58445525329335em", "53.002367545173165em", "41.736104355310104em", "15.404391439286286em", "54.92395166336868em", "32.069074403174284em", "33.032269972737666em", "47.64875805708052em", "46.48147336991766em", "13.643663075669926em", "18.880395794527452em", "32.3570248935177em", "41.245771650350235em", "7.764210840588886em", "23.454938745258982em", "37.91144900908236em", "30.320070680116427em", "18.791375624857135em", "65.16418309406407em", "46.71387319143557em", "7.846943262443075em", "65.36728247640318em", "30.174187023382977em", "46.07949711505938em", "62.61723976526354em", "10.845050988723685em", "19.855689338578195em", "44.22628585764768em", "39.75236435788356em", "37.595480328028735em", "17.958432327501427em", "29.69587739866097em", "33.29505531865027em", "35.686691956401845em", "41.85125892204078em", "23.339129379078976em", "47.56653145581347em", "41.1903039883585em", "32.596957396674654em", "27.63677115172188em", "15.340641014192988em"],
+		["18.481257792351826em", "12.885716306390837em", "58.87650844602303em", "64.61414688335095em", "61.03763355397875em", "29.110143120391392em", "60.11121194201965em", "55.626864101273014em", "30.007232168086265em", "64.93588872755731em", "5.955435741818062em", "17.044914670444157em", "28.578057249825132em", "59.19344404642128em", "19.36365724815638em", "66.33783332620973em", "21.504263277205244em", "58.240414345973235em", "69.76682996296006em", "31.190950290995023em", "30.928678375747587em", "34.25341411341586em", "59.99355108393715em", "34.8357677812318em", "10.054215100848705em", "32.85877010974398em", "34.921423821014em", "59.92794864929695em", "11.893682719551098em", "49.78454435126711em", "69.99054498544992em", "57.77969607386375em", "30.804572371799868em", "22.926874035614095em", "10.801871099157898em", "22.009750285635093em", "5.9945675323606205em", "64.26777166647129em", "39.616260499833786em", "15.91106382323728em", "61.14758254143076em", "42.62342481753199em", "29.89375150065473em", "20.40867923492624em", "46.664391286668845em", "52.83838490430741em", "59.63103863137831em", "44.56280417719536em", "53.12800543306306em", "6.40547225890776em"],
+		["64.2488621069493em", "35.28815911234439em", "52.643957952392874em", "64.29509947288635em", "21.824734855197125em", "23.055066602853337em", "6.2946606584023765em", "9.504296488678555em", "51.36341940001994em", "17.13002622697209em", "9.82595784665991em", "19.5075278888146em", "24.69139067958936em", "51.10670674734912em", "52.949106925121356em", "62.44869364380103em", "42.839080170131275em", "19.17508164675464em", "55.32859674325798em", "63.11699931137304em", "37.241604160161em", "9.84124744425873em", "12.515996854871254em", "67.93348161144483em", "5.278281793265517em", "39.08790057867171em", "58.62538558713603em", "44.32803496883928em", "54.98324013955397em", "6.520131760494765em", "57.51028052203412em", "26.265876382191525em", "66.83882890753175em", "60.78615055165415em", "39.29894460066528em", "34.36405244960001em", "5.123305485774691em", "45.56334997652757em", "30.495520086195363em", "55.420346581913904em", "36.52021566779355em", "47.65994697656256em", "47.84415146318383em", "32.09688202433em", "43.81865107998402em", "66.08867058022423em", "51.80178937672845em", "24.349305754805776em", "28.50991557140502em", "20.024194202041162em"]
+	];
+	const tops = ["62.975362319178714%", "47.85174758957214%", "-4.346004670522049%", "-24.080289524445146%", "66.70557293272681%", "56.13015364489219%", "-8.524718154519483%", "39.24348084977744%", "11.389621311535457%", "13.466408987111059%", "-20.211100995477217%", "57.55124976946%", "27.695998809477473%", "-1.550583194246073%", "61.7390556795217%", "50.90287233232519%", "56.926065014865245%", "-15.714507755902748%", "-32.8302040240563%", "-2.911229938776202%", "-26.6495119539843%", "-31.40123394341028%", "46.571767575556706%", "-14.75301755969214%", "-2.0745801414700296%", "20.895789951455235%", "-30.156635566479036%", "-8.855193437901722%", "65.20432552266375%", "25.30825198136074%", "50.663286901454654%", "32.61830411567637%", "27.022991493869043%", "-0.30651557302563504%", "51.087639949734125%", "65.23379993682498%", "15.077148925874717%", "-36.849403043091556%", "64.02825022360321%", "46.63278793285133%", "-6.203027022315702%", "43.07863371166103%", "-7.929797361571815%", "-23.42257031062637%", "-29.111830187264356%", "11.65546750405246%", "-31.5548%", "31.444269189730704%", "18.58948510156457%", "9.252157841601182%"];
+	// shuffle(font_sizes);
+	window.screen_change_eles.forEach((element,index) => {
 		const size = `1px`;
-		const top = `${getRandomArbitrary(-20,70)}%`;
-		const end = `${getRandomArbitrary(-10,70)}`;
-		const font = `${getRandomArbitrary(5,40)}em`;
-		const rotate = `rotate(${getInt(getRandomArbitrary(-50,50), 0)}deg);`
+		// const top = `${getRandomArbitrary(-40,70)}%`;
+		const top = tops[index];
+		const end = `${rand_end_position[index] - 30}`;
+		const font = font_sizes[0][index];
+		// const font = font_size[index];
 		element
 		//transform: rotate(45deg);
 		.html(`<i class="fas fa-heart"></i>`)
 		// .html(`<i class="fas fa-snowflake"></i>`)
-		.styles("transform",rotate).styles("color", random(window.colors)).styles("width",size).styles("height",size).styles("left", "-100%").styles("top", top).data("target-position-x",end).styles("font-size",font);
+		.styles("color", random(window.colors)).styles("width",size).styles("height",size).styles("left", "-100%").styles("top", top).data("target-position-x",end).styles("font-size",font);
 	});
 	// window.screen_change_eles[window.screen_change_eles.length-1].styles("left", "-170%").styles("top", "-95%").data("target-position-x","-24%").styles("font-size","130em");
+}
+
+function reColor(){
+	window.screen_change_eles.forEach((element,index) => {
+		element.styles("color", random(window.colors))
+	});
 }
 
 function getInt(v,d){
@@ -180,9 +217,23 @@ function getFloat(v,d){
 function getRandomArbitrary(min, max) {
   return Math.random() * (max - min) + min;
 }
+function shuffle(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    let j = Math.floor(Math.random() * (i + 1)); // 무작위 인덱스(0 이상 i 미만)
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+}
 
-if(window.screen_change_type_i <= 0 || window.screen_change_type_i >= window.screen_change_type.length)
+if(window.screen_change_type_i >= window.screen_change_type.length)
 	window.screen_change_type_i = 1;
+if(window.screen_change_type_i < 0){
+	window.screen_change_init = window.screen_change_close;
+	window.screen_change_type_i = Math.abs(getInt(window.screen_change_type_i, -1));
+	[window.screen_change_type[window.screen_change_type_i], window.screen_change_type[0]] = [window.screen_change_type[0], window.screen_change_type[window.screen_change_type_i]];
+}
+window.screen_change_eles.forEach((element,index) => {
+	window.screen_change_init.call(element);
+});
 // window.scroll_position = {x:0,y:(document.body.scrollHeight - document.body.clientHeight) / 2};
 // window.scrollTo(window.scroll_position.x, window.scroll_position.y);
 
@@ -204,10 +255,12 @@ function runningLoop(index,f,type=0){
 	return true;
 }
 
-document.body.onclick=function(){
-	if(document.body.data("animation-mode") == 1)return;
-	document.body.data("animation-mode",1);
-	//screen_change
+function start(){
+	setTimeout(autoAni, 1000);
+}
+start();
+
+function autoAni(){
 	let target = document.body.data("animation-direction") || 0;
 	let index = 0;
 	let c = 0;
@@ -229,6 +282,11 @@ document.body.onclick=function(){
 		endCount++;
 		if(endCount >= window.screen_change_eles.length){
 			document.body.data("animation-mode",0);
+			if(target == 0){
+				// setTimeout(()=>{
+				// 	document.body.click();
+				// }, 1000 );
+			}
 		}
 	};
 	runningLoop(index,f, target);
@@ -239,6 +297,22 @@ document.body.onclick=function(){
 		index +=c
 	}, window.screen_change_next_time);
 }
+
+document.body.onclick=function(){
+	if(document.body.data("animation-mode") == 1)return;
+	document.body.data("animation-mode",1);
+	//screen_change
+	if(window.screen_change_type_auto)
+		autoAni();
+	else {
+		console.log(window.screen_change_type[window.screen_change_type_i]);
+		window.screen_change_eles.forEach((ele,i)=>{
+			runningLoop(i,()=>{
+				document.body.data("animation-mode",0);
+			}, 0);
+		});
+	}
+}
 //////////////////////////////////////////////////////////////
 /**
  * ele 타겟 엘리먼트
@@ -246,10 +320,23 @@ document.body.onclick=function(){
  * args 추가 아규먼트들
  */
 window._animation_loop_queue = [];
+window._animation_loop_last_time;
 // 애니메이션 루프
 function loop(){
 	window.requestAnimationFrame(loop);
+	if(new Date().getTime() - window._animation_loop_last_time >=  100){
+		console.log("애니메이션 초기화");
+		document.body.data("animation-mode",0).data("animation-direction", 0);
+		window._animation_loop_queue = [];
+		window.screen_change_eles.forEach((element,index) => {
+			window.screen_change_init.call(element);
+		});
+		start();
+	}
+	// console.log(window._animation_loop_last_time , new Date().getTime() - (1000 * 2));
+	window._animation_loop_last_time = new Date().getTime();// 현재시간
 	if(!window._animation_loop_queue.length)return;// 루프가 비어있으면 패스
+
 	window._animation_loop_queue = window._animation_loop_queue.filter(({ele,f, args}) => {
 		return f.call(ele,args);
 	});
