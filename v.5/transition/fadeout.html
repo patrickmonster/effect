@@ -31,16 +31,16 @@ html, * {
 } */
 
 @keyframes fade_out {
-  0% { transform: scale(var(--background-max-scale)) translate(0); opacity: 0; }
+  0% { transform: scale(var(--background-max-scale)) translate(0%); opacity: 0; }
   50% { opacity: 1; }
-  99.99% { transform: scale(var(--background-min-scale)) translate(0); }
-  100% { transform: scale(var(--background-max-scale)) translate(10%); }
+  99.99% { transform: scale(var(--background-min-scale)) translate(0%); }
+  100% { transform: scale(var(--background-max-scale)) translate(30%); }
 }
 @keyframes fade_in {
-  0% { transform: scale(var(--background-max-scale)) translate(10%); opacity: 1; }
-  0.1% { transform: scale(var(--background-min-scale)) translate(0%); opacity: 1; }
+  0% { transform: scale(var(--background-max-scale)) translate(30%);}
+  0.1% { transform: scale(var(--background-min-scale)) translate(0%);}
   10% { opacity: 1; }
-  100% { transform: scale(var(--background-max-scale)) translate(0); opacity: 0; }
+  100% { transform: scale(var(--background-max-scale)) translate(0%); opacity: 0; }
 }
 	</style>
 </head>
@@ -211,13 +211,14 @@ function initBadges(id,target,f) {
 
 // 이미지 데이터를 생성
 function createLogoImage(url){
-	const img = new Image();
-	img.src = url;
-	img.id = "main"
-	img.style.animation = `${is_in} ${speed}s forwards`;
-	console.log(img.style.animation);
+	const style = document.createElement("style");
+	style.innerHTML = `#main{animation:${is_in} ${speed}s forwards}`;
+	document.head.appendChild(style);
+	window.img = new Image();
+	window.img.src = url;
+	window.img.id = "main"
 	//animation
-	document.body.appendChild(img);
+	document.body.appendChild(window.img);
 }
 // var img = new Image();
 if(params.img){
@@ -258,6 +259,22 @@ if(params.img){
 		})
 	}
 }
+
+
+window._animation_loop_last_time;
+// 애니메이션 루프
+function loop(){
+	window.requestAnimationFrame(loop);
+	if(new Date().getTime() - window._animation_loop_last_time >=  100){
+		window.img.id = "";
+		setTimeout(()=>{
+			window.img.id = "main";
+		},0)
+		console.log("초기화");
+	}
+	window._animation_loop_last_time = new Date().getTime();// 현재시간
+}
+loop();
 
 document.body.onclick=()=>{
 	// window.location.href =  = 
