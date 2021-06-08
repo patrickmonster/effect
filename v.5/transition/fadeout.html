@@ -75,6 +75,8 @@ const params = getUrlParams();// 파라메타 겟
 const color = params.color? getColorToInt(params.color) : [0,0,0,255];
 const is_in = params.in == 1 ? "fade_in"  : "fade_out";
 const speed = isNaN(parseFloat( params.speed)) ? 1 : parseFloat( params.speed);
+if(params.badges)
+	params.badges = "subscriber";
 console.log(color);
 function getImageData(url,f, isBlack=true){
 	let data = localStorage.getItem(url);
@@ -187,6 +189,7 @@ function initBadges(id,target,f) {
 		window.badges = JSON.parse(window.badges);
 		if(window.badges[target])
 			f(window.badges[target]);
+		else f(window.user.logo);
 		return;
 	}
 	console.log(id ,"신규로드", window.badges);
@@ -198,6 +201,7 @@ function initBadges(id,target,f) {
 		localStorage.setItem(`badges_${id}`, JSON.stringify(window.badges));
 		if(window.badges[target])
 			f(window.badges[target]);
+		else f(window.user.logo);
 		// else document.body.innerHTML("해당배찌가 없습니다!");
 	}).catch(e=>{
 		console.error(e);
@@ -219,17 +223,17 @@ function createLogoImage(url){
 if(params.img){
 	getImageData(params.img,createLogoImage);
 }else if(params.user){
-	const data = localStorage.getItem(params.user)
-	if(data){
-		const user_data = JSON.parse(data);
+	window.user = localStorage.getItem(params.user);
+	if(window.user){
+		window.user = JSON.parse(window.user);
 		
 		if(params.badges){// 배찌 데이터
-			initBadges(user_data._id, params.badges ,(src)=>{
+			initBadges(window.user._id, params.badges ,(src)=>{
 				console.log(src);
 				getImageData(src, createLogoImage);
 			});
 		}else{
-			getImageData(user_data.logo, createLogoImage);
+			getImageData(window.user.logo, createLogoImage);
 		}
 	}else{
 		// 데이터 긁어옴
@@ -243,13 +247,13 @@ if(params.img){
 				document.body.innerHTML = `<h1>${params.user}정보를 불러오지 못하였습니다!</h1>`
 				return;
 			}
-			data = data.users[0];
-			initBadges(data.id);
-			localStorage.setItem(params.user, JSON.stringify(data));		
+			window.user = data.users[0];
+			// initBadges(data._id);
+			localStorage.setItem(params.user, JSON.stringify(window.user));		
 			if(params.badges){// 배찌 데이터
-				initBadges(data._id, params.badges ,(src)=>getImageData(src, createLogoImage));
+				initBadges(window.user._id, params.badges ,(src)=>getImageData(src, createLogoImage));
 			}else{
-				getImageData(data.logo, createLogoImage);
+				getImageData(window.user.logo, createLogoImage);
 			}
 		})
 	}
