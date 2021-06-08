@@ -73,6 +73,16 @@ const speed = isNaN(parseFloat( params.speed)) ? 1 : parseFloat( params.speed);
 if(params.badges)
 	params.badges = "subscriber";
 console.log(color);
+if(params.reload){
+	delete params.reload;
+	const query = []
+	for (const i in params){
+		if(i=="reload")continue;
+		query.push(`${i}=${params[i]}`);
+	}
+	window.location.search = `?${query.join("&")}`;
+}
+
 function getImageData(url,f, isBlack=true){
 	let data = localStorage.getItem(url);
 	if(data)return f(data);
