@@ -3,13 +3,17 @@
 <head>
 	<meta charset="UTF-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Document</title>
+	<meta name="viewport" content="width=1920, height=1080, initial-scale=1.0">
+	<title>전환! - Patrickmonster</title>
 	<script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+	<script src="../../js/stackblur.min.js"></script>
 	<style>
 /* https://cdn.discordapp.com/attachments/682449668428529743/836456341723021322/51b2c8c287cf21515f12f7cb330fb5db.svg */
 :root{
-	--background-color : orange;
+	--background-max-scale : 30;
+	--background-min-scale : 1;
+	--background-ani : fade_out;
 }
 html, * {
 	margin: 0;
@@ -20,54 +24,283 @@ html, * {
 	overflow: hidden;
 	background-color: transparent;
 }
+/* body{
+	background-image:url(https://media.discordapp.net/attachments/682449668428529743/682449706693165066/9fa40e01b8cfb2486a61ee0998251ea1.png?width=630&height=630);
+	background-repeat: no-repeat;
+	background-size: 100%;
+} */
+
+@keyframes fade_out {
+  0% { transform: scale(var(--background-max-scale)) translate(0); opacity: 0; }
+  50% { opacity: 1; }
+  99.99% { transform: scale(var(--background-min-scale)) translate(0); }
+  100% { transform: scale(var(--background-max-scale)) translate(10%); }
+}
+@keyframes fade_in {
+  0% { transform: scale(var(--background-max-scale)) translate(10%); opacity: 1; }
+  0.1% { transform: scale(var(--background-min-scale)) translate(0%); opacity: 1; }
+  10% { opacity: 1; }
+  100% { transform: scale(var(--background-max-scale)) translate(0); opacity: 0; }
+}
 	</style>
 </head>
 <body>
-	<!-- <canvas width="500" height="500" id=canvas></canvas> -->
-	
 	<script>
-	var img = new Image();
-		
+window.oauth_client_id = "g1rhyzp1s7y2d755xqjn1otspdgvc3";
+function getUrlParams() {     
+    var params = {};
+    window.location.search.replace(/[?&]+([^=&]+)=([^&]*)/gi, 
+    	function(str, key, value) { 
+        	params[key] = value; 
+        }
+    );
+    return params; 
+}
+
+function uuidv4() {
+  return ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, c =>
+    (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
+  );
+}
+
+function getColorToInt(hax){
+	const color = [];
+	for(let i = 0; i < hax.length; i+=2)
+		color.push(parseInt(hax.substring(i, i+2), 16));
+	if(color.length == 3)color.push(255);
+	return color;
+}
+
+const params = getUrlParams();// 파라메타 겟
+const color = params.color? getColorToInt(params.color) : [0,0,0,255];
+const is_in = params.in == 1 ? "fade_in"  : "fade_out";
+const speed = isNaN(parseFloat( params.speed)) ? 1 : parseFloat( params.speed);
+console.log(color);
+function getImageData(url,f, isBlack=true){
+	let data = localStorage.getItem(url);
+	if(data)return f(data);
+	const img = new Image();
 	img.crossOrigin = "Anonymous";
+	img.src = url;
 	img.addEventListener("load", imageReceived, false);
-	// img.src = "https://media.discordapp.net/attachments/682449668428529743/836487053117095956/panel-177214992-image-b07fd452-8d23-48e3-81d3-f50b242a8867.png";
-	img.src = "https://static-cdn.jtvnw.net/jtv_user_pictures/4a4bb686-d5de-4cb3-baa8-c53ffcb89ca9-profile_image-300x300.png";
+	console.log("이미지 로드...", url);
 	function imageReceived() {
 		let canvas = document.createElement("canvas");
 		let context = canvas.getContext("2d");
-		const size = 30;
-		//scale(30)
+		const size = 10;
 		canvas.width = img.width * size;
 		canvas.height = img.height * size;
 
-		context.drawImage(img, canvas.width / size * (size / 2), canvas.width/ size * (size /2));
-		document.body.appendChild(canvas);
-
+		context.drawImage(img, canvas.width / size * (size / 2)  - img.width /2, canvas.width/ size * (size /2)  - img.height/ 2);
+		// context.drawImage(img, 0,0);
+		// document.body.appendChild(canvas);
 		try {
-			localStorage.setItem("saved-image-example", canvas.toDataURL("image/png"));
-			var id = context.getImageData(0, 0, canvas.width, canvas.height);
-			for (var i = 0; i < id.data.length; i += 4) {
-				var value = id.data[i] + id.data[i+1] + id.data[i+2];
-				if(id.data[i+3] <= 200){
-				// if ( value <= 10  || value > 764){
-					id.data[i] = 0;
-					id.data[i+1] = 0;
-					id.data[i+2] = 0;
-					id.data[i+3] = 255;
-        		}else{
-					id.data[i] = 0;
-					id.data[i+1] = 0;
-					id.data[i+2] = 0;
-					id.data[i+3] = 0;
+			const id = context.getImageData(0, 0, canvas.width, canvas.height);
+			const {width, height} = canvas;
+			if(isBlack){
+				for (var i = 0; i < id.data.length; i += 4) {
+					const c = id.data[i] + id.data[i+1] + id.data[i+2];
+					[id.data[i], id.data[i + 1], id.data[i + 2], id.data[i + 3]] = id.data[i+3] >= 200 ? color.slice() : [0,0,0,0];
 				}
 			}
-			// console.log();
+			if(params.reversal==1){
+				for (var i = 0; i < id.data.length; i += 4) {
+					// id.data[i+3] = id.data[i+3] ? 0 : 255;
+					[id.data[i], id.data[i + 1], id.data[i + 2], id.data[i + 3]] = id.data[i+3] ? [0,0,0,0] : color.slice();
+				}
+			}
+			
+			if(params.filter != 1){
+				//열림연산
+				filter_img(id.data, width, height, 3, 0, 1);// 팽창
+				filter_img(id.data, width, height, 3, 8, 1);// 침식
+			}
+
+			// 테두리 뽑기 - 침식후 감산연산
+			// const tmp = id.data.slice();
+			// filter_img(tmp, width, height, 3, 7, 1);// 침식
+
+			// for (var i = 0; i < id.data.length; i += 4) {
+			// 	id.data[i+3] = tmp[i+3] != id.data[i+3] ? 255: 0;
+			// 	if(id.data[i+3]) console.log(tmp[i+3]);
+			// }
+
 			context.putImageData(id, 0, 0);
-		}
-		catch(err) {
-			console.log("Error: " + err);
+			StackBlur.canvasRGBA(canvas, 0, 0, width, height, 4);
+			localStorage.setItem(url, canvas.toDataURL("image/png"));
+			f(canvas.toDataURL("image/png"));
+		}catch(err) {
+			console.error("Error: " + err);
 		}
 	}
+}
+
+/**
+ * 이미지 필터 연산
+ * a만 생각하고 구성하였기에, 차차 수정 필요성있음
+ * org_array 오리지널 배열 (rgba)
+ * width	가로
+ * height	세로
+ * select_rgba	0~3 (r/ g/ b/ a)
+ * filter_count	0~8 필터링 개수(침식 : 8, 팽창 : 0)
+ * default_value 테두리(배경) 디폴트 값(포함여부)
+ */
+function filter_img(org_array, width, height, select_rgba = 3, filter_count = 3, default_value = 0){
+	const is = (array,x, y) => x < 0 || y < 0 || x >= width || y >= height ? default_value : array[x + width * y];
+
+	let tmp = [];
+
+	for (var i = 0; i < org_array.length; i += 4) 
+		tmp.push(org_array[i+3]);
+
+	for (var y = 0; y < height; y++)
+		for (var x = 0; x < width; x++){
+			const _mapping_data = [// 매핑 데이터
+				is(tmp, x-1, y-1),is(tmp, x, y-1),is(tmp, x+1, y-1),
+				is(tmp, x-1, y),is(tmp, x, y),is(tmp, x+1, y),
+				is(tmp, x-1, y+1),is(tmp, x, y+1),is(tmp, x+1, y+1),
+			];
+			
+			const count = array_true_count(_mapping_data);
+			const index = (y * 4 * width + x * 4);
+			// org_array[index + 3] = count > filter_count ? 255 : 0;
+			[org_array[i], org_array[i + 1], org_array[i + 2], org_array[i + 3]] = count > filter_count ? color.slice() : [0,0,0,0];
+		}
+	tmp.length = 0;
+}
+const getArrayValue = (array,x, y) =>{
+	if(array[y])
+		if(array[y][x])
+			return array[y][x];
+	return 0;
+}
+function array_true_count(array){
+	let count = 0;
+	for(var i of array){
+		if(i)count++;
+	}
+	return count;
+}
+function initBadges(id,target,f) {
+	window.badges = localStorage.getItem(`badges_${id}`);
+	if(window.badges){
+		window.badges = JSON.parse(window.badges);
+		if(window.badges[target])
+			f(window.badges[target]);
+		return;
+	}
+	console.log(id ,"신규로드", window.badges);
+	axios.get(`https://api.twitch.tv/kraken/chat/${id}/badges`, {
+		headers : { "Client-Id" : oauth_client_id, "Accept" : "application/vnd.twitchtv.v5+json" }
+	}).then(({data})=>{
+		window.badges = {};
+		for(const k in data)if(data[k])window.badges[k] = data[k].image.slice(0,-1) + "3";
+		localStorage.setItem(`badges_${id}`, JSON.stringify(window.badges));
+		if(window.badges[target])
+			f(window.badges[target]);
+		// else document.body.innerHTML("해당배찌가 없습니다!");
+	}).catch(e=>{
+		console.error(e);
+	})
+}
+
+
+// 이미지 데이터를 생성
+function createLogoImage(url){
+	const img = new Image();
+	img.src = url;
+	img.id = "main"
+	img.style.animation = `${is_in} ${speed}s forwards`;
+	console.log(img.style.animation);
+	//animation
+	document.body.appendChild(img);
+}
+// var img = new Image();
+if(params.img){
+	getImageData(params.img,createLogoImage);
+}else if(params.user){
+	const data = localStorage.getItem(params.user)
+	if(data){
+		const user_data = JSON.parse(data);
+		
+		if(params.badges){// 배찌 데이터
+			initBadges(user_data._id, params.badges ,(src)=>{
+				console.log(src);
+				getImageData(src, createLogoImage);
+			});
+		}else{
+			getImageData(user_data.logo, createLogoImage);
+		}
+	}else{
+		// 데이터 긁어옴
+		axios.get(`https://api.twitch.tv/kraken/users?login=${params.user}`, {
+			headers: {
+				"Client-ID": window.oauth_client_id,
+				"Accept": "application/vnd.twitchtv.v5+json"
+			}
+		}).then(({data})=>{
+			if(!data.users.length){
+				document.body.innerHTML = `<h1>${params.user}정보를 불러오지 못하였습니다!</h1>`
+				return;
+			}
+			data = data.users[0];
+			initBadges(data.id);
+			localStorage.setItem(params.user, JSON.stringify(data));		
+			if(params.badges){// 배찌 데이터
+				initBadges(data._id, params.badges ,(src)=>getImageData(src, createLogoImage));
+			}else{
+				getImageData(data.logo, createLogoImage);
+			}
+		})
+	}
+}
+
+document.body.onclick=()=>{
+	// window.location.href =  = 
+	params.in = params.in=="1" ? 0 : 1;
+	const query = []
+	for (const i in params){
+		query.push(`${i}=${params[i]}`);
+	}
+	window.location.search = `?${query.join("&")}`;
+}
+// let canvas;
+// function imageReceived() {
+// 	canvas = document.createElement("canvas");
+// 	let context = canvas.getContext("2d");
+// 	const size = 30;
+// 	//scale(30)
+// 	canvas.width = img.width * size;
+// 	canvas.height = img.height * size;
+
+// 	context.drawImage(img, canvas.width / size * (size / 2), canvas.width/ size * (size /2));
+// 	// document.body.appendChild(canvas);
+
+// 	try {
+// 		localStorage.setItem("saved-image-example", canvas.toDataURL("image/png"));
+// 		var id = context.getImageData(0, 0, canvas.width, canvas.height);
+// 		for (var i = 0; i < id.data.length; i += 4) {
+// 			var value = id.data[i] + id.data[i+1] + id.data[i+2];
+// 			if(id.data[i+3] <= 200){
+// 			// if ( value <= 10  || value > 764){
+// 				id.data[i] = 0;
+// 				id.data[i+1] = 0;
+// 				id.data[i+2] = 0;
+// 				id.data[i+3] = 255;
+// 			}else{
+// 				id.data[i] = 0;
+// 				id.data[i+1] = 0;
+// 				id.data[i+2] = 0;
+// 				id.data[i+3] = 0;
+// 			}
+// 		}
+// 		// console.log();
+// 		context.putImageData(id, 0, 0);
+// 	}
+// 	catch(err) {
+// 		console.log("Error: " + err);
+// 	}
+// }
 	</script>
 </body>
 </html>
