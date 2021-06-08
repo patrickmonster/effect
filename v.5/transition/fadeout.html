@@ -9,7 +9,6 @@
 	<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 	<script src="../../js/stackblur.min.js"></script>
 	<style>
-/* https://cdn.discordapp.com/attachments/682449668428529743/836456341723021322/51b2c8c287cf21515f12f7cb330fb5db.svg */
 :root{
 	--background-max-scale : 30;
 	--background-min-scale : 1;
@@ -24,18 +23,14 @@ html, * {
 	overflow: hidden;
 	background-color: transparent;
 }
-/* body{
-	background-image:url(https://media.discordapp.net/attachments/682449668428529743/682449706693165066/9fa40e01b8cfb2486a61ee0998251ea1.png?width=630&height=630);
-	background-repeat: no-repeat;
-	background-size: 100%;
-} */
-
+/* 줄어들기 */
 @keyframes fade_out {
   0% { transform: scale(var(--background-max-scale)) translate(0%); opacity: 0; }
   50% { opacity: 1; }
   99.99% { transform: scale(var(--background-min-scale)) translate(0%); }
   100% { transform: scale(var(--background-max-scale)) translate(30%); }
 }
+/*  */
 @keyframes fade_in {
   0% { transform: scale(var(--background-max-scale)) translate(30%);}
   0.1% { transform: scale(var(--background-min-scale)) translate(0%);}
@@ -261,8 +256,7 @@ if(params.img){
 }
 
 
-window._animation_loop_last_time;
-// 애니메이션 루프
+window._animation_loop_last_time = new Date().getTime();
 function loop(){
 	window.requestAnimationFrame(loop);
 	if(new Date().getTime() - window._animation_loop_last_time >=  100){
@@ -285,43 +279,6 @@ document.body.onclick=()=>{
 	}
 	window.location.search = `?${query.join("&")}`;
 }
-// let canvas;
-// function imageReceived() {
-// 	canvas = document.createElement("canvas");
-// 	let context = canvas.getContext("2d");
-// 	const size = 30;
-// 	//scale(30)
-// 	canvas.width = img.width * size;
-// 	canvas.height = img.height * size;
-
-// 	context.drawImage(img, canvas.width / size * (size / 2), canvas.width/ size * (size /2));
-// 	// document.body.appendChild(canvas);
-
-// 	try {
-// 		localStorage.setItem("saved-image-example", canvas.toDataURL("image/png"));
-// 		var id = context.getImageData(0, 0, canvas.width, canvas.height);
-// 		for (var i = 0; i < id.data.length; i += 4) {
-// 			var value = id.data[i] + id.data[i+1] + id.data[i+2];
-// 			if(id.data[i+3] <= 200){
-// 			// if ( value <= 10  || value > 764){
-// 				id.data[i] = 0;
-// 				id.data[i+1] = 0;
-// 				id.data[i+2] = 0;
-// 				id.data[i+3] = 255;
-// 			}else{
-// 				id.data[i] = 0;
-// 				id.data[i+1] = 0;
-// 				id.data[i+2] = 0;
-// 				id.data[i+3] = 0;
-// 			}
-// 		}
-// 		// console.log();
-// 		context.putImageData(id, 0, 0);
-// 	}
-// 	catch(err) {
-// 		console.log("Error: " + err);
-// 	}
-// }
 	</script>
 </body>
 </html>
