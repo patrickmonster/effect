@@ -268,10 +268,10 @@ if(params.img){
 }
 
 
-window._animation_loop_last_time = new Date().getTime();
+window._animation_loop_last_time = -1;
 function loop(){
 	window.requestAnimationFrame(loop);
-	if(new Date().getTime() - window._animation_loop_last_time >=  100){
+	if(window._animation_loop_last_time != -1 && new Date().getTime() - window._animation_loop_last_time >=  100){
 		window.img.id = "";
 		setTimeout(()=>{
 			window.img.id = "main";
