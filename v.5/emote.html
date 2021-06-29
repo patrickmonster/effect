@@ -1,0 +1,60 @@
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="https://patrickmonster.github.io/moderator/javascript/tmi.min.js"></script>
+<script src="https://patrickmonster.github.io/moderator/js/main.js"></script>
+<script>
+$.fn.bottomup = function(options) {
+  var defaults ={size: 15,imgSize:4,html:'',color:'fff',direction:"bottom"},
+      options = $.extend({}, defaults, options),
+			$flake = $('<div id="flake" />').css({
+                position: 'absolute',
+                bottom: '0px'
+            }).html(options.html),
+			startPositionLeft = Math.random() * $(document).width() - 100,
+			durationFall = $(document).height() * 10 + Math.random() * 5000;
+	$flake.appendTo('body').css({
+		left: startPositionLeft,
+		opacity: 1,
+		'font-size': options.size,
+		color: "#"+options.color
+	}).animate({
+		bottom: $(document).height() - 40,
+		left: startPositionLeft - 100 + Math.random() * 10,
+		opacity: 0.5
+	}, durationFall,'linear',function(){
+		$(this).remove()
+	});
+};
+// austinshow
+const rawauth = document.location.href.replace("#", "?");
+const channel = getParams("channel", rawauth);
+const default_option={size:15,imgSize:4,color:'fff',direction:"bottom"};
+if(channel){
+	window.client = new tmi.Client({
+		options: {
+			debug: true,
+			level: 'warn',
+		},
+		connection: { reconnect: true, secure: true },
+		// identity : { username,  password: window.token.access_token},
+		channels : [channel]
+	});
+	window.client.on("chat",(channel, userstate, message, self)=>{
+		if(self)return;
+		addChat(userstate, message, userstate.id)
+
+		if(isMod(channel, username)){
+			const [comm, ...args] = msg.split();
+			switch(comm){
+				case ";크기":
+					default_option.imgSize = args[0];
+					break;
+			}
+		}else{
+			Object.entries(userstate.emotes).forEach(([id, positions]) => {
+				$.fn.bottomup($.extend({},default_option,{html:`<img src="https://static-cdn.jtvnw.net/emoticons/v1/${id}/1.0">`}));
+			});
+		}
+	});
+	window.client.connect().catch(console.error);
+}
+</script>
