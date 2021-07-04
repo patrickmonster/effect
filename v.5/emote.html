@@ -3,7 +3,7 @@
 <script src="https://patrickmonster.github.io/moderator/js/main.js"></script>
 <script>
 $.fn.bottomup = function(options) {
-  var defaults ={size: 15,imgSize:4,html:'',color:'fff',direction:"bottom"},
+  var defaults ={size: 15,imgSize:30,html:'',color:'fff',direction:"bottom"},
       options = $.extend({}, defaults, options),
 			$flake = $('<div id="flake" />').css({
                 position: 'absolute',
@@ -11,6 +11,7 @@ $.fn.bottomup = function(options) {
             }).html(options.html),
 			startPositionLeft = Math.random() * $(document).width() - 100,
 			durationFall = $(document).height() * 10 + Math.random() * 5000;
+	console.log(options.html);
 	$flake.appendTo('body').css({
 		left: startPositionLeft,
 		opacity: 1,
@@ -27,7 +28,14 @@ $.fn.bottomup = function(options) {
 // austinshow
 const rawauth = document.location.href.replace("#", "?");
 const channel = getParams("channel", rawauth);
-const default_option={size:15,imgSize:4,color:'fff',direction:"bottom"};
+const default_option={size:30,color:'333',direction:"bottom"};
+
+// setInterval(()=>{
+// 	$.fn.bottomup($.extend({},default_option,{html:`<img src="https://static-cdn.jtvnw.net/emoticons/v1/306997704/3.0" style="width:${default_option.size +5}px;height:${default_option.size +5}px">`}));
+// 	$.fn.bottomup($.extend({},default_option,{html:`<img src="https://static-cdn.jtvnw.net/emoticons/v2/emotesv2_5314a90cc7be4059a9e9efdd345dde5a/default/dark/3.0" style="width:${default_option.size +5}px;height:${default_option.size +5}px">`}));
+// 	$.fn.bottomup($.extend({},default_option,{html:`테스트`}));
+// }, 1000)
+//ponceSWING ponceOVERTOAD ponceCRYX ponceCOEURX ponceCHILL 
 if(channel){
 	window.client = new tmi.Client({
 		options: {
@@ -38,20 +46,28 @@ if(channel){
 		// identity : { username,  password: window.token.access_token},
 		channels : [channel]
 	});
-	window.client.on("chat",(channel, userstate, message, self)=>{
+	window.client.on("chat",function(channel, userstate, message, self){
 		if(self)return;
-		addChat(userstate, message, userstate.id)
+		// addChat(userstate, message, userstate.id)
 
-		if(isMod(channel, username)){
-			const [comm, ...args] = msg.split();
-			switch(comm){
-				case ";크기":
-					default_option.imgSize = args[0];
-					break;
+		console.log(userstate);
+		if(message.startsWith(";")){
+			if(window.client.isMod(channel, userstate.username) || userstate.badges.hasOwnProperty("broadcaster")){
+				const [comm, ...args] = message.split();
+				switch(comm){
+					case ";크기":
+						if(isNaN(args[0]))break;
+						default_option.size = args[0];
+						$.fn.bottomup($.extend({},default_option,{html:`크기 : ${args[0]}`}));
+						break;
+				}	
 			}
-		}else{
+		}else if(userstate.emotes){
 			Object.entries(userstate.emotes).forEach(([id, positions]) => {
-				$.fn.bottomup($.extend({},default_option,{html:`<img src="https://static-cdn.jtvnw.net/emoticons/v1/${id}/1.0">`}));
+				if(!isNaN(id))
+					$.fn.bottomup($.extend({},default_option,{html:`<img src="https://static-cdn.jtvnw.net/emoticons/v1/${id}/3.0" style="width:${default_option.size +5}px;height:${default_option.size +5}px">`}));
+				else
+					$.fn.bottomup($.extend({},default_option,{html:`<img src="https://static-cdn.jtvnw.net/emoticons/v2/${id}/default/dark/3.0" style="width:${default_option.size +5}px;height:${default_option.size +5}px">`}));
 			});
 		}
 	});

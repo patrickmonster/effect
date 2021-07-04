@@ -98,7 +98,7 @@ function getImageData(url,f, isBlack=true){
 		canvas.width = img.width * size;
 		canvas.height = img.height * size;
 
-		context.drawImage(img, canvas.width / size * (size / 2)  - img.width /2, canvas.width/ size * (size /2)  - img.height/ 2);
+		context.drawImage(img, canvas.width / size * (size / 2)  - img.width /2, canvas.width/ size * (size /2)  - img.height/ 2, 300, 300);
 		// context.drawImage(img, 0,0);
 		// document.body.appendChild(canvas);
 		try {
