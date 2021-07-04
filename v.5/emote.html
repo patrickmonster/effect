@@ -11,7 +11,6 @@ $.fn.bottomup = function(options) {
             }).html(options.html),
 			startPositionLeft = Math.random() * $(document).width() - 100,
 			durationFall = $(document).height() * 10 + Math.random() * 5000;
-	console.log(options.html);
 	$flake.appendTo('body').css({
 		left: startPositionLeft,
 		opacity: 1,
@@ -39,7 +38,7 @@ const default_option={size:30,color:'333',direction:"bottom"};
 if(channel){
 	window.client = new tmi.Client({
 		options: {
-			debug: true,
+			// debug: true,
 			level: 'warn',
 		},
 		connection: { reconnect: true, secure: true },
@@ -49,8 +48,6 @@ if(channel){
 	window.client.on("chat",function(channel, userstate, message, self){
 		if(self)return;
 		// addChat(userstate, message, userstate.id)
-
-		console.log(userstate);
 		if(message.startsWith(";")){
 			if(window.client.isMod(channel, userstate.username) || userstate.badges.hasOwnProperty("broadcaster")){
 				const [comm, ...args] = message.split();
