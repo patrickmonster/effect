@@ -50,7 +50,7 @@ if(channel){
 		// addChat(userstate, message, userstate.id)
 		if(message.startsWith(";")){
 			if(window.client.isMod(channel, userstate.username) || userstate.badges.hasOwnProperty("broadcaster")){
-				const [comm, ...args] = message.split();
+				const [comm, ...args] = message.split(" ");
 				switch(comm){
 					case ";크기":
 						if(isNaN(args[0]))break;
