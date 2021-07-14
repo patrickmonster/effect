@@ -40,7 +40,7 @@ if(data){
 	
 	ws.onopen =  function open() {setInterval(()=>ws.send("#ping"), 10 * 1000)}
 	ws.onerror = (e)=>{console.error(`[Toon ws error] - ${e}`);}
-	ws.onmessage = (data)=>{
+	ws.onmessage = ({data})=>{
 		if(typeof data == "string"){
 			if(!data.startsWith("{"))return;
 			data = JSON.parse(data);
@@ -50,6 +50,7 @@ if(data){
 			console.log(window.default);
 		}else if("code" in data){
 			const { content : { account, amount, name, message, image, acctype} } = data;
+			console.log(account, amount);
 			if(!amount)return;
 			// 계정 / 금액 / 이름 / 메세지
 			console.log(`[Toon]`,account, amount, name, message, acctype);
@@ -57,11 +58,9 @@ if(data){
 				i, t,
 				`${name}님이 ${amount}원을 후원하였습니다!`,
 				{
-					title: `${window.default}`,
+					title: `${window.default.text_template.replace("{name}", name).replace("{amount}", amount)}`,
 					type: 'rich',
-					description: `${message.text_template.replace("{name}", name).replace("{amount}", amount)}`,
-					timestamp: new Date(),
-					color: '#0099ff',
+					description: `${message.replace("video://", "http://")}`,
 					thumbnail: {// 도네이션 이미지
 						url: "https://media.discordapp.net/attachments/858487089875386408/864676875523063818/alert_donation_1.gif"
 					},
@@ -84,6 +83,7 @@ if(data){
  *  - 지정된 위치에 웹훅을 전송함 
  */
 function sendWebhook(id,token,sendText,tag, username, userimg){
+	console.log(tag);
 	axios.post(`https://discord.com/api/webhooks/${id}/${token}`,{
 		content : sendText,
 		avatar_url : userimg,
