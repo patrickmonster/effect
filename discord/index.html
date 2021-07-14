@@ -31,7 +31,7 @@ if(data){
 	const {k, i, t} = window.jwt_decode(data, {header : true});
 	const token = window.jwt_encode({
 		auth: k,
-		language: "ko",
+		// language: "ko",
 		service: "donationticker",
 		type: 101
 	}).split(".")[0];// 토큰암호화(연결용)
