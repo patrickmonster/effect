@@ -1,0 +1,98 @@
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="https://patrickmonster.github.io/tgd/javascript/jwt-decode.js"></script>
+<body>
+<script>
+function getParams(name, address = window.location.href) {
+	let url;
+	let results = "";
+	url = new URL(address);
+	if (typeof url.searchParams === 'undefined') {
+		results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(address);
+		if (results == null) {
+			return null;
+		} else {
+			return decodeURI(results[1]) || 0;
+		}
+	} else {
+		return url.searchParams.get(name);
+	}
+}
+
+const data = getParams("_");
+if(data){
+	/*
+	토큰 데이터
+	{
+		k, : toon key값
+		i, : webhook id값
+		t  : webhook token값
+	}
+	*/
+	const {k, i, t} = window.jwt_decode(data, {header : true});
+	const token = window.jwt_encode({
+		auth: k,
+		service: "donationticker",
+		type: 101
+	}).split(".")[0];// 토큰암호화(연결용)
+
+	const ws = new WebSocket(`wss://toon.at:8071/${token}`);
+	
+	ws.on('open', function open() {setInterval(()=>ws.send("#ping"), 10 * 1000)});
+	ws.on('error', (e)=>{console.error(`[Toon ws error] - ${e}`);});
+	ws.on('message', (data)=>{
+		if(!data.startsWith("{"))return;
+		data = JSON.parse(data);
+		if("conf" in data){
+			window.default = data.conf.donation.default;
+			console.log(window.default);
+		}else if("code" in data){
+			const { content : { account, amount, name, message, image, acctype} } = data;
+			if(!amount)return;
+			// 계정 / 금액 / 이름 / 메세지
+			console.log(`[Toon]`,account, amount, name, message, acctype);
+			sendWebhook(
+				i, t,
+				`${name}님이 ${amount}원을 후원하였습니다!`,
+				{
+					title: `${window.default}`,
+					type: 'rich',
+					description: `${message.text_template.replace("{name}", name).replace("{amount}", amount)}`,
+					timestamp: new Date(),
+					color: '#0099ff',
+					thumbnail: {// 도네이션 이미지
+						url: "https://media.discordapp.net/attachments/858487089875386408/864676875523063818/alert_donation_1.gif"
+					},
+					author: {
+						name: `${name}(${account})`,
+						icon_url: image
+					}
+				},
+				"트윕후원 관리자",
+				"https://media.discordapp.net/attachments/682449668428529743/864654957899022346/Erap8U5VQAEe1pF.jpeg.jpg"
+			);
+		}
+	});
+}else{
+	document.body.innerHTML=`당신은 분석을 목적으로 들어 오셨군요... 음... 딱히 환영하지는 않아요.///`;
+}
+
+/**
+ * 웹훅 전송용
+ *  - 지정된 위치에 웹훅을 전송함 
+ */
+function sendWebhook(id,token,sendText,tag, username, userimg){
+	axios.post(`https://discord.com/api/webhooks/${id}/${token}`,{
+		content : sendText,
+		avatar_url : userimg,
+		embeds : [tag],
+		username,
+	},{
+		"content-type": "application/json"
+	}).then(o=>{
+		console.log(`웹훅전송 - > ${sendText}/${username}`);
+	}).catch(console.error);
+}
+/// https://toon.at/donate/orefinger/1
+
+</script>		
+</body>
