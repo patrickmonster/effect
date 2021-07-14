@@ -41,7 +41,7 @@ if(data){
 	ws.onopen =  function open() {setInterval(()=>ws.send("#ping"), 10 * 1000)}
 	ws.onerror = (e)=>{console.error(`[Toon ws error] - ${e}`);}
 	ws.onmessage = (data)=>{
-		if(!data.startsWith("{"))return;
+		if(typeof data != "string" && !data.startsWith("{"))return;
 		data = JSON.parse(data);
 		if("conf" in data){
 			window.default = data.conf.donation.default;
