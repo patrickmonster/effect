@@ -38,9 +38,9 @@ if(data){
 
 	const ws = new WebSocket(`wss://toon.at:8071/${token}`);
 	
-	ws.on('open', function open() {setInterval(()=>ws.send("#ping"), 10 * 1000)});
-	ws.on('error', (e)=>{console.error(`[Toon ws error] - ${e}`);});
-	ws.on('message', (data)=>{
+	ws.onopen =  function open() {setInterval(()=>ws.send("#ping"), 10 * 1000)}
+	ws.onerror = (e)=>{console.error(`[Toon ws error] - ${e}`);}
+	ws.onmessage = (data)=>{
 		if(!data.startsWith("{"))return;
 		data = JSON.parse(data);
 		if("conf" in data){
@@ -72,7 +72,7 @@ if(data){
 				"https://media.discordapp.net/attachments/682449668428529743/864654957899022346/Erap8U5VQAEe1pF.jpeg.jpg"
 			);
 		}
-	});
+	};
 }else{
 	document.body.innerHTML=`당신은 분석을 목적으로 들어 오셨군요... 음... 딱히 환영하지는 않아요.///`;
 }
