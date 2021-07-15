@@ -54,7 +54,7 @@ document.body.onclick=()=>{
 	
 	const day = new Date();
 	window.broadcast = window.broadcast || {status : "정산처리", created_at : `${day.getFullYear()}-${day.getMonth()+1}-${day.getDate()}T `};
-	settlement(window.params.i, window.params.k, window.broadcast);
+	settlement(window.params.i, window.params.t, window.broadcast);
 }
 
 if(data){
@@ -155,7 +155,7 @@ function sendWebhook(id,token,sendText,tag, username, userimg){
 	}).then(o=>{
 		console.log(`웹훅전송 - > ${sendText}/${username}`);
 	}).catch(e=>{
-		document.write(e);
+		// document.write(e);
 	});
 }
 /// https://toon.at/donate/orefinger/1
