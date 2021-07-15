@@ -47,6 +47,15 @@ window.isStream = false;
 window.donateList = [];
 
 
+window.isSettlement = false;
+// 테스트용
+document.body.onclick=()=>{
+	if(window.isSettlement)return;//이미 결산처리중...
+	const day = new Date();
+	window.broadcast = window.broadcast || {status : "정산처리", create_at : `${day.getFullYear}-${day.getMonth()+1}-${day.getDate()}`};
+	settlement(window.params.i, window.params.k, window.broadcast);
+}
+
 if(data){
 	/*
 	토큰 데이터
@@ -54,70 +63,24 @@ if(data){
 		k, : toon key값
 		i, : webhook id값
 		t  : webhook token값
-		u  : user_id값 (twitch)
+		u  : user_id값 (twitch) - 생략가능
 	}
 	*/
-	const params = window.jwt_decode(data, {header : true});
-	const {k, i, t} = params; // 암호화된 파라메타
-	const bord = document.getElementById("dashbord");// 결산했을때 출력되는 보드
+	window.params = window.jwt_decode(data, {header : true});
+	const {k, i, t} = window.params; // 암호화된 파라메타
 
 	if("u" in params){// 유저정보 입력 여부(사전조치된 유저 대비)
 		const u = params.u;
 		setInterval(async function(){
-			const broadcast = await getAPI(`channels/${u}`);
-			if(broadcast && !window.isStream){// 스트림중인데, 이전까지 스트림이 아니였음
+			window.broadcast = await getAPI(`channels/${u}`);
+			if(window.broadcast && !window.isStream){// 스트림중인데, 이전까지 스트림이 아니였음
 				window.isStream = true;
-			}else if(!broadcast && window.isStream){// 스트림off인데, 이전까지 스트림이었심
+			}else if(!window.broadcast && window.isStream){// 스트림off인데, 이전까지 스트림이었심
 				//결산처리하자
 				window.isStream = false;
-				if(!window.donateList.length){
-					// 시봉 결산처리할것이 없어용
-					bord.innerHTML = `<img src="${imgs[0]}" style="width:300px;height:300px"><br><p>쥬륵... 오늘 정산은 처리할게 없어요...ㅠㅠ 우리, 분발해 보아요!</p>`;
-					return;
-				}//status
-				//{ account, amount, name, message, image, acctype }
-				const users = {};
-				window.donateList.forEach((user) => {
-					if(!users[user.account]){
-						users[user.account] = user;
-						return;
-					}
-					users[account].amount += user.amount;// 금액 가산
-				});
-				window.donateList = Object.values(users);
-				window.donateList.sort((a, b) => b.amount - a.amount);// 금액순으로 정렬
-
-				// 결산 출력
-				sendWebhook(
-					i, t,
-					`${broadcast["status"]}(${broadcast["created_at"].split("T")[0]}) 방송결산!`,
-					{
-						title: `최고 후원내역`,
-						type: 'rich',
-						description: `
-${window.donateList.map((user, index)=>`${index + 1}. ${user.name}(${user.account}) ${user.amount}원을 후원하셨어요!`).join("\n")}
-						`,
-						thumbnail: {
-							url: RandArrayList(gifs)
-						},
-						author: {
-							name: `${window.donateList[0].name}(${window.donateList[0].account})`,
-							icon_url: window.donateList[0].image
-						}
-					},
-					"트윕후원 결산처리!",
-					imgs[4]
-				);// 결산전송
-				//
-				bord.innerHTML = `
-<img src="${imgs[4]}" style="width:100px;height:100px"><br>
-<ol>
-	${window.donateList.map((user)=>`<li>${user.name}(${user.account}) ${user.amount}원을 후원하셨어요!</li>`).join("\n")}
-</ol>`;			
-				window.donateList = [];// 리스트 비우기
-				setTimeout(()=>{// 5분뒤 제거
-					bord.innerHTML = "";
-				}, 1000 * 60 * 5);
+				if(window.isSettlement)return;//이미 결산처리중...
+				// 처리
+				settlement(i, t, window.broadcast);
 			}else{
 				//running loop
 				console.log("읭... 동작중...");
@@ -202,6 +165,68 @@ async function getAPI(host){
 		'Client-ID' : window.oauth_client_id,
 		'Accept' : "application/vnd.twitchtv.v5+json"
 	});
+}
+
+/**
+ * @params i
+ * @params t
+ * @params broadcast {status, create_at }
+ */
+function settlement(i, t , broadcast){
+	const bord = document.getElementById("dashbord");// 결산했을때 출력되는 보드
+	window.isSettlement = true;// 결산처리 시작
+	if(!window.donateList.length){
+		// 시봉 결산처리할것이 없어용
+		bord.innerHTML = `<img src="${imgs[0]}" style="width:300px;height:300px"><br><p>쥬륵... 오늘 정산은 처리할게 없어요...ㅠㅠ 우리, 분발해 보아요!</p>`;
+		setTimeout(()=>{
+			window.isSettlement = false;
+		}, 1000 * 10);
+		return;
+	}//status
+	//{ account, amount, name, message, image, acctype }
+	const users = {};
+	window.donateList.forEach((user) => {
+		if(!users[user.account]){
+			users[user.account] = user;
+			return;
+		}
+		users[account].amount += user.amount;// 금액 가산
+	});
+	window.donateList = Object.values(users);
+	window.donateList.sort((a, b) => b.amount - a.amount);// 금액순으로 정렬
+
+	// 결산 출력
+	sendWebhook(
+		i, t,
+		`${broadcast["status"]}(${broadcast["created_at"].split("T")[0]}) 방송결산!`,
+		{
+			title: `최고 후원내역`,
+			type: 'rich',
+			description: `
+${window.donateList.map((user, index)=>`${index + 1}. ${user.name}(${user.account}) ${user.amount}원을 후원하셨어요!`).join("\n")}
+			`,
+			thumbnail: {
+				url: RandArrayList(gifs)
+			},
+			author: {
+				name: `${window.donateList[0].name}(${window.donateList[0].account})`,
+				icon_url: window.donateList[0].image
+			}
+		},
+		"트윕후원 결산처리!",
+		imgs[4]
+	);// 결산전송
+	//
+	bord.innerHTML = `
+<img src="${imgs[4]}" style="width:100px;height:100px"><br>
+<ol>
+${window.donateList.map((user)=>`<li>${user.name}(${user.account}) ${user.amount}원을 후원하셨어요!</li>`).join("\n")}
+</ol>`;			
+	window.donateList = [];// 리스트 비우기
+	setTimeout(()=>{// 5분뒤 제거
+		window.isSettlement = false;
+		bord.innerHTML = "";
+	}, 1000 * 60 * 5);
 }
 
 
