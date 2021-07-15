@@ -1,6 +1,9 @@
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script src="https://patrickmonster.github.io/tgd/javascript/jwt-decode.js"></script>
 <body>
+<div id="dashbord">
+	<!-- 스트림이 끝났을때 결산보고로 올라갈것임 -->
+</div>
 <script>
 function getParams(name, address = window.location.href) {
 	let url;
@@ -38,6 +41,11 @@ const gifs = [
 	"https://media.discordapp.net/attachments/858487089875386408/864859149366853692/ezgif.com-gif-maker_2.gif", //zero two
 ];
 
+// 윈도우 키
+window.oauth_client_id = "g1rhyzp1s7y2d755xqjn1otspdgvc3";
+window.isStream = false;
+window.donateList = [];
+
 
 if(data){
 	/*
@@ -46,9 +54,77 @@ if(data){
 		k, : toon key값
 		i, : webhook id값
 		t  : webhook token값
+		u  : user_id값 (twitch)
 	}
 	*/
-	const {k, i, t} = window.jwt_decode(data, {header : true});
+	const params = window.jwt_decode(data, {header : true});
+	const {k, i, t} = params; // 암호화된 파라메타
+	const bord = document.getElementById("dashbord");// 결산했을때 출력되는 보드
+
+	if("u" in params){// 유저정보 입력 여부(사전조치된 유저 대비)
+		const u = params.u;
+		setInterval(async function(){
+			const broadcast = await getAPI(`channels/${u}`);
+			if(broadcast && !window.isStream){// 스트림중인데, 이전까지 스트림이 아니였음
+				window.isStream = true;
+			}else if(!broadcast && window.isStream){// 스트림off인데, 이전까지 스트림이었심
+				//결산처리하자
+				window.isStream = false;
+				if(!window.donateList.length){
+					// 시봉 결산처리할것이 없어용
+					bord.innerHTML = `<img src="${imgs[0]}" style="width:300px;height:300px"><br><p>쥬륵... 오늘 정산은 처리할게 없어요...ㅠㅠ 우리, 분발해 보아요!</p>`;
+					return;
+				}//status
+				//{ account, amount, name, message, image, acctype }
+				const users = {};
+				window.donateList.forEach((user) => {
+					if(!users[user.account]){
+						users[user.account] = user;
+						return;
+					}
+					users[account].amount += user.amount;// 금액 가산
+				});
+				window.donateList = Object.values(users);
+				window.donateList.sort((a, b) => b.amount - a.amount);// 금액순으로 정렬
+
+				// 결산 출력
+				sendWebhook(
+					i, t,
+					`${broadcast["status"]}(${broadcast["created_at"].split("T")[0]}) 방송결산!`,
+					{
+						title: `최고 후원내역`,
+						type: 'rich',
+						description: `
+${window.donateList.map((user, index)=>`${index + 1}. ${user.name}(${user.account}) ${user.amount}원을 후원하셨어요!`).join("\n")}
+						`,
+						thumbnail: {
+							url: RandArrayList(gifs)
+						},
+						author: {
+							name: `${window.donateList[0].name}(${window.donateList[0].account})`,
+							icon_url: window.donateList[0].image
+						}
+					},
+					"트윕후원 결산처리!",
+					imgs[4]
+				);// 결산전송
+				//
+				bord.innerHTML = `
+<img src="${imgs[4]}" style="width:100px;height:100px"><br>
+<ol>
+	${window.donateList.map((user)=>`<li>${user.name}(${user.account}) ${user.amount}원을 후원하셨어요!</li>`).join("\n")}
+</ol>`;			
+				window.donateList = [];// 리스트 비우기
+				setTimeout(()=>{// 5분뒤 제거
+					bord.innerHTML = "";
+				}, 1000 * 60 * 5);
+			}else{
+				//running loop
+				console.log("읭... 동작중...");
+			}
+		}, 3 * 60 * 1000);// 3분에 한번 탐색(5분룰이지만, 참을성 없는 한국인을 위한 이 이하는 한계치)
+	}
+
 	const token = window.jwt_encode({
 		auth: k,
 		language: "ko",
@@ -57,7 +133,7 @@ if(data){
 	}).split(".")[0];// 토큰암호화(연결용)
 
 	const ws = new WebSocket(`wss://toon.at:8071/${token}`);
-	
+	// ws = {};
 	ws.onopen =  function open() {setInterval(()=>ws.send("#ping"), 10 * 1000)}
 	ws.onerror = (e)=>{console.error(`[Toon ws error] - ${e}`);}
 	ws.onmessage = ({data})=>{
@@ -75,6 +151,7 @@ if(data){
 			const isVideo = message.includes("video://");// 비디오 여부
 			// 계정 / 금액 / 이름 / 메세지
 			console.log(`[Toon]`,account, amount, name, message, acctype);
+			window.donateList.push({ account, amount, name, message, image, acctype });// 후원내역 저장하자!
 			sendWebhook(
 				i, t,
 				`${name}님이 ${amount}원을 후원하였습니다!`,
@@ -117,6 +194,16 @@ function sendWebhook(id,token,sendText,tag, username, userimg){
 	}).catch(console.error);
 }
 /// https://toon.at/donate/orefinger/1
+/**
+ * 트위치 API
+ */
+async function getAPI(host){
+	return await axios.get(`https://api.twitch.tv/kraken/${host}`, {}, {
+		'Client-ID' : window.oauth_client_id,
+		'Accept' : "application/vnd.twitchtv.v5+json"
+	});
+}
+
 
 </script>		
 </body>
