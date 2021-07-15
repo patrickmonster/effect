@@ -203,30 +203,25 @@ function settlement(i, t , broadcast){
 ${window.donateList.map((user)=>`<li>${user.name}(${user.account}) ${user.amount}원을 후원하셨어요!</li>`).join("\n")}
 </ol>`;			
 	// 결산 출력
-	console.log(broadcast["created_at"]);
-	sendWebhook(
-		i, t,
-		`결산전 메세지 전송`,
-	);
+	const { name, account, image} = window.donateList[0]
 	sendWebhook(
 		i, t,
 		`${broadcast["status"]}(${broadcast["created_at"].replace(/-/g, ".").split("T")[0]}) 방송결산!`,
 		{
-			title: `최고 후원내역`,
+			// title: `${window.default.text_template.replace("{name}", name).replace("{amount}", amount)}`,
 			type: 'rich',
 			description: `${window.donateList.map((user, index)=>`${index + 1}. ${user.name}(${user.account}) ${user.amount}원을 후원하셨어요!`).join("\\r\\n")}`,
-			thumbnail: {
+			thumbnail: {// 도네이션 이미지
 				url: RandArrayList(gifs)
 			},
 			author: {
-				name: `${window.donateList[0].name}(${window.donateList[0].account})`,
-				icon_url: window.donateList[0].image
+				name: `${name}(${account})`,
+				icon_url: image
 			}
 		},
-		"트윕후원 결산처리!",
-		imgs[4]
-	);// 결산전송
-	//
+		"트윕후원 관리자",
+		RandArrayList(imgs)
+	);
 	window.donateList = [];// 리스트 비우기
 	setTimeout(()=>{// 5분뒤 제거
 		window.isSettlement = false;
