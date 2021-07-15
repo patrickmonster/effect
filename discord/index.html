@@ -115,6 +115,7 @@ if(data){
 			// 계정 / 금액 / 이름 / 메세지
 			console.log(`[Toon]`,account, amount, name, message, acctype);
 			window.donateList.push({ account, amount, name, message, image, acctype });// 후원내역 저장하자!
+			//.match(/#emote:([0-9]+)/g ).map(o=>o.replace("#emote","")+":")
 			sendWebhook(
 				i, t,
 				`${name}님이 ${amount}원을 후원하였습니다!`,
