@@ -79,7 +79,6 @@ if(data){
 			}else if(!window.broadcast && window.isStream){// 스트림off인데, 이전까지 스트림이었심
 				//결산처리하자
 				window.isStream = false;
-				if(window.isSettlement)return;//이미 결산처리중...
 				// 처리
 				settlement(i, t, window.broadcast);
 			}else{
@@ -175,6 +174,7 @@ async function getAPI(host){
  */
 function settlement(i, t , broadcast){
 	const bord = document.getElementById("dashbord");// 결산했을때 출력되는 보드
+	if(window.isSettlement)return;//이미 결산처리중...
 	window.isSettlement = true;// 결산처리 시작
 	if(!window.donateList.length){
 		// 시봉 결산처리할것이 없어용
