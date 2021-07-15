@@ -19,6 +19,26 @@ function getParams(name, address = window.location.href) {
 }
 
 const data = getParams("_");
+const RandArrayList = (a) => a[Math.floor(Math.random()*a.length)];
+
+// 이미지 리스트 (알림 캐릭터 이미지)
+const imgs = [
+	"https://media.discordapp.net/attachments/682449668428529743/864654959098462209/E3zwueyUcAQsL2l.jpeg.jpg",
+	"https://media.discordapp.net/attachments/682449668428529743/864654957222952990/EoCVThsVoAEs_aX.png",
+	"https://media.discordapp.net/attachments/682449668428529743/864654958606942228/E0gvBJpVoAIzH-c.jpeg.jpg",
+	"https://media.discordapp.net/attachments/682449668428529743/864654957437517844/EpuSoS5VEAAA8r4.jpeg.jpg",
+	"https://media.discordapp.net/attachments/682449668428529743/864654957899022346/Erap8U5VQAEe1pF.jpeg.jpg",
+];
+
+// gif 후원 안내 (zero two 이미지 퀄리티 변경)
+const gifs = [
+	"https://media.discordapp.net/attachments/858487089875386408/864676875523063818/alert_donation_1.gif",
+	"https://media.discordapp.net/attachments/858487089875386408/864863667189973032/ezgif.com-gif-maker_2.gif",
+	"https://media.discordapp.net/attachments/858487089875386408/864861788477456394/ezgif.com-gif-maker_5.gif",
+	"https://media.discordapp.net/attachments/858487089875386408/864859149366853692/ezgif.com-gif-maker_2.gif", //zero two
+];
+
+
 if(data){
 	/*
 	토큰 데이터
@@ -52,6 +72,7 @@ if(data){
 			const { content : { account, amount, name, message, image, acctype} } = data;
 			console.log(account, amount);
 			if(!amount)return;
+			const isVideo = message.includes("video://");// 비디오 여부
 			// 계정 / 금액 / 이름 / 메세지
 			console.log(`[Toon]`,account, amount, name, message, acctype);
 			sendWebhook(
@@ -62,7 +83,7 @@ if(data){
 					type: 'rich',
 					description: `${message.replace("video://", "https://")}`,
 					thumbnail: {// 도네이션 이미지
-						url: "https://media.discordapp.net/attachments/858487089875386408/864676875523063818/alert_donation_1.gif"
+						url: isVideo ? gifs[3] : RandArrayList(gifs.filter((e,i)=>i < 3))
 					},
 					author: {
 						name: `${name}(${account})`,
@@ -70,7 +91,7 @@ if(data){
 					}
 				},
 				"트윕후원 관리자",
-				"https://media.discordapp.net/attachments/682449668428529743/864654957899022346/Erap8U5VQAEe1pF.jpeg.jpg"
+				RandArrayList(imgs)
 			);
 		}
 	};
