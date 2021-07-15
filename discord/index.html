@@ -53,7 +53,7 @@ document.body.onclick=()=>{
 	if(window.isSettlement && !("u" in window.params))return;//이미 결산처리중...
 	
 	const day = new Date();
-	window.broadcast = window.broadcast || {status : "정산처리", create_at : `${day.getFullYear}-${day.getMonth()+1}-${day.getDate()}T`};
+	window.broadcast = window.broadcast || {status : "정산처리", created_at : `${day.getFullYear()}-${day.getMonth()+1}-${day.getDate()}T `};
 	settlement(window.params.i, window.params.k, window.broadcast);
 }
 
@@ -181,6 +181,7 @@ function settlement(i, t , broadcast){
 		bord.innerHTML = `<img src="${imgs[0]}" style="width:300px;height:300px"><br><p>쥬륵... 오늘 정산은 처리할게 없어요...ㅠㅠ 우리, 분발해 보아요!</p>`;
 		setTimeout(()=>{
 			window.isSettlement = false;
+			bord.innerHTML = "";
 		}, 1000 * 10);
 		return;
 	}//status
@@ -191,12 +192,18 @@ function settlement(i, t , broadcast){
 			users[user.account] = user;
 			return;
 		}
-		users[account].amount += user.amount;// 금액 가산
+		users[user.account].amount += user.amount;// 금액 가산
 	});
 	window.donateList = Object.values(users);
 	window.donateList.sort((a, b) => b.amount - a.amount);// 금액순으로 정렬
 
+	bord.innerHTML = `
+<img src="${imgs[4]}" style="width:100px;height:100px"><br>
+<ol>
+${window.donateList.map((user)=>`<li>${user.name}(${user.account}) ${user.amount}원을 후원하셨어요!</li>`).join("\n")}
+</ol>`;			
 	// 결산 출력
+	console.log(broadcast["created_at"]);
 	sendWebhook(
 		i, t,
 		`${broadcast["status"]}(${broadcast["created_at"].split("T")[0]}) 방송결산!`,
@@ -218,11 +225,6 @@ ${window.donateList.map((user, index)=>`${index + 1}. ${user.name}(${user.accoun
 		imgs[4]
 	);// 결산전송
 	//
-	bord.innerHTML = `
-<img src="${imgs[4]}" style="width:100px;height:100px"><br>
-<ol>
-${window.donateList.map((user)=>`<li>${user.name}(${user.account}) ${user.amount}원을 후원하셨어요!</li>`).join("\n")}
-</ol>`;			
 	window.donateList = [];// 리스트 비우기
 	setTimeout(()=>{// 5분뒤 제거
 		window.isSettlement = false;
