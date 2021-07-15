@@ -69,8 +69,8 @@ if(data){
 	window.params = window.jwt_decode(data, {header : true});
 	const {k, i, t} = window.params; // 암호화된 파라메타
 
-	if("u" in params){// 유저정보 입력 여부(사전조치된 유저 대비)
-		const u = params.u;
+	if("u" in window.params){// 유저정보 입력 여부(사전조치된 유저 대비)
+		const u = window.params.u;
 		setInterval(async function(){
 			window.broadcast = await getAPI(`channels/${u}`);
 			if(window.broadcast && !window.isStream){// 스트림중인데, 이전까지 스트림이 아니였음
