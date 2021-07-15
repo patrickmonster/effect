@@ -210,9 +210,7 @@ ${window.donateList.map((user)=>`<li>${user.name}(${user.account}) ${user.amount
 		{
 			title: `최고 후원내역`,
 			type: 'rich',
-			description: `
-${window.donateList.map((user, index)=>`${index + 1}. ${user.name}(${user.account}) ${user.amount}원을 후원하셨어요!`).join("\n")}
-			`,
+			description: `${window.donateList.map((user, index)=>`${index + 1}. ${user.name}(${user.account}) ${user.amount}원을 후원하셨어요!`).join("\\r\\n")}`,
 			thumbnail: {
 				url: RandArrayList(gifs)
 			},
