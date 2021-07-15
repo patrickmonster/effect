@@ -154,7 +154,9 @@ function sendWebhook(id,token,sendText,tag, username, userimg){
 		"content-type": "application/json"
 	}).then(o=>{
 		console.log(`웹훅전송 - > ${sendText}/${username}`);
-	}).catch(console.error);
+	}).catch(e=>{
+		document.write(e);
+	});
 }
 /// https://toon.at/donate/orefinger/1
 /**
