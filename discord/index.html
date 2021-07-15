@@ -206,7 +206,7 @@ ${window.donateList.map((user)=>`<li>${user.name}(${user.account}) ${user.amount
 	console.log(broadcast["created_at"]);
 	sendWebhook(
 		i, t,
-		`${broadcast["status"]}(${broadcast["created_at"].split("T")[0]}) 방송결산!`,
+		`${broadcast["status"]}(${broadcast["created_at"].replace(/-/g, ".").split("T")[0]}) 방송결산!`,
 		{
 			title: `최고 후원내역`,
 			type: 'rich',
