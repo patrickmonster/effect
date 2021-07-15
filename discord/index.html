@@ -52,7 +52,7 @@ window.isSettlement = false;
 document.body.onclick=()=>{
 	if(window.isSettlement)return;//이미 결산처리중...
 	const day = new Date();
-	window.broadcast = window.broadcast || {status : "정산처리", create_at : `${day.getFullYear}-${day.getMonth()+1}-${day.getDate()}`};
+	window.broadcast = window.broadcast || {status : "정산처리", create_at : `${day.getFullYear}-${day.getMonth()+1}-${day.getDate()}T`};
 	settlement(window.params.i, window.params.k, window.broadcast);
 }
 
