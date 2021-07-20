@@ -1,0 +1,300 @@
+<head>
+    <script src="https://patrickmonster.github.io/tgd/javascript/jwt-decode.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <link rel="alternate icon" class="js-site-favicon" type="image/png" href="https://cdn.discordapp.com/avatars/826484552029175808/51b2c8c287cf21515f12f7cb330fb5db.png">
+</head>
+<body>
+    <head>
+        <title>디스코드 - 권한</title>
+      </head>
+      <style>
+        body {
+            background-color: #36393e;
+        }
+        .discord-message {
+            color: #dcddde;
+            display: flex;
+            font-size: 0.9em;
+            margin: 1em 0;
+            padding: 0.25em 1em 0;
+        }
+        .discord-message .discord-author-avatar {
+            margin-top: 1px;
+            margin-right: 16px;
+            min-width: 40px;
+        }
+        .discord-message .discord-author-avatar img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+        }
+      .discord-message-body{
+        color: #7289da;
+      }
+        .discord-message .discord-author-info .discord-bot-tag {
+            background-color: #7289da;
+            font-size: 0.65em;
+            margin-left: 5px;
+            padding: 3px;
+            border-radius: 3px;
+            line-height: 100%;
+            text-transform: uppercase;
+        }
+        .discord-embed {
+            color: #dcddde;
+            display: flex;
+            margin-top: 8px;
+            margin-bottom: 8px;
+            font-size: 13px;
+            line-height: 150%;
+        }
+        .discord-embed .discord-embed-content {
+            display: flex;
+        }
+        .discord-embed .discord-embed-thumbnail {
+            max-width: 80px;
+            max-height: 80px;
+            margin-left: 16px;
+            margin-top: 8px;
+            border-radius: 4px;
+            -o-object-fit: contain;
+            object-fit: contain;
+            -o-object-position: top center;
+            object-position: top center;
+        }
+        .discord-embed .discord-embed-footer {
+            color: #72767d;
+            display: flex;
+            align-items: center;
+            font-size: 0.85em;
+            margin-top: 8px;
+        }
+        .discord-embed .discord-embed-author a {
+            color: #fff;
+        }
+        .discord-embed .discord-embed-title a {
+            color: #00b0f4;
+            font-weight: 600;
+        }
+        .discord-message .discord-message-content {
+            width: 100%;
+            line-height: 160%;
+            font-weight: 400;
+            overflow-wrap: anywhere;
+        }
+        .discord-embed .discord-embed-fields {
+            display: flex;
+            flex-wrap: wrap;
+            margin-top: 8px;
+        }
+        .discord-embed .discord-embed-author .discord-author-image {
+            width: 24px;
+            height: 24px;
+            margin-right: 8px;
+            border-radius: 50%;
+        }
+        .discord-embed .discord-left-border {
+            background-color: #202225;
+            flex-shrink: 0;
+            width: 4px;
+            border-radius: 4px 0 0 4px;
+        }
+        .discord-embed .discord-embed-container {
+            background-color: #2f3136;
+            display: flex;
+            flex-direction: column;
+            max-width: 520px;
+            padding: 8px 16px 16px;
+            border: 1px solid rgba(46,48,54,.6);
+            border-radius: 0 4px 4px 0;
+        }
+        .discord-message .discord-message-content {
+            width: 100%;
+            line-height: 160%;
+            font-weight: 400;
+            overflow-wrap: anywhere;
+        }
+        .discord-message .discord-author-info {
+            color: #fff;
+            display: inline-flex;
+            align-items: center;
+            font-size: 15px;
+        }
+        .discord-message .discord-message-timestamp {
+            color: hsla(0,0%,100%,.2);
+            font-size: 12px;
+            margin-left: 3px;
+        }
+        .theme-default-content:not(.custom) img {
+            max-width: 100%;
+        }
+      
+        .discord-embed .discord-embed-field {
+            min-width: 100%;
+            margin-top: 5px;
+        }
+        .discord-embed-image {
+            width: 100%;
+            height: auto;
+        }
+        .discord-embed .discord-embed-image {
+            max-width: 100%;
+            margin-top: 16px;
+            border-radius: 4px;
+        }
+        input[type="submit"]{
+          width: 100px;
+          height: 40px;
+          position: fixed;
+          top: 300px;
+          left: 500px;
+        }
+      </style>
+<div class = "discord-messages" >
+    <div class="discord-message">
+        <div class="discord-author-avatar">
+            <img
+                src="https://cdn.discordapp.com/avatars/826484552029175808/51b2c8c287cf21515f12f7cb330fb5db.png?size=128"
+                alt="Guide Bot"></img>
+        </div>
+        <div class="discord-message-content">
+            <div>
+                <span class="discord-author-info">
+                    <span class="discord-author-username">방송알리미</span>
+                    <span class="discord-bot-tag">봇</span>
+                </span>
+                <span class="discord-message-timestamp">04/20/2021</span>
+            </div>
+            <div class="discord-message-body">
+                <!-- <p style="color:#0099ff">@Everyone</p> <p id="txt"><%= data.send_text
+                %></p> -->
+            </div>
+            <div class="discord-embed">
+                <div class="discord-left-border" style="background-color:#0099ff;"></div>
+                <div class="discord-embed-container">
+                    <div class="discord-embed-content">
+                        <div>
+                            <div class="discord-embed-title">
+                                <a href="" target="_blank">
+                                    <h3>코드가 발급되었습니다! 하단의 코드를 복사해 주세요!</h3>
+                                </a>
+                            </div>
+                            <div class="discord-embed-description">
+                                <textarea id="token" name="content" cols="60" rows="5">토큰</textarea>
+                            </div>
+                            <!-- <img src="<%= img %>" alt="" class="discord-embed-image"/> -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="discord-message">
+        <div class="discord-author-avatar">
+            <img
+                src="https://cdn.discordapp.com/avatars/826484552029175808/51b2c8c287cf21515f12f7cb330fb5db.png?size=128"
+                alt="Guide Bot"></img>
+        </div>
+        <div class="discord-message-content">
+            <div>
+                <span class="discord-author-info">
+                    <span class="discord-author-username">방송알리미</span>
+                    <span class="discord-bot-tag">봇</span>
+                </span>
+                <span class="discord-message-timestamp">04/20/2021</span>
+            </div>
+            <div class="discord-message-body">
+                <!-- <p style="color:#0099ff">@Everyone</p> <p id="txt"><%= data.send_text
+                %></p> -->
+            </div>
+            <div class="discord-embed">
+                <div class="discord-left-border" style="background-color:#0099ff;"></div>
+                <div class="discord-embed-container">
+                    <div class="discord-embed-content">
+                        <div>
+                            <div class="discord-embed-title">
+                                <a href="" target="_blank">
+                                    <h3>코드안내</h3>
+                                </a>
+                            </div>
+                            <div class="discord-embed-description">
+                                해당코드는 Twitch에서 발급하는 코드로,<br>
+                                개인 계정으로만 인증을 하시기 바랍니다.<br>
+                                보안 및 암호화가 되어있긴하나, <br>
+                                유실되었을때는, 사용자가 임의로 조작 가능합니다.<br>
+                                이점 유의하시고 코드를 입력 부탁드립니다<br>
+                                <br>
+                                코드는 1회성이며, 발급후 토큰으로 변환됩니다.
+                            </div>
+                            <!-- <img src="<%= img %>" alt="" class="discord-embed-image"/> -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <script>
+// 토큰을 발급받습니다.
+const oauth_client_id = "c08rvsvk2rum9y3p3d0gkr137fcpzk";//
+const oauth_redirect_uri = `${window.location.origin}${window.location.pathname}`;// 리다이렉션 -> https://patrickmonster.github.io/effect/discord/access
+const permissions = [
+    "chat:read", "chat:edit", "channel:moderate", 
+    "analytics:read:extensions",// 확장분석
+    // "channel:manage:videos", // 동영상
+    "channel:read:editors", // 편집자 목록 
+    "channel:read:subscriptions", // 구독자 목록
+    "user:edit:follows", // 팔로우 수정
+    // "user:manage:blocked_users", // 차단목록
+    "user:read:email", // 이메일 - 사용자 정보
+    // "moderation:read",
+    // "moderator:manage:automod", // Automod
+    // "channel:manage:broadcast", // 방송 정보 수정
+    // "channel:manage:polls", //설문
+    "whispers:edit", // 귓속말
+    // "clips:edit" // 클립생성
+]; 
+
+const rawauth = document.location.href.replace("#", "?");
+const code = getParams("code", rawauth);
+const state = getParams("state", rawauth);
+const inp = document.getElementById("token");
+inp.onclick = function(){
+    copyToClipboard(this.value);
+    alert("토큰이 복사되었습니다!");
+}
+if(!code){
+    location.href = `https://api.twitch.tv/kraken/oauth2/authorize?response_type=code&client_id=${oauth_client_id}&redirect_uri=${oauth_redirect_uri}&scope=${permissions.join("%20")}&state=${state}`;
+}else{
+    const scope = getParams("scope", rawauth).split(" ");// 사용자 허용 범위
+    const token = window.jwt_encode({ c : code, s : scope, i : state });
+
+    inp.value = token;
+}
+
+function copyToClipboard(value) {
+    var aux = document.createElement("input");
+    aux.setAttribute("value", value);
+    document.body.appendChild(aux);
+    aux.select();
+    document.execCommand("copy");
+    document.body.removeChild(aux);
+}
+function getParams(name, address = window.location.href) {
+    let url;
+    let results = "";
+    url = new URL(address);
+    if (typeof url.searchParams === 'undefined') {
+        results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(address);
+        if (results == null) {
+            return null;
+        } else {
+            return decodeURI(results[1]) || 0;
+        }
+    } else {
+        return url.searchParams.get(name);
+    }
+}
+        </script>
+</body>
