@@ -270,8 +270,6 @@ if(code){
     const token = window.jwt_encode({ c : code, s : scope, i : state });
     location.href = `${oauth_redirect_uri}?token=${token}`;
 }else if (token){
-    const scope = getParams("scope", rawauth).split(" ");// 사용자 허용 범위
-    const token = window.jwt_encode({ c : code, s : scope, i : state });
     inp.value = token;
 }else{
     location.href = `https://api.twitch.tv/kraken/oauth2/authorize?response_type=code&client_id=${oauth_client_id}&redirect_uri=${oauth_redirect_uri}&scope=${permissions.join("%20")}&state=${state}`;
