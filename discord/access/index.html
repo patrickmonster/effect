@@ -259,20 +259,30 @@ const permissions = [
 const rawauth = document.location.href.replace("#", "?");
 const code = getParams("code", rawauth);
 const state = getParams("state", rawauth);
+const token = getParams("token", rawauth);
 const inp = document.getElementById("token");
 inp.onclick = function(){
     copyToClipboard(this.value);
     alert("토큰이 복사되었습니다!");
 }
-if(!code){
-    location.href = `https://api.twitch.tv/kraken/oauth2/authorize?response_type=code&client_id=${oauth_client_id}&redirect_uri=${oauth_redirect_uri}&scope=${permissions.join("%20")}&state=${state}`;
-}else{
+if(code){
     const scope = getParams("scope", rawauth).split(" ");// 사용자 허용 범위
     const token = window.jwt_encode({ c : code, s : scope, i : state });
-
+    location.href = `${oauth_redirect_uri}?token=${token}`;
+}else if (token){
+    const scope = getParams("scope", rawauth).split(" ");// 사용자 허용 범위
+    const token = window.jwt_encode({ c : code, s : scope, i : state });
     inp.value = token;
+}else{
+    location.href = `https://api.twitch.tv/kraken/oauth2/authorize?response_type=code&client_id=${oauth_client_id}&redirect_uri=${oauth_redirect_uri}&scope=${permissions.join("%20")}&state=${state}`;
 }
 
+/*
+const scope = getParams("scope", rawauth).split(" ");// 사용자 허용 범위
+const token = window.jwt_encode({ c : code, s : scope, i : state });
+
+inp.value = token;
+*/
 function copyToClipboard(value) {
     var aux = document.createElement("input");
     aux.setAttribute("value", value);
