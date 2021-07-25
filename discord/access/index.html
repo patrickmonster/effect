@@ -272,7 +272,11 @@ if(code){
 }else if (token){
     inp.value = token;
 }else{
-    location.href = `https://api.twitch.tv/kraken/oauth2/authorize?response_type=code&client_id=${oauth_client_id}&redirect_uri=${oauth_redirect_uri}&scope=${permissions.join("%20")}&state=${state}`;
+    if(state)
+        location.href = `https://api.twitch.tv/kraken/oauth2/authorize?response_type=code&client_id=${oauth_client_id}&redirect_uri=${oauth_redirect_uri}&scope=${permissions.join("%20")}&state=${state}`;
+    else {
+        document.write(`잘못된 접근인거 같은데...? 디스코드에서 다시 시도해 주세요!`);
+    }
 }
 
 /*
