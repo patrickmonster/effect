@@ -154,7 +154,7 @@
     <div class="discord-message">
         <div class="discord-author-avatar">
             <img
-                src="https://cdn.discordapp.com/avatars/826484552029175808/51b2c8c287cf21515f12f7cb330fb5db.png?size=128"
+                src="https://cdn.discordapp.com/avatars/826484552029175808/c5d1adf68b9c9ac73dcaf0af302cd280.png?size=128"
                 alt="Guide Bot"></img>
         </div>
         <div class="discord-message-content">
@@ -192,7 +192,7 @@
     <div class="discord-message">
         <div class="discord-author-avatar">
             <img
-                src="https://cdn.discordapp.com/avatars/826484552029175808/51b2c8c287cf21515f12f7cb330fb5db.png?size=128"
+                src="https://cdn.discordapp.com/avatars/826484552029175808/c5d1adf68b9c9ac73dcaf0af302cd280.png?size=128"
                 alt="Guide Bot"></img>
         </div>
         <div class="discord-message-content">
@@ -238,16 +238,17 @@
     <script>
 // 토큰을 발급받습니다.
 const oauth_client_id = "1x2sylk8ovfbclyfr23fbg899u2ol9";//
-const oauth_redirect_uri = `${window.location.origin}${window.location.pathname}`;// 리다이렉션 -> https://patrickmonster.github.io/effect/discord/access
+const oauth_redirect_uri = `${window.location.origin}${window.location.pathname}`;// 리다이렉션
 const permissions = [
     "chat:read", "chat:edit", "channel:moderate", 
     "analytics:read:extensions",// 확장분석
     // "channel:manage:videos", // 동영상
     "channel:read:editors", // 편집자 목록 
     "channel:read:subscriptions", // 구독자 목록
-    "user:edit:follows", // 팔로우 수정
-    // "user:manage:blocked_users", // 차단목록
+    // "user:edit:follows", // 팔로우 수정
+    "user:manage:blocked_users", // 차단목록
     "user:read:email", // 이메일 - 사용자 정보
+    // "channel:manage:redemptions", // 채널포인트
     // "moderation:read",
     // "moderator:manage:automod", // Automod
     // "channel:manage:broadcast", // 방송 정보 수정

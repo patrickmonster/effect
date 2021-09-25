@@ -1,0 +1,329 @@
+
+<script src="/javascript/tmi.min.js"></script>
+<div>
+    
+</div>
+<script>
+'use strict';
+window.ver = "2.1.0";
+
+const oauth_client_id = "v4dinr7jz80iitoezfoo362paj6kmu";
+const oauth_redirect_uri = `${window.location.origin}${window.location.pathname}`;// 리다이렉션
+
+const rawauth = document.location.href.replace("#", "?");
+const channel = location.hash.substr(1) || getParams("state") || 0;//채널정보가 없을때 / 스코프 / 0
+const permissions = ["chat:read","chat:edit"];
+
+const oauth = getParams("o");
+const access_token = getParams("access_token", rawauth);
+const chat_log_limit = 1000;
+
+const is_test = false;
+
+window.autoscroll = true;
+window.command = {};
+
+//=======================================================================================================
+
+const append_bt = document.getElementById("append_load");
+if(access_token){ // 토큰은 1회성 코드 (발급 당시 사용하고 바로 파기) - 코드발급 - 클라이언트 시크릿 유출
+	const scope = getParams("scope", rawauth).split(" ");// 사용자 허용 범위
+	const state = getParams("state", rawauth);// 타겟채널
+	const jwt = window.jwt_encode({access_token,scope, date : new Date()});
+	location.href = `${location.origin}${location.pathname}?o=${jwt}#${state}`;// 토큰 적용하여 이동
+}else if(!channel){
+    window.onload = function() {
+		document.body.innerHTML = `
+			<div id="input_surch">
+				<input id="user-input" type="text" value="" onkeypress="if(event.keyCode!=13)return;setChannel()" placeholder="채널의 id를 입력해 주세요!" focus="">
+				<button onclick="setChannel()" style="transform: translate(-70px, 20px);">
+					<svg aria-hidden="true" style="transform:translate(0px, 4px)" focusable="false" data-prefix="fas" data-icon="sign-in-alt" class="svg-inline--fa fa-sign-in-alt fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+						<path fill="currentColor" d="M416 448h-84c-6.6 0-12-5.4-12-12v-40c0-6.6 5.4-12 12-12h84c17.7 0 32-14.3 32-32V160c0-17.7-14.3-32-32-32h-84c-6.6 0-12-5.4-12-12V76c0-6.6 5.4-12 12-12h84c53 0 96 43 96 96v192c0 53-43 96-96 96zm-47-201L201 79c-15-15-41-4.5-41 17v96H24c-13.3 0-24 10.7-24 24v96c0 13.3 10.7 24 24 24h136v96c0 21.5 26 32 41 17l168-168c9.3-9.4 9.3-24.6 0-34z"></path>
+					</svg>
+				</button>
+			</div>
+		`;
+		window.addStyle("#input_surch:hover>button{opacity:1}#input_surch{position: absolute;left: 50%;top: 50%;transform: translate(-50%,-50%);}#user-input{height: 60px;padding: 2px;width: 400px;border-radius: 50%;font-size: 2em;border: 0px;background: #333;color: #fff;border-radius: 30px;padding: 0 60px 0 14px;}button{height: 60px;opacity: 0;font-size: 2em;border: 0;border-radius: 50%;width: 60px;height: 60px;background: #fff;color: #000;padding: 0 10px 0 0;transform: translate(-60px, 0px);padding-left: 14px;transition: .4s;}");
+		document.head.C("script").html(`
+			function setChannel(){
+				const channel = document.getElementById("user-input").value;
+				console.log(channel)
+				if (/[a-zA-Z0-9_]/.test(channel) && channel.length > 2 ){
+					location.href = location.origin + location.pathname + '#' + channel;
+					location.reload()
+				}else alert("채널이 아닌거 같습니다.. 다시 입력해 주세요!");
+			}
+		`)
+		
+    }
+}else if(!oauth){// 사용자 인증
+	location.href = `https://api.twitch.tv/kraken/oauth2/authorize?response_type=token&client_id=${oauth_client_id}&redirect_uri=${oauth_redirect_uri}&scope=${permissions.join("%20")}&state=${channel}`;
+}else {
+    
+	window.token = window.jwt_decode(oauth, {header : true});
+	if(window.token.date > new Date().setDate(new Date().getDate() - 1)){// 일정시간 지나면, 토큰 갱신
+		alert("토큰갱신");
+		location.href = `${oauth_redirect_uri}${location.hash}`;
+	}
+	window.token.instance = axios.create({
+		baseURL: 'https://api.twitch.tv/helix/',
+		headers: { 
+			'Authorization':  `Bearer ${window.token.access_token}`,
+			"Client-Id" : oauth_client_id
+		}
+	});
+	
+	window._channel = function(str){
+		const channel = (str ? str : '').toLowerCase();
+		return channel[0] === '#' ? channel : '#' + channel;
+	}
+	window.onload = ()=>{
+		const end = onDialogueLoading("채널정보를 불러오는중...");
+		window.token.instance.get("users").then(({data: {data}}) =>{
+			if(!data.length)return;// 사용자가 없다?
+			const {login : username} = data[0];
+			console.log(data[0]);
+			window.client = new tmi.Client({
+				options: {
+					debug: is_test,
+					level: 'warn',
+				},
+				connection: { reconnect: true, secure: true },
+				identity : { username,  password: window.token.access_token},
+				channels : [channel]
+			});
+			window.client.once("connected", (s,p)=>{window.client.popup(document.createElement("span").html(`트위치 채팅채널에 정상적으로 연결되었습니다! ${s}(${p})`).styles("background","blue").styles("color","#fff"), 30)});
+			window.client.on("join", (channel, username, self)=>{if(self)window.client.popup(document.createElement("span").html(`${channel}에 연결됨`).styles("background","blue").styles("color","#fff"), 30)});
+			window.client.on("part", (channel, username, self)=>{if(self)window.client.popup(document.createElement("span").html(`${channel}에 퇴장됨`).styles("background","blue").styles("color","#fff"), 30)});
+			window.client.on("reconnect", ()=>{window.client.popup(document.createElement("span").html(`서버가 불안정하여 재접속을 시도합니다...`).styles("background","red").styles("color","#fff"), 30)});
+			window.client.popup = Popup();
+			window.client.connect().catch(console.error);
+		});
+
+		window.command = JSON.parse(localStorage.getItem(`moderator_${channel}`) || `{}`);
+		setBrodcast((o)=>{// 스트리머 정보
+			initTime();// 시간 루퍼
+			initBadges(); // 배찌 불러오기
+			getStream(end); // 스트림 여부
+			// getEmoteListView();
+			setInterval(getStream, 5 * 60 * 1000);// 스트림 상태
+		});
+	}
+}
+
+function popupLogList(){
+	const bord = document.createElement("span");
+	const end = onDialogue(bord, ()=>{ end() });// 배경클릭시 닫침
+	bord.onclick = (event)=>{event.stopPropagation()};
+	bord.styles("width", "500px");
+	bord.styles("max-height", "300px");
+	bord.styles("height", "auto");
+	
+	bord.C("p").html("로그 리스트");
+	bord.C("line");
+
+	const logs = window.client.popup("");
+	const list = bord.C("div").styles("width","100%").styles("overflow-y", "scroll").styles("max-height","270px");
+	for (const i of logs)
+		list.C("p").html(i).styles("hieght", "20px").styles("text-overflow","ellipsis").styles("white-space","nowrap").styles("overflow","hidden");
+	
+}
+/**
+ * 스크롤 맨 위로
+ * @param {*} target 
+ */
+function scrollDiv(target){
+    target.scrollTop = target.scrollHeight;
+}
+/**
+ * 다이얼로그
+ * @param {element} html 표기
+ * @param {Function} end 종료후
+ */
+function onDialogue(html,f){
+	const dia = document.body.C("div");
+	dia.addClass("dialogue");
+	dia.onclick =()=>{if(f)f();}; // 클릭무시
+
+	const parent = document.body;//맨앞으로 이동
+	parent.insertBefore(dia, parent.firstChild);
+	dia.appendChild(html);
+	return function end(){
+		dia.remove();
+	}
+}
+
+/**
+ * 로딩 다이얼로그
+ * @param {String} mant 맨트
+ * @param {callback} f 콜백
+ * @param {boolean} is_cancle 취소 버튼 여부
+ * @returns 
+ */
+ function onDialogueLoading(mant=false,f,is_cancle = false){
+	const bord = document.createElement("span");
+	const end = onDialogue(bord,()=>{});
+
+	const size = 300;
+	bord.styles("width",`${size}px`).styles("height", "auto");
+
+
+	if(mant)bord.C("p").html(mant);
+	bord.createElement("img").styles("width", `${size}px`).styles("height", `${size}px`).src = "./img/loading.gif";
+	bord.onclick =()=>{}; // 클릭무시
+	if(is_cancle)bord.C("button").html("취소").styles("padding", "5px !important").onclick= end;
+	return end;
+}
+/**
+ * 알림창
+ */
+const newExcitingAlerts = (function (msg = "New!") {
+    var oldTitle = document.title;
+    var timeoutId;
+    var blink = function() { document.title = document.title == msg ? oldTitle : msg; };
+    var clear = function() {
+        clearInterval(timeoutId);
+        document.title = oldTitle;
+        window.onmousemove = null;
+        timeoutId = null;
+    };
+	try{
+		if(!isMobile)
+			window.open(oauth_redirect_uri).close();
+		window.isEnablePopup = true;
+	}catch(e){
+		// 팝업이 차단됨
+		window.isEnablePopup = false;
+	}
+    return function () {
+        if (!timeoutId) {
+            timeoutId = setInterval(blink, 1000);
+            window.onmousemove = clear;
+        }
+    };
+}());
+//======================================================================================
+
+/**
+ * 명령어 추가
+ */
+function addCommand(f){
+	const bord = document.createElement("span");
+	const end = onDialogue(bord, ()=>{ end() });
+	bord.onclick = (event)=>{event.stopPropagation()};
+
+	bord.styles("height", "auto");
+	bord.C("p").html(`명령을 추가합니다`);
+
+	const command = bord.C("input");
+	command.setAttribute("type", "text");
+	command.setAttribute("placeholder", "명령어를 입력해 주세요");
+	bord.C("br")
+	const msg = bord.C("input");
+	msg.setAttribute("type", "text");
+	msg.setAttribute("placeholder", "출력할 내용을 입력해 주세요");
+	bord.C("br");
+	bord.C("button").html("저장").onclick = function(){
+		if(command.value.length < 3){
+			alert("명령어는 최소 3자 이상으로 해주세요!");
+			return;
+		}else if(msg.value.length < 1){
+			alert("출력메세지는 최소 1자입니다.");
+			return;
+		}
+		if(window.command[command.value]){
+			alert("이미 존재하는 명령어 입니다!");
+			return;
+		}
+		window.command[command.value] = msg.value;
+		addCommandTxt(command.value, msg.value);
+		localStorage.setItem(`moderator_${channel}`, JSON.stringify(window.command));
+		if(f)f(command.value, msg.value);
+		alert("저장되었습니다.");
+		end();
+	};
+	bord.C("button").html("취소").onclick = end;
+}
+
+function addCommandTxt(k,v) {
+	document.getElementById("command").C("p").html(`${k} -> ${v}`).onclick= function(event){
+		const element = this;
+		const bord = document.createElement("span");
+		const end = onDialogue(bord, ()=>{ end() });
+		bord.onclick = (event)=>{event.stopPropagation()};
+
+		bord.styles("height", "auto");
+		bord.C("button").html("커맨드변경").onclick = ()=>{
+			end();
+			editCommand((tk, tv)=>{
+				k = tk;v = tv;
+				element.html(`${k} -> ${v}`);
+			}, k, false);
+		};
+		bord.C("button").html("명령변경").onclick = ()=>{
+			end();
+			editCommand((tk, tv)=>{
+				k = tk;v = tv;
+				element.html(`${k} -> ${v}`);
+			}, k, true);
+		};
+		bord.C("button").html("삭제").onclick = ()=>{
+			end();
+			subCommand(k);
+		};
+		bord.C("button").html("취소").onclick = end;
+
+	}
+}
+
+/**
+ * 명령어 편집
+ * @param {*} f 콜백
+ * @param {*} target 타겟(key)
+ * @param {*} is_msg 메세지 변경?
+ */
+function editCommand(f, target, is_msg = true){
+	const bord = document.createElement("span");
+	const end = onDialogue(bord, ()=>{ end() });
+	bord.onclick = (event)=>{event.stopPropagation()};
+
+	bord.C("p").html(`바꿀 ${is_msg ? "메세지" : "명령어"}를 입력해 주세요!`);
+	bord.C("input").attr("readonly","readonly").value = target;
+
+	const command = bord.C("input");
+	command.setAttribute("type", "text");
+	command.setAttribute("placeholder", is_msg ? "출력내용을 입력해 주세요!" : "명령어를 입력해 주세요");
+	bord.C("br");
+	bord.C("button").html("저장").onclick = function(){
+		if(!is_msg && command.value.length < 3){
+			alert("명령어는 최소 3자 이상으로 해주세요!");
+			return;
+		}else if( is_msg && command.value.length < 1){
+			alert("출력메세지는 최소 1자입니다.");
+			return;
+		}else if(!is_msg && window.command[command.value]){
+			alert("이미 존재하는 명령어 입니다!");
+			return;
+		}else if(!is_msg && command.value == target){
+			alert("변경내용과, 이전내용이 동일합니다!");
+			end();
+			return;
+		}
+		if(is_msg){
+			window.command[target] = command.value;
+			if(f)f(target, command.value);
+		}else{
+			window.command[command.value] = window.command[target];
+			delete window.command[target];
+			if(f)f(command.value, window.command[command.value]);
+		}
+		localStorage.setItem(`moderator_${channel}`, JSON.stringify(window.command));
+		alert("변경되었습니다.");
+		end();
+	};
+	bord.C("button").html("취소").onclick = end;
+}
+
+
+//======================================================================================
+</script>
