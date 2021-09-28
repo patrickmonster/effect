@@ -1,0 +1,176 @@
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+  <title>Twista</title>
+  <!-- <script src="https://patrickmonster.github.io/irc_chat_client/chat.js"charset="utf-8"></script> -->
+  <!-- <script src="../js/chat.js" charset="utf-8"></script> -->
+  <script>
+    function getParams(name, address = window.location.href) {
+      let url;
+      let results = "";
+      url = new URL(address);
+      if (typeof url.searchParams === "undefined") {
+        results = new RegExp("[?&]" + name + "=([^&#]*)").exec(address);
+        if (results == null) {
+          return null;
+        } else {
+          return decodeURI(results[1]) || 0;
+        }
+      } else {
+        return url.searchParams.get(name);
+      }
+    }
+
+    console.log(getParams("color"), getParams("user-id"));
+    let color = getParams("color");
+    if (color) color = "#" + color;
+    else color = "#fff";
+    const object = {
+      "--nav-size": 0,
+      "--section-padding": "10px",
+      "--left-margin": "3%",
+      "--svg-color": color,
+      "--section-count": 2,
+      "--camera-background": "#ffffff42",
+    };
+    const style = document.createElement("style");
+    document.head.appendChild(style);
+    const styles = [];
+    Object.keys(object).forEach((o) => {
+      styles.push(`${o}: ${object[o]}`);
+    });
+    console.log(styles);
+    style.innerHTML = `:root {${styles.join(";")}}`;
+  </script>
+  <link rel="stylesheet" href="main.css" />
+</head>
+<body>
+  <!-- <nav>
+    <div class="logo">
+      <svg aria-hidden="true" focusable="false" data-prefix="fab" data-icon="twitch" class="svg-inline--fa fa-twitch fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M391.17,103.47H352.54v109.7h38.63ZM285,103H246.37V212.75H285ZM120.83,0,24.31,91.42V420.58H140.14V512l96.53-91.42h77.25L487.69,256V0ZM449.07,237.75l-77.22,73.12H294.61l-67.6,64v-64H140.14V36.58H449.07Z"></path></svg>
+    </div>
+    <div class="sub-profile">
+      <img id="profile-broadcast-img-src-sub" alt="프로필 이미지">
+      <svg aria-hidden="true" focusable="false" data-prefix="fab" data-icon="instagram" class="svg-inline--fa fa-instagram fa-w-14" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M224.1 141c-63.6 0-114.9 51.3-114.9 114.9s51.3 114.9 114.9 114.9S339 319.5 339 255.9 287.7 141 224.1 141zm0 189.6c-41.1 0-74.7-33.5-74.7-74.7s33.5-74.7 74.7-74.7 74.7 33.5 74.7 74.7-33.6 74.7-74.7 74.7zm146.4-194.3c0 14.9-12 26.8-26.8 26.8-14.9 0-26.8-12-26.8-26.8s12-26.8 26.8-26.8 26.8 12 26.8 26.8zm76.1 27.2c-1.7-35.9-9.9-67.7-36.2-93.9-26.2-26.2-58-34.4-93.9-36.2-37-2.1-147.9-2.1-184.9 0-35.8 1.7-67.6 9.9-93.9 36.1s-34.4 58-36.2 93.9c-2.1 37-2.1 147.9 0 184.9 1.7 35.9 9.9 67.7 36.2 93.9s58 34.4 93.9 36.2c37 2.1 147.9 2.1 184.9 0 35.9-1.7 67.7-9.9 93.9-36.2 26.2-26.2 34.4-58 36.2-93.9 2.1-37 2.1-147.8 0-184.8zM398.8 388c-7.8 19.6-22.9 34.7-42.6 42.6-29.5 11.7-99.5 9-132.1 9s-102.7 2.6-132.1-9c-19.6-7.8-34.7-22.9-42.6-42.6-11.7-29.5-9-99.5-9-132.1s-2.6-102.7 9-132.1c7.8-19.6 22.9-34.7 42.6-42.6 29.5-11.7 99.5-9 132.1-9s102.7-2.6 132.1 9c19.6 7.8 34.7 22.9 42.6 42.6 11.7 29.5 9 99.5 9 132.1s2.7 102.7-9 132.1z"></path></svg>
+      <svg aria-label="구독 취소" class="_8-yf5 " fill="#ed4956" height="24" viewBox="0 0 48 48" width="24"><path clip-rule="evenodd" d="M35.3 35.6c-9.2 8.2-9.8 8.9-11.3 8.9s-2.1-.7-11.3-8.9C6.5 30.1.5 25.6.5 17.8.5 9.9 6.4 3.5 13.7 3.5 20.8 3.5 24 8.8 24 8.8s3.2-5.3 10.3-5.3c7.3 0 13.2 6.4 13.2 14.3 0 7.8-6.1 12.3-12.2 17.8z" fill-rule="evenodd"></path></svg>
+    </div>
+  </nav> -->
+  <!-- <wl></wl> -->
+  <main>
+    <!-- 좌측 -->
+    <section>
+      <div id="profile-broadcast-img" class="profile">
+        <!-- <img id="profile-broadcast-img-back" src="back.jpg" alt="백그라운드" /> -->
+        <img id="profile-broadcast-img-src" alt="프로필 이미지" />
+        <!-- <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="paper-plane" class="svg-inline--fa fa-paper-plane fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M476 3.2L12.5 270.6c-18.1 10.4-15.8 35.6 2.2 43.2L121 358.4l287.3-253.2c5.5-4.9 13.3 2.6 8.6 8.3L176 407v80.5c0 23.6 28.5 32.9 42.5 15.8L282 426l124.6 52.2c14.2 6 30.4-2.9 33-18.2l72-432C515 7.8 493.3-6.8 476 3.2z"></path></svg> -->
+        <!-- <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="bell" class="svg-inline--fa fa-bell fa-w-14" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M224 512c35.32 0 63.97-28.65 63.97-64H160.03c0 35.35 28.65 64 63.97 64zm215.39-149.71c-19.32-20.76-55.47-51.99-55.47-154.29 0-77.7-54.48-139.9-127.94-155.16V32c0-17.67-14.32-32-31.98-32s-31.98 14.33-31.98 32v20.84C118.56 68.1 64.08 130.3 64.08 208c0 102.3-36.15 133.53-55.47 154.29-6 6.45-8.66 14.16-8.61 21.71.11 16.4 12.98 32 32.1 32h383.8c19.12 0 32-15.6 32.1-32 .05-7.55-2.61-15.27-8.61-21.71z"></path></svg> -->
+        <svg
+          aria-label="게시물 공유"
+          class="_8-yf5"
+          height="24"
+          viewBox="0 0 48 48"
+          width="24"
+        >
+          <path
+            d="M46.5 3.5h-45C.6 3.5.2 4.6.8 5.2l16 15.8 5.5 22.8c.2.9 1.4 1 1.8.3L47.4 5c.4-.7-.1-1.5-.9-1.5zm-40.1 3h33.5L19.1 18c-.4.2-.9.1-1.2-.2L6.4 6.5zm17.7 31.8l-4-16.6c-.1-.4.1-.9.5-1.1L41.5 9 24.1 38.3z"
+          ></path>
+          <path d="M14.7 48.4l2.9-.7"></path>
+        </svg>
+        <svg
+          aria-label="옵션"
+          aria-hidden="true"
+          focusable="false"
+          data-prefix="fas"
+          data-icon="ellipsis-h"
+          class="svg-inline--fa fa-ellipsis-h fa-w-16"
+          role="img"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 512 512"
+        >
+          <path
+            fill="currentColor"
+            d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8 0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8 0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"
+          ></path>
+        </svg>
+        <div class="option">
+          <h1 id="profile-broadcast">스트리머 닉네임</h1>
+          <h4 id="profile-broadcast-id">서브타이틀</h4>
+        </div>
+      </div>
+      <wl></wl>
+      <!-- 팔로우 바 -->
+      <div class="main-img"></div>
+      <div class="main-icon">
+        <input id="follow" type="checkbox" name="" style="display: none" />
+        <label for="follow">
+          <svg
+            id="follow-off"
+            aria-label="좋아요"
+            class="_8-yf5"
+            height="24"
+            viewBox="0 0 48 48"
+            width="24"
+          >
+            <path
+              clip-rule="evenodd"
+              d="M34.3 3.5C27.2 3.5 24 8.8 24 8.8s-3.2-5.3-10.3-5.3C6.4 3.5.5 9.9.5 17.8s6.1 12.4 12.2 17.8c9.2 8.2 9.8 8.9 11.3 8.9s2.1-.7 11.3-8.9c6.2-5.5 12.2-10 12.2-17.8 0-7.9-5.9-14.3-13.2-14.3zm-1 29.8c-5.4 4.8-8.3 7.5-9.3 8.1-1-.7-4.6-3.9-9.3-8.1-5.5-4.9-11.2-9-11.2-15.6 0-6.2 4.6-11.3 10.2-11.3 4.1 0 6.3 2 7.9 4.2 3.6 5.1 1.2 5.1 4.8 0 1.6-2.2 3.8-4.2 7.9-4.2 5.6 0 10.2 5.1 10.2 11.3 0 6.7-5.7 10.8-11.2 15.6z"
+              fill-rule="evenodd"
+            ></path>
+          </svg>
+          <!-- <svg id="follow-on" aria-label="좋아요 취소" class="_8-yf5 " fill="#ed4956" height="24" viewBox="0 0 48 48" width="24"><path clip-rule="evenodd" d="M35.3 35.6c-9.2 8.2-9.8 8.9-11.3 8.9s-2.1-.7-11.3-8.9C6.5 30.1.5 25.6.5 17.8.5 9.9 6.4 3.5 13.7 3.5 20.8 3.5 24 8.8 24 8.8s3.2-5.3 10.3-5.3c7.3 0 13.2 6.4 13.2 14.3 0 7.8-6.1 12.3-12.2 17.8z" fill-rule="evenodd"></path></svg> -->
+        </label>
+        <svg
+          aria-label="댓글 달기"
+          class="_8-yf5"
+          height="24"
+          viewBox="0 0 48 48"
+          width="24"
+        >
+          <path
+            clip-rule="evenodd"
+            d="M47.5 46.1l-2.8-11c1.8-3.3 2.8-7.1 2.8-11.1C47.5 11 37 .5 24 .5S.5 11 .5 24 11 47.5 24 47.5c4 0 7.8-1 11.1-2.8l11 2.8c.8.2 1.6-.6 1.4-1.4zm-3-22.1c0 4-1 7-2.6 10-.2.4-.3.9-.2 1.4l2.1 8.4-8.3-2.1c-.5-.1-1-.1-1.4.2-1.8 1-5.2 2.6-10 2.6-11.4 0-20.6-9.2-20.6-20.5S12.7 3.5 24 3.5 44.5 12.7 44.5 24z"
+            fill-rule="evenodd"
+          ></path>
+        </svg>
+        <svg
+          aria-label="게시물 공유"
+          class="_8-yf5"
+          height="24"
+          viewBox="0 0 48 48"
+          width="24"
+        >
+          <path
+            d="M46.5 3.5h-45C.6 3.5.2 4.6.8 5.2l16 15.8 5.5 22.8c.2.9 1.4 1 1.8.3L47.4 5c.4-.7-.1-1.5-.9-1.5zm-40.1 3h33.5L19.1 18c-.4.2-.9.1-1.2-.2L6.4 6.5zm17.7 31.8l-4-16.6c-.1-.4.1-.9.5-1.1L41.5 9 24.1 38.3z"
+          ></path>
+          <path d="M14.7 48.4l2.9-.7"></path>
+        </svg>
+
+        <svg
+          aria-label="저장"
+          class="_8-yf5"
+          fill="#262626"
+          height="24"
+          viewBox="0 0 48 48"
+          width="24"
+          style="float: right"
+        >
+          <path
+            d="M43.5 48c-.4 0-.8-.2-1.1-.4L24 29 5.6 47.6c-.4.4-1.1.6-1.6.3-.6-.2-1-.8-1-1.4v-45C3 .7 3.7 0 4.5 0h39c.8 0 1.5.7 1.5 1.5v45c0 .6-.4 1.2-.9 1.4-.2.1-.4.1-.6.1zM24 26c.8 0 1.6.3 2.2.9l15.8 16V3H6v39.9l15.8-16c.6-.6 1.4-.9 2.2-.9z"
+          ></path>
+        </svg>
+      </div>
+      <div class="main-follows">
+        <img id="follow-img" src="" alt="" />
+        <h5 id="follow-name" style="display: none">0</h5>
+        <h5>좋아요</h5>
+        <h5 id="follow_count">100명</h5>
+        <h5>개</h5>
+        <br />
+      </div>
+      <div id="stream-title" class="main-comment">
+        라이브방송중! 여러분 잘부탁해~
+      </div>
+      <div class="main-comment-hash-tag">#트위치 #라이브 #저스트_채팅</div>
+    </section>
+  </main>
+  <script src="main.js"></script>
+</body>

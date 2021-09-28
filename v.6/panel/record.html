@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=1920, initial-scale=1.0">
+    <script src="https://patrickmonster.github.io/tgd/javascript/jwt-decode.js"></script>
+    <title>Twcod</title>
+    <script>
+function getParams(){
+    const params = {};
+    location.search.substr(1).split("&").map(function(o){
+        const [key,val] = o.split("=");
+        if(key)
+            params[key] = val;
+    });
+    return params;
+}
+
+
+function getAverageRGB(imgEl) {
+
+    var blockSize = 5, // only visit every 5 pixels
+        defaultRGB = {r:0,g:0,b:0}, // for non-supporting envs
+        canvas = document.createElement('canvas'),
+        context = canvas.getContext && canvas.getContext('2d'),
+        data, width, height,
+        i = -4,
+        length,
+        rgb = {r:0,g:0,b:0},
+        count = 0;
+
+    if (!context) {
+        return defaultRGB;
+    }
+
+    height = canvas.height = imgEl.naturalHeight || imgEl.offsetHeight || imgEl.height;
+    width = canvas.width = imgEl.naturalWidth || imgEl.offsetWidth || imgEl.width;
+
+    context.drawImage(imgEl, 0, 0);
+
+    try {
+        data = context.getImageData(0, 0, width, height);
+    } catch(e) {
+        console.log(e);
+        /* security error, img on diff domain */
+        return defaultRGB;
+    }
+
+    length = data.data.length;
+
+    while ( (i += blockSize * 4) < length ) {
+        ++count;
+        rgb.r += data.data[i];
+        rgb.g += data.data[i+1];
+        rgb.b += data.data[i+2];
+    }
+
+    // ~~ used to floor values
+    rgb.r = ~~(rgb.r/count);
+    rgb.g = ~~(rgb.g/count);
+    rgb.b = ~~(rgb.b/count);
+
+    return rgb;
+}
+
+function randomItem(a) {
+    return a[Math.floor(Math.random() * a.length)];
+}
+
+function imageToUri(url, callback) {
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+
+    base_image = new Image();
+    base_image.src = url;
+    base_image.onload = function() {
+        canvas.width = base_image.width;
+        canvas.height = base_image.height;
+
+        ctx.drawImage(base_image, 0, 0);
+
+        callback(canvas.toDataURL('image/png'));
+
+        canvas.remove();
+    }
+}
+
+const params = getParams();
+const style_option = {};
+if(params.code){
+    const data = window.jwt_decode(params.code, {header: true});
+    console.log(data);
+    params.index = data.index || 2;
+    params.img = data.img
+    
+    style_option["base-size"] = data["base-size"] || "150px";
+    let i =  parseInt(typeof style_option["base-size"] != "number" &&  style_option["base-size"].endsWith("px") ? style_option["base-size"].substring(0,style_option["base-size"].length-2) : style_option["base-size"]);
+
+    if(typeof style_option["base-size"] != "number" && !style_option["base-size"].endsWith("px"))style_option["base-size"] += "px";
+    style_option["holl-size"] = `${i/5}px`;
+    style_option["holl-border-size"] = `${(i/5)/2}px`;
+    style_option["background-animation"] = data["background-animation"] || "background_scale";
+    style_option["background-animation-blur"] = data["background-animation-blur"] || "1rem";
+    style_option["background-animation-speed"] = data["background-animation-speed"] || "30s";
+
+    let style = document.createElement("link");
+    style.setAttribute("rel", "stylesheet");
+    style.setAttribute("href", `css/record${data.index}.css`);
+    document.head.appendChild(style);
+    
+}else{
+    if(!params.index || ![1,2,3].includes(parseInt(params.index)))params.index = 3;
+    params.img = "./img/" + randomItem([
+        "1.png","2.jpg","3.png","4.png","5.jpg","6.png","7.png",
+    ]);
+    style_option["base-size"] = "100px";
+    // style_option["holl-size"] = `30px`;
+    // style_option["holl-border-size"] = `15px`;
+    style_option["background-animation"] = "background_scale";
+    style_option["background-animation-blur"] = "1.5rem";
+    style_option["background-animation-speed"] = "30s";
+}
+let style = document.createElement("link");
+style.setAttribute("rel", "stylesheet");
+style.setAttribute("href", `css/record${params.index}.css`);
+document.head.appendChild(style);
+
+const root_sty = document.createElement("style");
+root_sty.innerHTML= `:root{ ${Object.keys(style_option).map(o=>`--${o}: ${style_option[o]}`).join(";")} }`;
+document.head.appendChild(root_sty);
+
+
+// setTimeout(()=>{
+//     location.reload();
+// }, 1000 * 5)
+
+window.onload=()=>{
+    const mainImg = new Image();
+    mainImg.src = params.img;
+    [document.getElementsByClassName("cover")[0], document.getElementsByClassName("cd")[0],mainImg].forEach(o=>{
+        if(o)o.style["background-image"] = `url(${params.img})`;
+    });
+    
+    mainImg.onload = () => {
+        const i = getAverageRGB(mainImg);
+        document.getElementsByClassName("out")[0].style.background = document.getElementsByClassName("recorder")[0].style.background = `rgb(${i.r},${i.g},${i.b})`;
+    }
+}
+
+function reload(data){
+
+    style_option["base-size"] = data["base-size"] || style_option["base-size"];
+    let i =  parseInt(typeof style_option["base-size"] != "number" &&  style_option["base-size"].endsWith("px") ? style_option["base-size"].substring(0,style_option["base-size"].length-2) : style_option["base-size"]);
+    if(typeof style_option["base-size"] != "number" && !style_option["base-size"].endsWith("px"))style_option["base-size"] += "px";
+    style_option["holl-size"] = `${i/5}px`;
+    style_option["holl-border-size"] = `${(i/5)/2}px`;
+    style_option["background-animation"] = data["background-animation"] || style_option["background-animation"];
+    style_option["background-animation-blur"] = data["background-animation-blur"] || style_option["background-animation-blur"];
+    style_option["background-animation-speed"] = data["background-animation-speed"] || style_option["background-animation-speed"];
+    return style_option;
+}
+
+function makeNew(data){
+    reload(data);
+    style_option.index = data.index || params.index;
+    style_option.img = data.img || params.img;
+    location.href = location.pathname + "?code=" + jwt_encode(style_option);
+}
+    </script>
+    <style>
+/* :root {
+    --base-size : 150px;
+    --holl-size : 30px;
+    --holl-border-size : 15px;
+    --background-animation: background_scale;
+    --background-animation-blur: 1rem;
+    --background-animation-speed: 30s;
+} */
+@keyframes cloudOrbit {
+  0%{
+    transform: rotate(0deg);
+  }
+  50%{
+    transform: rotate(180deg);
+  }
+  100%{
+    transform: rotate(360deg);
+  }
+}
+html, *{
+	margin: 0;
+    padding: 0;
+	background-color:transparent;
+    overflow: hidden;
+    /* background: #333; */
+    /* border: 5px solid; */
+}
+body{
+    margin: 0;
+    padding: 0;
+    height : 1080px;
+    width: 1920px;
+}
+    </style>
+
+</head>
+<body>
+    <div class="recorder">
+        <div class="cd">
+            <div class="holl"></div>
+            <div class="out"></div>
+        </div>
+        <div class="cover"></div>
+    </div>
+</body>
+</html>
