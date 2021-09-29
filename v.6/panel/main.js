@@ -9,12 +9,22 @@ window.last_follow = [];
 window.user_id = getParams("user-id");
 window.user_name = getParams("user-name");
 if (window.user_name || !window.user_id) {
-  // const users = JSON.parse(
-  //   getAPI("https://api.twitch.tv/kraken/users?login=" + window.user_name)
-  // )["users"];
-  // if (users.length) {
-  //   window.user_id = users[0]["_id"];
-  // }
+  const users = JSON.parse(
+    getAPI("https://api.twitch.tv/kraken/users?login=" + window.user_name)
+  )["users"];
+  if (users.length) {
+    window.user_id = users[0]["_id"];
+  }
+  
+  // const client = new tmi.Client({ connection: { reconnect: true, secure: true }, channels : [user_name] });
+  // client.on("redeem", function(channel, user, type, tags, msg){
+  //   if("highlighted-message" == type){
+  //     // 메세지전송
+  //     if(window["highlighted-message"])
+  //       window["highlighted-message"](tags, message);
+  //   }
+  // });
+  // client.connect().catch(e=>{});//연결  
 }
 if (!window.user_id) {
   window.user_id = "129955642";
@@ -30,45 +40,16 @@ function getData() {
   setTimeout(getData, 60 * 1000);
 
   window.broadcast = JSON.parse(getAPI("https://api.twitch.tv/kraken/channels/" + window.user_id));
-  let is = follow.getAttribute("data-follow") == window.broadcast["followers"];
 
-  follow.innerHTML = numberToKorean(window.broadcast["followers"]);
+  // live-viewer
+  document.getElementById("live-viewer").innerHTML = numberToKorean(window.broadcast["followers"]);
 
-  document.getElementById("profile-broadcast-img-src").src = window.broadcast["logo"];
-  // document.getElementById("profile-broadcast-img-src-sub").src=window.broadcast["logo"];
+  document.getElementById("profile-broadcast-img-src-sub").src = window.broadcast["logo"];
+  document.getElementById("stream-title").innerHTML =  `${window.broadcast["display_name"]}(${window.broadcast["name"]})`;
 
-  //profile-broadcast-img-src-sub
-  document.getElementById("profile-broadcast").innerHTML =  window.broadcast["display_name"];
-  document.getElementById("profile-broadcast-id").innerHTML = window.broadcast["name"];
-
-  document.getElementById("stream-title").innerHTML = window.broadcast["status"];
-  // document.getElementById("stream-game").innerHTML = window.broadcast["game"];
-
-  if (!newFollows.length) return; // 새로운 사용자 없음
-  const lastUser = follows[follows.length - 1];
-  document.getElementById("follow-img").src = lastUser.logo;
-  document.getElementById("follow-name").innerHTML = lastUser.name;
 }
 
 
-function append_message(user, msg, id, img, isright) {
-  console.log(user, msg, img, isright);
-  let bord = document.getElementById("chatting_bord").getElementsByClassName("message");
-  let message = bord[bord.length - 1];
-  if (!message || user != message.getAttribute("data-name")) {
-    message = document.getElementById("chatting_bord").C("div");
-    message.classList.add("message");
-    if (isright) message.classList.add("broadcast");
-    message.setAttribute("data-name", user);
-    message.C("img").src = img;
-  }
-  let ele = message.C("div");
-  ele.classList.add("item");
-  ele.setAttribute("data-id", id);
-  ele = ele.C("div");
-  ele.classList.add("text");
-  ele.innerHTML = msg;
-}
 function numberToKorean(number) {
     const inputNumber = number < 0 ? false : number;
     const unitWords = ["", "K", "M", "G", "T"];

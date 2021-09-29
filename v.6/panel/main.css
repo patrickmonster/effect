@@ -83,7 +83,7 @@ main {
 section {
   display: inline;
   float: left;
-  width: calc(100% - var(--left-margin) * 4);
+  width: calc(100% - 4px - var(--left-margin) * 4);
   height: calc(100% - var(--nav-size));
   color: var(--svg-color);
   margin: 0 var(--left-margin);
@@ -396,9 +396,12 @@ div.main-img.chatting-input > div.chatting-input-left > svg {
   width: 35px;
   height: 35px;
 }
+
 #profile-broadcast-img-src-sub {
   width: 50px;
   height: 50px;
+  border-radius: 50px;
+  background-color: #333;
 }
 #stream-title {
   transform: translate(5px, -15px);
