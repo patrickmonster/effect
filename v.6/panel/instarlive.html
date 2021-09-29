@@ -87,7 +87,6 @@
   </main>
   <script src="main.js"></script>
   <style>
-
 section{
   border: 2px solid #fff;
 }
@@ -151,11 +150,11 @@ let hm_queue_time = -1;
  * 하이라이트 메세지
  */
 window["highlighted-message"] = function(tags, message){
-    if(hm_queue_time != -1){
+    if(hm_queue_time == -1){
         hm_queue_time = setTimeout(changeQueue, 1000 * 5);
-        document.getElementById("hight-light-msg").innerHTML = message;
+        document.getElementById("hight-light-msg").innerHTML = `${tags["display-name"] } : ${message}`;
     }else{
-      hm_queue.push(message);
+      hm_queue.push(`${tags["display-name"] } : ${message}`);
     }
 }
 
@@ -165,7 +164,7 @@ function changeQueue(){
         document.getElementById("hight-light-msg").innerHTML = hm_queue.shift();
     }else{// 없음
       hm_queue_time = -1;
-      document.getElementById("hight-light-msg").innerHTML = hm_queue.shift();
+      document.getElementById("hight-light-msg").innerHTML = "댓글달기";
     }
 }
   </script>
