@@ -144,5 +144,29 @@ function eventLoop(){
 })();
 
 
+
+const hm_queue = [];
+let hm_queue_time = -1;
+/**
+ * 하이라이트 메세지
+ */
+window["highlighted-message"] = function(tags, message){
+    if(hm_queue_time != -1){
+        hm_queue_time = setTimeout(changeQueue, 1000 * 5);
+        document.getElementById("hight-light-msg").innerHTML = message;
+    }else{
+      hm_queue.push(message);
+    }
+}
+
+function changeQueue(){
+    if(hm_queue.length){// 다음내용 있으
+        hm_queue_time = setTimeout(changeQueue, 1000 * 5);
+        document.getElementById("hight-light-msg").innerHTML = hm_queue.shift();
+    }else{// 없음
+      hm_queue_time = -1;
+      document.getElementById("hight-light-msg").innerHTML = hm_queue.shift();
+    }
+}
   </script>
 </body>

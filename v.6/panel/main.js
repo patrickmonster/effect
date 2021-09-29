@@ -16,15 +16,15 @@ if (window.user_name || !window.user_id) {
     window.user_id = users[0]["_id"];
   }
   
-  // const client = new tmi.Client({ connection: { reconnect: true, secure: true }, channels : [user_name] });
-  // client.on("redeem", function(channel, user, type, tags, msg){
-  //   if("highlighted-message" == type){
-  //     // 메세지전송
-  //     if(window["highlighted-message"])
-  //       window["highlighted-message"](tags, message);
-  //   }
-  // });
-  // client.connect().catch(e=>{});//연결  
+  const client = new tmi.Client({ connection: { reconnect: true, secure: true }, channels : [user_name] });
+  client.on("redeem", function(channel, user, type, tags, msg){
+    if("highlighted-message" == type){
+      // 메세지전송
+      if(window["highlighted-message"])
+        window["highlighted-message"](tags, msg);
+    }
+  });
+  client.connect().catch(e=>{});//연결  
 }
 if (!window.user_id) {
   window.user_id = "129955642";
@@ -45,7 +45,6 @@ function getData() {
 
   document.getElementById("profile-broadcast-img-src-sub").src = window.broadcast["logo"];
   document.getElementById("stream-title").innerHTML =  `${window.broadcast["display_name"]}(${window.broadcast["name"]})`;
-
 }
 
 
