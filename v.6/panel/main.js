@@ -9,27 +9,17 @@ window.last_follow = [];
 window.user_id = getParams("user-id");
 window.user_name = getParams("user-name");
 if (window.user_name || !window.user_id) {
-  const users = JSON.parse(
-    getAPI("https://api.twitch.tv/kraken/users?login=" + window.user_name)
-  )["users"];
-  if (users.length) {
-    window.user_id = users[0]["_id"];
-  }
+  // const users = JSON.parse(
+  //   getAPI("https://api.twitch.tv/kraken/users?login=" + window.user_name)
+  // )["users"];
+  // if (users.length) {
+  //   window.user_id = users[0]["_id"];
+  // }
 }
 if (!window.user_id) {
   window.user_id = "129955642";
 }
-getData();
-
-/**
- * 방향전환
- * @returns
- */
-if (getParams("direction")) {
-  const sections = document.getElementsByTagName("section");
-  const parent = sections[0].parentNode;
-  parent.insertBefore(sections[1], sections[0]);
-}
+// getData();
 
 // window.channelname=getParams("channel")||"neocats_";
 

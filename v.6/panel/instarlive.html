@@ -1,0 +1,92 @@
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+  <title>Twista</title>
+  <script>
+    function getParams(name, address = window.location.href) {
+      let url;
+      let results = "";
+      url = new URL(address);
+      if (typeof url.searchParams === "undefined") {
+        results = new RegExp("[?&]" + name + "=([^&#]*)").exec(address);
+        if (results == null) {
+          return null;
+        } else {
+          return decodeURI(results[1]) || 0;
+        }
+      } else {
+        return url.searchParams.get(name);
+      }
+    }
+
+    console.log(getParams("color"), getParams("user-id"));
+    let color = getParams("color");
+    if (color) color = "#" + color;
+    else color = "#fff";
+    const object = {
+      "--nav-size": 0,
+      "--section-padding": "10px",
+      "--left-margin": "0%",
+      "--svg-color": color,
+      "--section-count": 1,
+      "--camera-background": "#ffffff42",
+    };
+    const style = document.createElement("style");
+    document.head.appendChild(style);
+    const styles = [];
+    Object.keys(object).forEach((o) => {
+      styles.push(`${o}: ${object[o]}`);
+    });
+    console.log(styles);
+    style.innerHTML = `:root {${styles.join(";")}}`;
+  </script>
+  <link rel="stylesheet" href="main.css" />
+</head>
+<body>
+  <main>
+    <!-- 우측 -->
+    <section>
+      <div class="chat-board">
+        <div class="chat-user">
+          <!-- <svg aria-label="트위치" aria-hidden="true" focusable="false" data-prefix="fab" data-icon="twitch" class="svg-inline--fa fa-twitch fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M391.17,103.47H352.54v109.7h38.63ZM285,103H246.37V212.75H285ZM120.83,0,24.31,91.42V420.58H140.14V512l96.53-91.42h77.25L487.69,256V0ZM449.07,237.75l-77.22,73.12H294.61l-67.6,64v-64H140.14V36.58H449.07Z"></path></svg> -->
+          <!-- <h1 id="chat-user-channel">neocats_</h1> -->
+          <img id="profile-broadcast-img-src-sub" alt="프로필 이미지">
+          <div class="option">
+            <h1 id="stream-title">닉네임</h1>
+          </div>
+          <!-- 라이브 상태 영역 -->
+          <div id="title-right-live">
+            <div id="live-ment">라이브방송</div>
+            <div id="live-viewer">19.9k</div>
+          </div>
+        </div>
+        <!-- 채팅영역 -->
+        <div class="main-img chatting-bord">
+          <div id="chatting_bord" class="content">
+          </div>
+        </div>
+        <!--  -->
+        <div class="main-img chatting-input">
+          <div class="chatting-input-left">
+            <h1>댓글달기</h1>
+            <svg aria-label="옵션" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="ellipsis-h" class="svg-inline--fa fa-ellipsis-h fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+              <path fill="currentColor" d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8 0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8 0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z" ></path>
+            </svg>
+          </div>
+          <div class="chatting-input-right">
+            <svg aria-label="게시물 공유" class="_8-yf5" height="50" viewBox="0 0 48 48" width="50" >
+              <path d="M46.5 3.5h-45C.6 3.5.2 4.6.8 5.2l16 15.8 5.5 22.8c.2.9 1.4 1 1.8.3L47.4 5c.4-.7-.1-1.5-.9-1.5zm-40.1 3h33.5L19.1 18c-.4.2-.9.1-1.2-.2L6.4 6.5zm17.7 31.8l-4-16.6c-.1-.4.1-.9.5-1.1L41.5 9 24.1 38.3z" ></path>
+              <path d="M14.7 48.4l2.9-.7"></path>
+            </svg>
+            <svg id="follow-off" aria-label="좋아요" class="_8-yf5 " height="50" viewBox="0 0 48 48" width="50"><path clip-rule="evenodd" d="M34.3 3.5C27.2 3.5 24 8.8 24 8.8s-3.2-5.3-10.3-5.3C6.4 3.5.5 9.9.5 17.8s6.1 12.4 12.2 17.8c9.2 8.2 9.8 8.9 11.3 8.9s2.1-.7 11.3-8.9c6.2-5.5 12.2-10 12.2-17.8 0-7.9-5.9-14.3-13.2-14.3zm-1 29.8c-5.4 4.8-8.3 7.5-9.3 8.1-1-.7-4.6-3.9-9.3-8.1-5.5-4.9-11.2-9-11.2-15.6 0-6.2 4.6-11.3 10.2-11.3 4.1 0 6.3 2 7.9 4.2 3.6 5.1 1.2 5.1 4.8 0 1.6-2.2 3.8-4.2 7.9-4.2 5.6 0 10.2 5.1 10.2 11.3 0 6.7-5.7 10.8-11.2 15.6z" fill-rule="evenodd"></path></svg>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+  <script src="main.js"></script>
+  <style>
+  body{
+    background-color: darkkhaki;
+  }
+  </style>
+</body>
