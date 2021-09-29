@@ -29,7 +29,7 @@ if (window.user_name || !window.user_id) {
 if (!window.user_id) {
   window.user_id = "129955642";
 }
-// getData();
+getData();
 
 // window.channelname=getParams("channel")||"neocats_";
 
