@@ -34,7 +34,6 @@ getData();
 // window.channelname=getParams("channel")||"neocats_";
 
 function getData() {
-  let follow = document.getElementById("follow_count");
   console.log("업데이트");
 
   setTimeout(getData, 60 * 1000);
