@@ -159,7 +159,6 @@ const client = new tmi.Client({ connection: { reconnect: true, secure: true }, c
 client.on("redeem", function(channel, user, type, tags, msg){
     if("highlighted-message" == type){
         // 메세지전송
-        if(window["highlighted-message"])
         addList(msg, tags["display-name"]);
     }
 });
