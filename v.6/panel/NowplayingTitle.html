@@ -1,27 +1,46 @@
 <script src="./javascript/api.js"></script>
+<script src="https://patrickmonster.github.io/moderator/javascript/tmi.min.js"></script>
 <style>
 @font-face {
   font-family: 'NanumBarunpen';
-  src: url('/font/SSShinRegularOTF.woff');
+  src: url('../../font/SSShinRegularOTF.woff');
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'sangsangant';
+  src: url('/font/SangSangAnt.otf.ttf');
   font-weight: normal;
   font-style: normal;
 }
 /* https://media.sandollcloud.com/static/font/subset_sandoll/5808/SDSamliphopangcheOutline.woff */
-html {background-color: black}
+/* html {background-color: black} */
 html, *{
   margin: 0;
   padding: 0;
+  color: #fff;
 }
 
 :root{
   --font-color : #ff00de;
 }
 p{
-	font-family: NanumBarunpen;
+    /* font-family: NanumBarunpen; */
+    font-family: sangsangant;
   color: #fff;
-	/* color: var(--font-color); */
   font-size: 5em;
   animation: neon6 1.5s ease-in-out infinite alternate;
+}
+
+ul{
+    width: 400px;
+    height: 190px;
+    overflow : hidden;
+}
+li{
+    /* font-family: NanumBarunpen; */
+    font-family: sangsangant;
+  /* animation: neon1 1.5s ease-in-out infinite alternate; */
 }
 /*glow*/
 
@@ -83,25 +102,90 @@ p{
   --font-color : rgb(55, 0, 255);
 }
 </style>
-
 <p>Now playing...</p>
-<p id="title"></p>
-
+<p id="title" style="font-size: 2em;"></p>
+<ul id=list> </ul>
 <script>
-// setTimeout(()=>{
-//   location.href = "http://localhost:8000/v.3/panel/NowplayingTitle.html?id=131396124"
-// }, 1000*10);
+const queue = [];
 
-window.user_id = getParams("id") || "null";
-
-const onload = ()=>{
-  window.broadcast = JSON.parse(
-    getAPI("https://api.twitch.tv/kraken/channels/" + window.user_id)
-  );
-  console.log(window.broadcast);
-  document.getElementById("title").innerText = `by. ${window.broadcast["name"]}`;
+window.user_name = getParams("user-name");
+// - 하이라이트 메세지
+function addList(item, owner){
+    if(document.getElementById("title").innerHTML){// 큐  항목이 있으면
+        queue.push({item, owner});
+    }else{
+        document.getElementById("title").innerHTML = `${owner}: ${item}`;
+    }
+    updateList();
 }
-onload();
-setInterval( onload, 1000 * 60 * 5);
 
+function nextList(){
+    if(!queue.length){
+        return document.getElementById("title").innerHTML = "";
+    }
+    const { item, owner} = queue.shift();
+    
+    document.getElementById("title").innerHTML =  `${owner}: ${item}`;
+    updateList();
+}
+
+
+function updateList(){
+    const buffer = [];
+    for(let i in queue){
+        buffer.push(`<li>${parseInt(i) + 1}. ${queue[i].item}</li>`);
+    }
+    document.getElementById("list").innerHTML=buffer.join("");
+}
+
+
+function getParams(name, address = window.location.href) {
+  let url;
+  let results = "";
+  url = new URL(address);
+  if (typeof url.searchParams === "undefined") {
+    results = new RegExp("[?&]" + name + "=([^&#]*)").exec(address);
+    if (results == null) {
+      return null;
+    } else {
+      return decodeURI(results[1]) || 0;
+    }
+  } else {
+    return url.searchParams.get(name);
+  }
+}
+
+const client = new tmi.Client({ connection: { reconnect: true, secure: true }, channels : [window.user_name] });
+client.on("redeem", function(channel, user, type, tags, msg){
+    if("highlighted-message" == type){
+        // 메세지전송
+        if(window["highlighted-message"])
+        addList(msg, tags["display-name"]);
+    }
+});
+
+const w_list = ["neocats_", window.user_name];
+client.on("message", function(channel, {username}, msg, self){
+    if(client.isMod(channel, username) || w_list.includes(username)){
+        const [comm, ...args] = msg.split(" ");
+        switch(comm){
+            case "?다음":
+                nextList();
+                break;
+            case "?제거":
+                if(!args.length)return;
+                const index = parseInt(args[0]) - 1;
+                if(queue.length > index ){
+                    queue.splice(index, 1);
+                    updateList();
+                }
+                break;
+            case "?새로고침":
+                return location.reload();
+                break;
+            
+        }
+    }
+});
+client.connect().catch(e=>{});//연결  
 </script>
