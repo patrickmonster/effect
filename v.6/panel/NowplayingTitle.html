@@ -145,7 +145,7 @@ client.on("redeem", function(channel, user, type, tags, msg){
 
 const w_list = ["neocats_", window.user_name];
 client.on("message", function(channel, {username}, msg, self){
-    if(/*badges.includes("moderator")||*/ w_list.includes(username)){
+    if(w_list.includes(username)){
         const [comm, ...args] = msg.split(" ");
         switch(comm){
             case "?다음":
