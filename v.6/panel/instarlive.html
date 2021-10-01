@@ -138,7 +138,7 @@ function eventLoop(){
 (async function(){
   for(let i = 0 ; i< 10; i++){
     eventLoop();
-    await sleep(getRandomArbitrary(100, 500));
+    await sleep(getRandomArbitrary(100, 1000 *20));
   }  
 })();
 
