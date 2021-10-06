@@ -143,13 +143,25 @@ client.on("redeem", function(channel, user, type, tags, msg){
     }
 });
 
-const w_list = ["neocats_", window.user_name];
+const w_list = localStorage.hasOwnProperty("now_playing_users") ? localStorage.getItem("now_playing_users").split(",") : ["neocats_", window.user_name];
 client.on("message", function(channel, {username}, msg, self){
     if(w_list.includes(username)){
         const [comm, ...args] = msg.split(" ");
         switch(comm){
             case "?다음":
                 nextList();
+                break;
+            case "?추가":
+                addList(args.join(" "), "");
+                break;
+            case "?노예":
+              const i = w_list.indexOf(args[0]);
+                if(i != -1){
+                  w_list.splice(i, 1);
+                }else{
+                  w_list.push(args[0]);
+                }
+                localStorage.setItem("now_playing_users", w_list.join(","))
                 break;
             case "?제거":
                 if(!args.length)return;
