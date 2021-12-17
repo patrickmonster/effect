@@ -53,6 +53,8 @@ function getData() {
   //profile-broadcast-img-src-sub
   document.getElementById("profile-broadcast").innerHTML =
     window.broadcast["display_name"];
+  document.getElementById("tag").innerHTML = 
+    `#개발자는_${window.broadcast["display_name"]}님을_응원합니다!`;
   document.getElementById("profile-broadcast-id").innerHTML =
     window.broadcast["name"];
 

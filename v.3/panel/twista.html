@@ -41,7 +41,33 @@
     console.log(styles);
     style.innerHTML = `:root {${styles.join(";")}}`;
   </script>
+  <style>
+
+@keyframes rainbow {
+ 0% { color: #ff2a2a; }
+ 15% { color: #ff7a2a; }
+ 30% { color: #ffc52a; }
+ 45% { color: #43ff2a; }
+ 60% { color: #2a89ff; }
+ 75% { color: #202082; }
+ 90% { color: #6b2aff; } 
+ 100% { color: #e82aff; }
+}
+#tag  {
+  animation-duration: 3s;
+  animation-name: rainbow;
+  animation-iteration-count: infinite;
+      font-weight: bold;
+}
+    /* #tag {
+      background-image: linear-gradient(90deg, red, orange, yellow, green, blue, navy, purple);
+      -webkit-background-clip: text;
+      color: transparent;
+      font-weight: bold;
+    } */
+  </style>
   <link rel="stylesheet" href="main.css" />
+  <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 </head>
 <body>
   <!-- <nav>
@@ -131,18 +157,7 @@
             fill-rule="evenodd"
           ></path>
         </svg>
-        <svg
-          aria-label="게시물 공유"
-          class="_8-yf5"
-          height="24"
-          viewBox="0 0 48 48"
-          width="24"
-        >
-          <path
-            d="M46.5 3.5h-45C.6 3.5.2 4.6.8 5.2l16 15.8 5.5 22.8c.2.9 1.4 1 1.8.3L47.4 5c.4-.7-.1-1.5-.9-1.5zm-40.1 3h33.5L19.1 18c-.4.2-.9.1-1.2-.2L6.4 6.5zm17.7 31.8l-4-16.6c-.1-.4.1-.9.5-1.1L41.5 9 24.1 38.3z"
-          ></path>
-          <path d="M14.7 48.4l2.9-.7"></path>
-        </svg>
+
 
         <svg
           aria-label="저장"
@@ -169,7 +184,8 @@
       <div id="stream-title" class="main-comment">
         라이브방송중! 여러분 잘부탁해~
       </div>
-      <div class="main-comment-hash-tag">#트위치 #라이브 #저스트_채팅</div>
+      <div class="main-comment-hash-tag">#트위치 <p style="display: contents;color: red;">#크리스마스</p> #트수는 #올해도 #솔크 #내년도 #솔로 <span  id=tag >#응애</span></div>
+
     </section>
     <!-- 우측 -->
     <section>
@@ -292,4 +308,234 @@
     </section>
   </main>
   <script src="main.js"></script>
+  <script>
+///눈
+(function ($) {
+    //
+    // Zachary Johnson
+    // https://www.zachstronaut.com/posts/2009/12/21/happy-xmas-winternet.html
+    // December 2009
+    //
+    
+    var ww = 0;
+    var wh = 0;
+    var maxw = 0;
+    var minw = 0;
+    var maxh = 0;
+    var textShadowSupport = true;
+    var xv = 0;
+    var snowflakes = ["\u2744", "\u2745", "\u2746"];
+    var prevTime;
+    var absMax = 100;
+    var flakeCount = 0;
+    
+    $(init);
+
+    function init()
+    {
+        var detectSize = function ()
+        {
+            ww = $(window).width();
+            wh = $(window).height();
+            
+            maxw = ww + 150;
+            minw = -150;
+            maxh = wh + 150;
+        };
+        
+        detectSize();
+        
+        $(window).resize(detectSize);
+        
+        if (!$('body').css('textShadow'))
+        {
+            textShadowSupport = false;
+        }
+
+        var i = 30;
+        while (i--)
+        {
+            addFlake(true);
+        }
+        
+        prevTime = new Date().getTime();
+        setInterval(move, 50);
+    }
+
+    function addFlake(initial)
+    {
+        flakeCount++;
+        
+        var sizes = [
+            {
+                r: 1.0,
+                css: {
+                    fontSize: 5 + Math.floor(Math.random() * 20) + 'px',
+                    textShadow: '9999px 0 0 rgba(238, 238, 238, 0.5)'
+                },
+                v: 2
+            },
+            {
+                r: 0.6,
+                css: {
+                    fontSize: 7 + Math.floor(Math.random() * 20) + 'px',
+                    textShadow: '9999px 0 2px #eee'
+                },
+                v: 6
+            },
+            {
+                r: 0.2,
+                css: {
+                    fontSize: 10 + Math.floor(Math.random() * 30) + 'px',
+                    textShadow: '9999px 0 6px #eee'
+                },
+                v: 12
+            }
+        ];
+    
+        var $nowflake = $('<span class="winternetz">' + snowflakes[Math.floor(Math.random() * snowflakes.length)] + '</span>').css(
+            {
+                /*fontFamily: 'Wingdings',*/
+                color: '#eee',
+                display: 'block',
+                position: 'fixed',
+                background: 'transparent',
+                width: 'auto',
+                height: 'auto',
+                margin: '0',
+                padding: '0',
+                textAlign: 'left',
+                zIndex: 9999
+            }
+        );
+        
+        if (textShadowSupport)
+        {
+            $nowflake.css('textIndent', '-9999px');
+        }
+        
+        var r = Math.random();
+    
+        var i = sizes.length;
+        
+        var v = 0;
+        
+        while (i--)
+        {
+            if (r < sizes[i].r)
+            {
+                v = sizes[i].v;
+                $nowflake.css(sizes[i].css);
+                break;
+            }
+        }
+    
+        var x = (-300 + Math.floor(Math.random() * (ww + 300)));
+        
+        var y = 0;
+        if (typeof initial == 'undefined' || !initial)
+        {
+            y = -300;
+        }
+        else
+        {
+            y = (-300 + Math.floor(Math.random() * (wh + 300)));
+        }
+    
+        $nowflake.css(
+            {
+                left: x + 'px',
+                top: y + 'px'
+            }
+        );
+        
+        $nowflake.data('x', x);
+        $nowflake.data('y', y);
+        $nowflake.data('v', v);
+        $nowflake.data('half_v', Math.round(v * 0.5));
+        
+        $('body').append($nowflake);
+    }
+    
+    function move()
+    {
+        if (Math.random() > 0.8)
+        {
+            xv += -1 + Math.random() * 2;
+            
+            if (Math.abs(xv) > 3)
+            {
+                xv = 3 * (xv / Math.abs(xv));
+            }
+        }
+        
+        // Throttle code
+        var newTime = new Date().getTime();
+        var diffTime = newTime - prevTime;
+        prevTime = newTime;
+        
+        if (diffTime < 55 && flakeCount < absMax)
+        {
+            addFlake();
+        }
+        else if (diffTime > 150)
+        {
+            $('span.winternetz:first').remove();
+            flakeCount--;
+        }
+        
+        $('span.winternetz').each(
+            function ()
+            {
+                var x = $(this).data('x');
+                var y = $(this).data('y');
+                var v = $(this).data('v');
+                var half_v = $(this).data('half_v');
+                
+                y += v;
+                
+                x += Math.round(xv * v);
+                x += -half_v + Math.round(Math.random() * v);
+                
+                // because flakes are rotating, the origin could be +/- the size of the flake offset
+                if (x > maxw)
+                {
+                    x = -300;
+                }
+                else if (x < minw)
+                {
+                    x = ww;
+                }
+                
+                if (y > maxh)
+                {
+                    $(this).remove();
+                    flakeCount--;
+                    
+                    addFlake();
+                }
+                else
+                {
+                    $(this).data('x', x);
+                    $(this).data('y', y);
+
+                    $(this).css(
+                        {
+                            left: x + 'px',
+                            top: y + 'px'
+                        }
+                    );
+                    
+                    // only spin biggest three flake sizes
+                    if (v >= 6)
+                    {
+                        $(this).animate({rotate: '+=' + half_v + 'deg'}, 0);
+                    }
+                }
+            }
+        );
+    }
+})
+
+  </script>
 </body>
