@@ -159,9 +159,9 @@ let hm_queue_time = -1;
 window["highlighted-message"] = function(tags, message){
     if(hm_queue_time == -1){
         hm_queue_time = setTimeout(changeQueue, 1000 *20);
-        document.getElementById("hight-light-msg").innerHTML = `${tags["display-name"] } : ${message}`;
+        document.getElementById("hight-light-msg").innerHTML = `${message}`;
     }else{
-      hm_queue.push(`${tags["display-name"] } : ${message}`);
+      hm_queue.push(`${message}`);
     }
 }
 
