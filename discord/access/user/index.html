@@ -223,8 +223,11 @@
                                     </a>
                                 </div>
                                 <div class="discord-embed-description" id="user_message">
-                                    인증은 한번만 하면 됩니다!
-                                    두번해주시면.. 말리진 않을께요! 조금 귀찮을 거에요!
+                                    인증이 안되신다구요?!?!<br/>
+                                    트위치 오류가 많이 발생하고 있어요...<br/>
+                                    방송하시는분 채팅에 가셔서<br/>
+                                    /w orefinger <p id=code></p><br/>
+                                    입력하시면 바로 될거에요!....<br/>귀찮게 해서 죄송해요 8ㅅ8
                                 </div>
                                 <!-- <img src="<%= img %>" alt="" class="discord-embed-image"/> -->
                             </div>
@@ -248,6 +251,9 @@ const permissions = [
 const rawauth = document.location.href.replace("#", "?");
 const access_token = getParams("access_token", rawauth);
 const state = getParams("state", rawauth);
+
+document.getElementById("code").innerHTML = state;
+
 
 if(access_token){
     axios.get('https://api.twitch.tv/helix/users',{
